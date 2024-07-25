@@ -1,26 +1,27 @@
-NAME	= libft.a
-CC	= gcc -Wall -Wextra -Werror
-SRCDIR	= src/check src/convert src/ft_printf src/get_next_line src/list src/mem src/put src/str
-INCDIR	= include/
-SRCS	= $(foreach d, $(SRCDIR), $(wildcard $(d)/*.c))		
-OBJS	= $(SRCS:.c=.o)
-RM		= rm -f
+SRCS            = $(wildcard src/*.c) $(wildcard src/*/*.c)
+OBJS			= ${SRCS:.c=.o}
+
+NAME			= libft.a
+
+CC				= cc
+RM				= rm -f
+AR				= ar rc
+INCLUDES		+= -I include/
+
+CFLAGS			= -Wall -Wextra -Werror ${INCLUDES}
+
+.c.o:
+			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+
+$(NAME):	${OBJS}
+			${AR} ${NAME} ${OBJS}
 
 all:		$(NAME)
 
-$(NAME):	$(OBJS) $(INCDIR)libft.h
-			ar rcs $@ $^
-
-%.o: %.c $(INCDIR)libft.h
-			$(CC) -I$(INCDIR) -c $< -o $@
-
 clean:
-			$(RM) $(OBJS)
+			${RM} ${OBJS}
 
 fclean:		clean
-			$(RM) $(NAME)
+			${RM} $(NAME)
 
 re:			fclean all
-
-
-.PHONY: all clean fclean re

@@ -1,44 +1,35 @@
-NAME    = minishell
+SRCS 			= $(wildcard src/*/*.c) $(wildcard src/*.c)
 
-SRCDIR  = src
-INCDIR  = include
+OBJS			= ${SRCS:.c=.o}
 
-# Find all .c files in the src directory and its subdirectories
-SRC     = $(wildcard src/*/*.c) $(wildcard src/*.c)
-OBJS    = $(SRC:.c=.o)
+NAME			= minishell
 
-LIBFT = libft/libft.a
-LIBFT_PATH = libft/
-LIBFT_INCLUDE = libft/include
+LIBFT_DIR		= ./libft
+LIBFT			= ./libft/libft.a
 
-CC      = cc
-CFLAGS  = -Wall -Wextra -Werror -g
-RM      = rm -f
+CC				= cc
+RM				= rm -f
+AR				= ar rc
+CP				= cp
 
-all: $(LIBFT) $(NAME)
+INCLUDES		+= -I libft/include
+INCLUDES		+= -I ./include
+CFLAGS			= -Wall -Wextra -Werror $(INCLUDES)
 
-$(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_PATH) -lft -o $(NAME)
+$(NAME):	$(LIBFT) ${OBJS}
+			${CC} ${CFLAGS} ${OBJS} $(LIBFT) -o ${NAME}
 
-# COLORS
-GREEN = \033[1;38;5;76m
-RESET = \033[0m
+$(LIBFT):	$(LIBFT_DIR)
+				@$(MAKE) -C $(LIBFT_DIR)
 
-$(LIBFT):
-	@echo "$(GREEN)Compiling libft..."
-	@make -sC $(LIBFT_PATH)
-	@echo "Libft compiled!$(RESET)"
-
-%.o: %.c $(INCDIR)/executor.h $(INCDIR)/lexer.h $(INCDIR)/parser.h
-	$(CC) $(CFLAGS) -I$(INCDIR) -I$(LIBFT_INCLUDE) -c $< -o $@
+all:		$(NAME)
 
 clean:
-	$(MAKE) -C $(LIBFT_PATH) clean
-	$(RM) $(OBJS)
+			${RM} ${OBJS}
+			@$(MAKE) -C $(LIBFT_DIR) clean
 
-fclean: clean
-	$(RM) $(NAME) $(LIBFT)
+fclean:		clean
+			${RM} $(NAME)
+			@$(MAKE) -C $(LIBFT_DIR) fclean
 
-re: fclean all
-
-.PHONY: all clean fclean re
+re:			fclean all
