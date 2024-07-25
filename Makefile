@@ -4,7 +4,7 @@ SRCDIR  = src
 INCDIR  = include
 
 # Find all .c files in the src directory and its subdirectories
-SRC     = $(shell find $(SRCDIR) -name '*.c')
+SRC     = $(wildcard src/*/*.c) $(wildcard src/*.c)
 OBJS    = $(SRC:.c=.o)
 
 LIBFT = libft/libft.a
@@ -29,7 +29,7 @@ $(LIBFT):
 	@make -sC $(LIBFT_PATH)
 	@echo "Libft compiled!$(RESET)"
 
-%.o: %.c $(INCDIR)/minishell.h
+%.o: %.c $(INCDIR)/executor.h $(INCDIR)/lexer.h $(INCDIR)/parser.h
 	$(CC) $(CFLAGS) -I$(INCDIR) -I$(LIBFT_INCLUDE) -c $< -o $@
 
 clean:

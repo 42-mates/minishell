@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/25 08:40:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/07/25 09:25:39 by oprosvir         ###   ########.fr       */
+/*   Created: 2024/07/24 10:43:03 by alex              #+#    #+#             */
+/*   Updated: 2024/07/24 11:21:02 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "lexer.h"
 
-# include "libft.h"
-
-#endif
+char	**lexer(char *line)
+{
+	return (ft_strtok(line, TOKEN_DELIM));
+}
