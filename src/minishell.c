@@ -6,11 +6,10 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:05:22 by alex              #+#    #+#             */
-/*   Updated: 2024/07/24 12:03:34 by alex             ###   ########.fr       */
+/*   Updated: 2024/07/30 15:04:42 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "lexer.h"
 #include "parser.h"
 #include "executor.h"
@@ -21,23 +20,23 @@ int main()
     size_t len = 0;
     ssize_t read;
     char **tokens;
-    t_command *cmd;
+    cmd_node *cmd;
+    t_token *token;
 
     while (1)
     {
-        ft_printf("> ");
+        ft_printf("minishell$ ");
         read = getline(&line, &len, stdin);
         if (read == -1) {
             perror("getline");
             exit(EXIT_FAILURE);
         }
         tokens = lexer(line);
-        if (tokens[0] == NULL)
-            continue;
-        cmd = parser(tokens);
+        token = convert_from_tokens(tokens);
+        cmd = parser(&token);
         executor(cmd);
         free(tokens);
-        free(cmd);
+        free(token);
     }
     free(line);
     return (0);
