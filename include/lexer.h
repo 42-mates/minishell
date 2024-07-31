@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:06:24 by alex              #+#    #+#             */
-/*   Updated: 2024/07/30 15:02:04 by alex             ###   ########.fr       */
+/*   Updated: 2024/07/31 14:07:20 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ enum TokenType{
 	CHAR_PIPE = '|',
 	TOKEN	= -1,
 };
+
+# define TOKEN_DELIM " \t\n\r\a"
 
 typedef struct s_token {
 	char			*data;
