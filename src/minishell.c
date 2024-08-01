@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:05:22 by alex              #+#    #+#             */
-/*   Updated: 2024/07/30 15:04:42 by alex             ###   ########.fr       */
+/*   Updated: 2024/07/31 21:41:04 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ int main()
         }
         tokens = lexer(line);
         token = convert_from_tokens(tokens);
+        //print_tokens(token);
         cmd = parser(&token);
+        //show_cmd_tree(cmd);
+        //printf("\n_______\n");
         executor(cmd);
         free(tokens);
         free(token);

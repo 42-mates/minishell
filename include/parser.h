@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:28:41 by alex              #+#    #+#             */
-/*   Updated: 2024/07/30 15:02:12 by alex             ###   ########.fr       */
+/*   Updated: 2024/07/31 14:31:21 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 typedef enum
 {
     NODE_PIPE 			= 1,
-    NODE_CMDPATH		= 2,
-    NODE_ARGUMENT		= 3,
+	NODE_REDIRECT_OUT	= 2,
+    NODE_CMDPATH		= 3,
+    NODE_ARGUMENT		= 4,
     NODE_DATA 			= 0,
 } node_type;
 
@@ -33,15 +34,6 @@ typedef struct cmd_node {
 	struct cmd_node	*right;
 }	cmd_node;
 
-typedef struct cmd_internal
-{
-	int argc;
-	char **argv;
-	bool stdin_pipe;
-	bool stdout_pipe;
-	int pipe_read;
-	int pipe_write;
-}   cmd_internal;
 
 void	    cmd_set(cmd_node *node, char *data, node_type nodetype, cmd_node *next);
 void	    cmd_delete(cmd_node* node);
@@ -54,6 +46,7 @@ void        show_cmd_tree(cmd_node *node);
 cmd_node    *job(t_token **token);
 cmd_node	*job_pipe(t_token **token);
 cmd_node	*cmd(t_token **token);
+cmd_node	*cmd_redirect_out(t_token **token);
 cmd_node	*cmd_simple(t_token **token);
 cmd_node	*cmd_argument(t_token **token);
 cmd_node	*argument(t_token **token);

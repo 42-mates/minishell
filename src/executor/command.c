@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 13:25:25 by alex              #+#    #+#             */
-/*   Updated: 2024/07/30 14:58:22 by alex             ###   ########.fr       */
+/*   Updated: 2024/08/01 15:51:44 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	**get_command_args(cmd_node *node, int *argc)
 	return (argv);
 }
 
-int init_command_internal(cmd_node* node, cmd_internal* cmd, bool stdin_pipe, bool stdout_pipe, int pipe_read, int pipe_write)
+int init_command_internal(cmd_node* node, cmd_internal* cmd, bool stdin_pipe, bool stdout_pipe, int pipe_read, int pipe_write, char *redirect_in, char *redirect_out)
 {
 	if (node == NULL || node->type != NODE_CMDPATH)
 	{
@@ -54,6 +54,8 @@ int init_command_internal(cmd_node* node, cmd_internal* cmd, bool stdin_pipe, bo
 	cmd->stdout_pipe = stdout_pipe;
 	cmd->pipe_read = pipe_read;
 	cmd->pipe_write = pipe_write;
+	cmd->redirect_in = redirect_in;
+    cmd->redirect_out = redirect_out;
 	return 0;
 }
 
@@ -79,6 +81,16 @@ void execute_command_internal(cmd_internal* cmd)
 			dup2(cmd->pipe_read, STDIN_FILENO);
 		if (cmd->stdout_pipe)
 			dup2(cmd->pipe_write, STDOUT_FILENO);
+		if (cmd->redirect_out) {
+			//printf("rediret to %s\n", cmd->redirect_out);
+            int fd = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_TRUNC,
+                          S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+            if (fd == -1) {
+                perror(cmd->redirect_out);
+                exit(1);
+            }
+            dup2(fd, STDOUT_FILENO);
+        }
 		if (execvp(cmd->argv[0], cmd->argv) == -1)
 		{
 			dup2(stdoutfd, STDOUT_FILENO);

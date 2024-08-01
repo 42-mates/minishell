@@ -1,0 +1,14 @@
+.
+..
+.git
+.gitignore
+LICENSE
+Makefile
+README.md
+a
+include
+libft
+minishell
+res.txt
+src
+subject_minishell.pdf

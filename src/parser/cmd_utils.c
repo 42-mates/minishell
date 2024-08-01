@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 11:06:35 by alex              #+#    #+#             */
-/*   Updated: 2024/07/30 15:00:40 by alex             ###   ########.fr       */
+/*   Updated: 2024/07/31 14:36:43 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ void show_cmd_tree(cmd_node *node)
 	else if (node->type == NODE_PIPE)
 	{
 		printf("pipe: %s | %s\n", node->left->data, node->right->data);
+	}
+	else if (node->type == NODE_REDIRECT_OUT)
+	{
+		printf("redirect: %s > %s\n", node->right->data, node->data);
 	}
 	show_cmd_tree(node->right);
 }

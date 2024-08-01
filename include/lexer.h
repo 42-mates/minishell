@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:06:24 by alex              #+#    #+#             */
-/*   Updated: 2024/07/31 14:07:20 by alex             ###   ########.fr       */
+/*   Updated: 2024/07/31 14:24:01 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@
 # include "libft.h"
 
 enum TokenType{
-	CHAR_PIPE = '|',
-	TOKEN	= -1,
+	CHAR_PIPE		= '|',
+	CHAR_GREATER	= '>',
+	TOKEN			= -1,
 };
 
 # define TOKEN_DELIM " \t\n\r\a"

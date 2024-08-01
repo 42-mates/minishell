@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:43:03 by alex              #+#    #+#             */
-/*   Updated: 2024/07/28 19:16:23 by alex             ###   ########.fr       */
+/*   Updated: 2024/07/31 14:25:40 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ t_token *convert_from_tokens(char **tokens)
         token->data = tokens[i];
 		if (tokens[i][0] == '|')
         	token->type = CHAR_PIPE;
+        else if (tokens[i][0] == '>')
+        	token->type = CHAR_GREATER;
 		else
 			token->type = TOKEN;
         token->next = NULL;

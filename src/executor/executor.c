@@ -6,16 +6,16 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:53:48 by alex              #+#    #+#             */
-/*   Updated: 2024/07/30 14:48:33 by alex             ###   ########.fr       */
+/*   Updated: 2024/08/01 15:51:51 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-static void execute_simple_command(cmd_node* node, bool stdin_pipe, bool stdout_pipe, int pipe_read, int pipe_write)
+static void execute_simple_command(cmd_node* node, bool stdin_pipe, bool stdout_pipe, int pipe_read, int pipe_write, char *redirect_in, char *redirect_out)
 {
     cmd_internal cmd;
-    init_command_internal(node, &cmd, stdin_pipe, stdout_pipe, pipe_read, pipe_write);
+    init_command_internal(node, &cmd, stdin_pipe, stdout_pipe, pipe_read, pipe_write, redirect_in, redirect_out);
 	execute_command_internal(&cmd);
 	destroy_command_internal(&cmd);
 }
@@ -24,8 +24,10 @@ static void execute_command(cmd_node* node, bool stdin_pipe, bool stdout_pipe, i
 {
     if (node == NULL)
         return;
-	if (node->type == NODE_CMDPATH)
-		execute_simple_command(node, stdin_pipe, stdout_pipe, pipe_read, pipe_write);
+    if (node->type == NODE_REDIRECT_OUT)
+        execute_simple_command(node->right, stdin_pipe, stdout_pipe, pipe_read, pipe_write, NULL, node->data);
+	else if (node->type == NODE_CMDPATH)
+		execute_simple_command(node, stdin_pipe, stdout_pipe, pipe_read, pipe_write, NULL, NULL);
 }
 
 static void execute_pipeline(cmd_node* tree)
@@ -61,6 +63,6 @@ void executor(cmd_node* node)
         return ;
 	if (node->type == NODE_PIPE)
 		execute_pipeline(node);
-	if (node->type == NODE_CMDPATH)
+	else
 		execute_command(node, false, false, 0, 0);
 }

@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:29:08 by alex              #+#    #+#             */
-/*   Updated: 2024/07/30 15:03:29 by alex             ###   ########.fr       */
+/*   Updated: 2024/07/31 14:48:52 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,36 @@ cmd_node	*cmd(t_token **token)
 	cmd_node	*node;
 	
 	save = *token;
+	if ((*token = save, node = cmd_redirect_out(token)) != NULL)
+		return (node);
     if ((*token = save, node = cmd_simple(token)) != NULL)
         return (node);
     return (NULL);
+}
+
+cmd_node	*cmd_redirect_out(t_token **token)
+{
+	cmd_node* cmd_tok;
+    cmd_node* result;
+
+    if ((cmd_tok = cmd_simple(token)) == NULL)
+        return NULL;
+	if (!check_tokentype(CHAR_GREATER, token, NULL)) {
+		cmd_delete(cmd_tok);
+		return NULL;
+	}
+	char* filename;
+	if (!check_tokentype(TOKEN, token, &filename)) {
+		free(filename);
+		cmd_delete(cmd_tok);
+		return NULL;
+	}
+	//printf("filename: %s\n", filename);
+    result = malloc(sizeof(*result));
+    cmd_set_type(result, NODE_REDIRECT_OUT);
+    cmd_set_data(result, filename);
+	cmd_attach(result, NULL, cmd_tok);
+    return result;
 }
 
 cmd_node	*cmd_simple(t_token **token)
