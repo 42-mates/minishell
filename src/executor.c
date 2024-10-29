@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/24 11:53:48 by alex              #+#    #+#             */
-/*   Updated: 2024/07/24 12:46:39 by alex             ###   ########.fr       */
+/*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
+/*   Updated: 2024/10/29 01:45:01 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
+#include "minishell.h"
 
 void	executor(t_command *cmd)
 {

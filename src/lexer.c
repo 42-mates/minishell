@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/24 10:43:03 by alex              #+#    #+#             */
-/*   Updated: 2024/07/24 11:21:02 by alex             ###   ########.fr       */
+/*   Created: 2024/10/29 11:42:19 by oprosvir          #+#    #+#             */
+/*   Updated: 2024/10/29 01:42:36 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "minishell.h"
 
 char	**lexer(char *line)
 {

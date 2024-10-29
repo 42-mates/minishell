@@ -1,35 +1,43 @@
-SRCS 			= $(wildcard src/*/*.c) $(wildcard src/*.c)
+NAME            = minishell
 
-OBJS			= ${SRCS:.c=.o}
+OBJDIR          = obj/
+INCDIR          = include/
 
-NAME			= minishell
+SRCS            = src/minishell.c \
+                  src/executor.c \
+                  src/lexer.c \
+                  src/parser.c
 
-LIBFT_DIR		= ./libft
-LIBFT			= ./libft/libft.a
+OBJS            = $(SRCS:src/%.c=$(OBJDIR)%.o)
 
-CC				= cc
-RM				= rm -f
-AR				= ar rc
-CP				= cp
+LIBFT_DIR       = ./libft
+LIBFT           = $(LIBFT_DIR)/libft.a
 
-INCLUDES		+= -I libft/include
-INCLUDES		+= -I ./include
-CFLAGS			= -Wall -Wextra -Werror $(INCLUDES)
-
-$(NAME):	$(LIBFT) ${OBJS}
-			${CC} ${CFLAGS} ${OBJS} $(LIBFT) -o ${NAME}
-
-$(LIBFT):	$(LIBFT_DIR)
-				@$(MAKE) -C $(LIBFT_DIR)
+CC              = cc
+CFLAGS          = -Wall -Wextra -Werror -I $(INCDIR) -I $(LIBFT_DIR)/include
+RM              = rm -f
 
 all:		$(NAME)
 
+$(NAME): 	$(LIBFT) $(OBJS)
+			$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+
+$(OBJDIR)%.o: src/%.c
+			@mkdir -p $(OBJDIR)
+			$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIBFT):
+			@$(MAKE) -C $(LIBFT_DIR)
+
 clean:
-			${RM} ${OBJS}
+			$(RM) $(OBJS)
 			@$(MAKE) -C $(LIBFT_DIR) clean
 
-fclean:		clean
-			${RM} $(NAME)
+fclean: 	clean
+			$(RM) $(NAME)
 			@$(MAKE) -C $(LIBFT_DIR) fclean
+			rm -rf $(OBJDIR)
 
-re:			fclean all
+re: 		fclean all
+
+.PHONY: 	all clean fclean re
