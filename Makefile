@@ -3,9 +3,8 @@ NAME            = minishell
 OBJDIR          = obj/
 INCDIR          = include/
 
-SRCS            = src/minishell.c \
+SRCS            = src/main.c \
                   src/executor.c \
-                  src/lexer.c \
                   src/parser.c
 
 OBJS            = $(SRCS:src/%.c=$(OBJDIR)%.o)
@@ -15,12 +14,13 @@ LIBFT           = $(LIBFT_DIR)/libft.a
 
 CC              = cc
 CFLAGS          = -Wall -Wextra -Werror -I $(INCDIR) -I $(LIBFT_DIR)/include
+LDFLAGS         = -lreadline
 RM              = rm -f
 
 all:		$(NAME)
 
 $(NAME): 	$(LIBFT) $(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+			$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
 
 $(OBJDIR)%.o: src/%.c
 			@mkdir -p $(OBJDIR)

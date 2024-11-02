@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/10/29 02:25:22 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/02 14:05:01 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 # define MINISHELL_H
 
 # include "libft.h"
-# include <stdio.h> // printf, perror
-# include <stdlib.h> // malloc, free, exit
-# include <unistd.h> // read, write, close
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <stdio.h>    // printf, perror
+# include <stdlib.h>   // malloc, free, exit
 # include <sys/wait.h> // waitpid
+# include <unistd.h>   // read, write, close
 
 # define TOKEN_DELIM " \t\r\n\a"
 
