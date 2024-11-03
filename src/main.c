@@ -49,7 +49,7 @@ int	main(int argc, char *argv[])
 	if (argc != 1)
 	{
 		ft_putstr_fd("Error: This program does not accept arguments.\n", 2);
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	welcome_message();
 	while (1)
@@ -68,5 +68,5 @@ int	main(int argc, char *argv[])
 			add_history(line);
 		free(line);
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
