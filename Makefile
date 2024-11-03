@@ -5,7 +5,8 @@ INCDIR          = include/
 
 SRCS            = src/main.c \
                   src/executor.c \
-                  src/parser.c
+                  src/parser.c \
+				  src/utils.c
 
 OBJS            = $(SRCS:src/%.c=$(OBJDIR)%.o)
 

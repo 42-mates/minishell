@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/02 14:05:01 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/03 21:21:14 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ typedef struct s_command
 	char	*name;
 	char	**args;
 }			t_command;
+
+void		welcome_message(void);
+bool		is_empty_line(const char *line);
 
 char		**lexer(char *line);
 t_command	*parser(char **tokens);
