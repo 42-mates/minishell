@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/03 21:21:14 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/04 09:50:28 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ typedef struct s_command
 void		welcome_message(void);
 bool		is_empty_line(const char *line);
 
-char		**lexer(char *line);
-t_command	*parser(char **tokens);
+t_command	*parser(char *line);
 void		executor(t_command *cmd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/03 21:21:36 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/04 17:17:55 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,56 @@ static char	*generate_prompt(void)
 	return (prompt);
 }
 
+void free_command(t_command *cmd)
+{
+    int i = 0;
+
+    if (!cmd)
+        return;
+    while (cmd->args[i])
+    {
+        free(cmd->args[i]);
+        i++;
+    }
+    free(cmd->args);
+    free(cmd);
+}
+
+// for debugging
+void print_command(t_command *cmd)
+{
+    int i;
+
+    if (!cmd)
+    {
+        printf("Command is NULL\n");
+        return;
+    }
+    printf("Command name: %s\n", cmd->name);
+    printf("Arguments:\n");
+    if (cmd->args)
+    {
+        i = 0;
+        while (cmd->args[i])
+        {
+            printf("  args[%d]: %s\n", i, cmd->args[i]);
+            i++;
+        }
+    }
+    else
+        printf("  No arguments\n");
+}
+
+static void	minishell(char *line)
+{
+	t_command *cmd;
+
+	cmd = parser(line);
+	print_command(cmd);
+	//executor(cmd);
+	free_command(cmd);	
+}
+
 int	main(int argc, char *argv[])
 {
 	char	*line;
@@ -66,6 +116,7 @@ int	main(int argc, char *argv[])
 		}
 		if (!is_empty_line(line))
 			add_history(line);
+		minishell(line);
 		free(line);
 	}
 	return (EXIT_SUCCESS);

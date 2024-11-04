@@ -6,21 +6,18 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/02 14:48:46 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/04 16:59:23 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**lexer(char *line)
+t_command	*parser(char *line)
 {
-	return (ft_strtok(line, TOKEN_DELIM));
-}
-
-t_command	*parser(char **tokens)
-{
+	char **tokens;
 	t_command	*cmd;
 
+	tokens = ft_strtok(line, TOKEN_DELIM);
 	cmd = malloc(sizeof(t_command));
 	if (!cmd)
 	{
