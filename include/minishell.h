@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/05 20:59:16 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/05 21:34:28 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
-# include <stdio.h>    // printf, perror
-# include <stdlib.h>   // malloc, free, exit
-# include <sys/wait.h> // waitpid
-# include <unistd.h>   // read, write, close
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
 # define TOKEN_DELIM " \t\r\n\a"
 
@@ -33,6 +33,8 @@ typedef struct s_command
 void		welcome_message(void);
 void		setup_signals(void);
 void    	handle_eof(void);
+void		free_command(t_command *cmd);
+void		print_command(t_command *cmd);
 bool		is_empty_line(const char *line);
 
 t_command	*parser(char *line);
