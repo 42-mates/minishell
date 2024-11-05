@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/04 09:50:28 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:59:16 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>    // printf, perror
 # include <stdlib.h>   // malloc, free, exit
 # include <sys/wait.h> // waitpid
@@ -30,6 +31,8 @@ typedef struct s_command
 }			t_command;
 
 void		welcome_message(void);
+void		setup_signals(void);
+void    	handle_eof(void);
 bool		is_empty_line(const char *line);
 
 t_command	*parser(char *line);

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/04 17:17:55 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:52:02 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,21 @@ void print_command(t_command *cmd)
         printf("  No arguments\n");
 }
 
+static int	init_shell(int argc, char **argv)
+{
+	(void)argv;
+	if (argc != 1)
+	{
+		ft_putstr_fd("Error: This program does not accept arguments.\n", 2);
+		return (1);
+	}
+	setup_signals();
+	// add : копирование переменных окружения
+	// add : обработка уровней вложенности shell
+	welcome_message();
+	return (0);
+}
+
 static void	minishell(char *line)
 {
 	t_command *cmd;
@@ -95,13 +110,8 @@ int	main(int argc, char *argv[])
 	char	*line;
 	char	*prompt;
 
-	(void)argv;
-	if (argc != 1)
-	{
-		ft_putstr_fd("Error: This program does not accept arguments.\n", 2);
+	if (init_shell(argc, argv) != 0)
 		return (EXIT_FAILURE);
-	}
-	welcome_message();
 	while (1)
 	{
 		prompt = generate_prompt();
@@ -110,10 +120,7 @@ int	main(int argc, char *argv[])
 		line = readline(prompt);
 		free(prompt);
 		if (!line)
-		{
-			printf("exit\n");
-			break ;
-		}
+			handle_eof();
 		if (!is_empty_line(line))
 			add_history(line);
 		minishell(line);
