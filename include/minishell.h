@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/10 01:27:23 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/10 19:54:12 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,34 +26,34 @@
 
 typedef struct s_command
 {
-	char	*name;
-	char	**args;
-}			t_command;
+	char			*name;
+	char			**args;
+}					t_command;
 
-typedef struct	s_env
+typedef struct s_env
 {
 	char			*name;
 	char			*value;
 	struct s_env	*next;
-}	t_env;
- 
-typedef struct	s_shell
+}					t_env;
+
+typedef struct s_shell
 {
-	int		exit_status;    // ($?)
-	t_env	*env_vars;
-}	t_shell;
+	int				exit_status; // ($?)
+	t_env			*env_vars;
+}					t_shell;
 
-void		welcome_message(void);
-void		setup_signals(void);
-void    	handle_eof(void);
-void		free_command(t_command *cmd);
-void		print_command(t_command *cmd);
-void		print_env_list(t_env *env_list);
-void		env_lstclear(t_env *lst);
-bool		is_empty_line(const char *line);
-t_env		*init_env(char **envp);
+void				welcome_message(void);
+void				setup_signals(void);
+void				handle_eof(void);
+void				free_command(t_command *cmd);
+void				print_command(t_command *cmd); //debug
+void				print_env_list(t_env *env_list); //debug
+void				env_lstclear(t_env *lst);
+bool				is_empty_line(const char *line);
+t_env				*init_env(char **envp);
 
-t_command	*parser(char *line);
-void		executor(t_command *cmd);
+t_command			*parser(char *line);
+void				executor(t_command *cmd);
 
 #endif

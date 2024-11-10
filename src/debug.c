@@ -1,19 +1,19 @@
 #include "minishell.h"
 
 // printing environment variables from minishell
-void print_env_list(t_env *env_list)
+void	print_env_list(t_env *env_list)
 {
-    t_env *current;
+	t_env	*current;
 
-    current = env_list;
-    while (current)
-    {
-        ft_putstr_fd(current->name, 1);
-        ft_putstr_fd("=", 1);
-        ft_putstr_fd(current->value, 1);
-        ft_putstr_fd("\n", 1);
-        current = current->next;
-    }
+	current = env_list;
+	while (current)
+	{
+		ft_putstr_fd(current->name, 1);
+		ft_putstr_fd("=", 1);
+		ft_putstr_fd(current->value, 1);
+		ft_putstr_fd("\n", 1);
+		current = current->next;
+	}
 }
 
 void	print_command(t_command *cmd)

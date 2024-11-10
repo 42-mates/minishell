@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/10 01:32:25 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/10 20:29:24 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*generate_prompt(void)
 static int	init_shell(int argc, char **argv, char **envp)
 {
 	t_env	*env_list;
-	
+
 	(void)argv;
 	if (argc != 1)
 	{
