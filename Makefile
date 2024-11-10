@@ -7,6 +7,9 @@ SRCS            = src/main.c \
                   src/executor.c \
                   src/parser.c \
 				  src/signals.c \
+				  src/free.c \
+				  src/env.c \
+				  src/debug.c \
 				  src/utils.c
 
 OBJS            = $(SRCS:src/%.c=$(OBJDIR)%.o)

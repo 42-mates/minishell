@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/05 21:28:20 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/10 01:32:25 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,10 @@ static char	*generate_prompt(void)
 	return (prompt);
 }
 
-static int	init_shell(int argc, char **argv)
+static int	init_shell(int argc, char **argv, char **envp)
 {
+	t_env	*env_list;
+	
 	(void)argv;
 	if (argc != 1)
 	{
@@ -49,9 +51,12 @@ static int	init_shell(int argc, char **argv)
 		return (1);
 	}
 	setup_signals();
-	// add : копирование переменных окружения
+	env_list = init_env(envp);
+	print_env_list(env_list);
 	// add : обработка уровней вложенности shell
-	welcome_message();
+	// add : корр. очистка списка пер.окр.
+	// add : обработка ошибок env
+	// welcome_message();
 	return (0);
 }
 
@@ -60,17 +65,17 @@ static void	minishell(char *line)
 	t_command	*cmd;
 
 	cmd = parser(line);
-	print_command(cmd);
+	// print_command(cmd);
 	// executor(cmd);
 	free_command(cmd);
 }
 
-int	main(int argc, char *argv[])
+int	main(int argc, char *argv[], char *envp[])
 {
 	char	*input;
 	char	*prompt;
 
-	if (init_shell(argc, argv) != 0)
+	if (init_shell(argc, argv, envp) != 0)
 		return (EXIT_FAILURE);
 	while (1)
 	{
