@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/10 20:29:24 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/10 21:20:15 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*generate_prompt(void)
 	return (prompt);
 }
 
-static int	init_shell(int argc, char **argv, char **envp)
+static t_env *init_shell(int argc, char **argv, char **envp)
 {
 	t_env	*env_list;
 
@@ -48,25 +48,30 @@ static int	init_shell(int argc, char **argv, char **envp)
 	if (argc != 1)
 	{
 		ft_putstr_fd("Error: This program does not accept arguments.\n", 2);
-		return (1);
+		return (NULL);
 	}
 	setup_signals();
+	welcome_message();
 	env_list = init_env(envp);
-	print_env_list(env_list);
+	// print_env_list(env_list);
+	if (!env_list)
+    {
+        ft_putstr_fd("Error: Failed to initialize environment.\n", 2);
+        return (NULL);
+    }
+    return (env_list);
 	// add : обработка уровней вложенности shell
 	// add : корр. очистка списка пер.окр.
 	// add : обработка ошибок env
-	// welcome_message();
-	return (0);
 }
 
-static void	minishell(char *line)
+static void	minishell(char *line, t_env *env_list)
 {
 	t_command	*cmd;
 
 	cmd = parser(line);
 	// print_command(cmd);
-	// executor(cmd);
+	executor(cmd, env_list);
 	free_command(cmd);
 }
 
@@ -74,8 +79,9 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	char	*input;
 	char	*prompt;
+	t_env	*env_list;
 
-	if (init_shell(argc, argv, envp) != 0)
+	if ((env_list = init_shell(argc, argv, envp)) == NULL)
 		return (EXIT_FAILURE);
 	while (1)
 	{
@@ -88,8 +94,9 @@ int	main(int argc, char *argv[], char *envp[])
 			handle_eof();
 		if (!is_empty_line(input))
 			add_history(input);
-		minishell(input);
+		minishell(input, env_list);
 		free(input);
 	}
+	free_env(env_list);
 	return (EXIT_SUCCESS);
 }
