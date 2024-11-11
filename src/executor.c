@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/10 22:34:33 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/10 23:29:57 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,18 @@ static int is_builtin(const char *cmd_name)
 }
 
 // note : нужна реализация
-void execute_builtin(t_command *cmd, t_env *env_list)
+void execute_builtin(t_command *cmd, t_shell *shell)
 {
 	(void)cmd;
-	(void)env_list;
+	(void)shell;
 }
 
-void	execute_command(t_command *cmd, t_env *env_list)
+void	execute_command(t_command *cmd, t_shell *shell)
 {
 	pid_t	pid;
 	int		status;
 
-	(void)env_list;
+	(void)shell;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -58,10 +58,10 @@ void	execute_command(t_command *cmd, t_env *env_list)
 	}
 }
  
-void	executor(t_command *cmd, t_env *env_list)
+void	executor(t_command *cmd, t_shell *shell)
 {
 	if (is_builtin(cmd->name))
-		execute_builtin(cmd, env_list);
+		execute_builtin(cmd, shell);
     else
-		execute_command(cmd, env_list);
+		execute_command(cmd, shell);
 }

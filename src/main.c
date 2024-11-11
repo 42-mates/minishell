@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/10 21:20:15 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/10 23:47:43 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ static char	*generate_prompt(void)
 	return (prompt);
 }
 
-static t_env *init_shell(int argc, char **argv, char **envp)
+static t_shell *init_shell(int argc, char **argv, char **envp)
 {
-	t_env	*env_list;
+	t_shell *shell;
 
 	(void)argv;
 	if (argc != 1)
@@ -52,26 +52,29 @@ static t_env *init_shell(int argc, char **argv, char **envp)
 	}
 	setup_signals();
 	welcome_message();
-	env_list = init_env(envp);
+	shell = malloc(sizeof(t_shell));
+	if (!shell)
+        return (NULL);
+	shell->env_vars = init_env(envp);
 	// print_env_list(env_list);
-	if (!env_list)
+	// add : обработка ошибок env
+	if (!shell->env_vars)
     {
-        ft_putstr_fd("Error: Failed to initialize environment.\n", 2);
+        free(shell);
         return (NULL);
     }
-    return (env_list);
+	shell->exit_status = 0;
 	// add : обработка уровней вложенности shell
-	// add : корр. очистка списка пер.окр.
-	// add : обработка ошибок env
+    return (shell);
 }
 
-static void	minishell(char *line, t_env *env_list)
+static void	minishell(char *line, t_shell *shell)
 {
 	t_command	*cmd;
 
 	cmd = parser(line);
 	// print_command(cmd);
-	executor(cmd, env_list);
+	executor(cmd, shell);
 	free_command(cmd);
 }
 
@@ -79,9 +82,9 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	char	*input;
 	char	*prompt;
-	t_env	*env_list;
+	t_shell *shell;
 
-	if ((env_list = init_shell(argc, argv, envp)) == NULL)
+	if ((shell = init_shell(argc, argv, envp)) == NULL)
 		return (EXIT_FAILURE);
 	while (1)
 	{
@@ -91,12 +94,12 @@ int	main(int argc, char *argv[], char *envp[])
 		input = readline(prompt);
 		free(prompt);
 		if (!input)
-			handle_eof();
+			handle_eof(shell);
 		if (!is_empty_line(input))
 			add_history(input);
-		minishell(input, env_list);
+		minishell(input, shell);
 		free(input);
 	}
-	free_env(env_list);
+	free_shell(shell);
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 20:36:13 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/05 22:16:59 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/10 23:51:28 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ static void	handle_sigint(int sig)
 }
 
 // EOF (ctrl-D)
-void	handle_eof(void)
+void	handle_eof(t_shell *shell)
 {
 	printf("exit\n");
+	free_shell(shell);
 	exit(EXIT_SUCCESS);
+	// exit(shell->exit_status);
 }
 
 void	setup_signals(void)
