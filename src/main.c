@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/10 23:47:43 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/11 19:24:12 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static t_shell *init_shell(int argc, char **argv, char **envp)
 	if (!shell)
         return (NULL);
 	shell->env_vars = init_env(envp);
-	// print_env_list(env_list);
+	// print_env_list(shell->env_vars);
 	// add : обработка ошибок env
 	if (!shell->env_vars)
     {
