@@ -1,36 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 20:36:13 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/13 20:17:22 by oprosvir         ###   ########.fr       */
+/*   Created: 2024/11/13 21:28:03 by oprosvir          #+#    #+#             */
+/*   Updated: 2024/11/13 21:28:49 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// SIGINT (ctrl-C)
-static void	handle_sigint(int sig)
+void	ft_exit(t_command *cmd, t_shell *shell)
 {
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-// EOF (ctrl-D)
-void	handle_eof(t_shell *shell)
-{
-	printf("exit\n");
+	free_command(cmd);
 	exit(free_shell(shell));
 }
 
-void	setup_signals(void)
+// note : нужна реализация
+void	execute_builtin(t_command *cmd, t_shell *shell)
 {
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	if (ft_strncmp(cmd->name, "exit", 5) == 0)
+		ft_exit(cmd, shell);
 }

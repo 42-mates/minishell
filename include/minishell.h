@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/11 18:47:52 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/13 22:17:31 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,14 @@ void				welcome_message(void);
 void				setup_signals(void);
 void				handle_eof(t_shell *shell);
 void				free_command(t_command *cmd);
-void				free_shell(t_shell *shell);
+void				execute_builtin(t_command *cmd, t_shell *shell);
+int					free_shell(t_shell *shell);
 void				print_command(t_command *cmd); //debug
 void				print_env_list(t_env *env_list); //debug
 bool				is_empty_line(const char *line);
 t_env				*init_env(char **envp);
 char				**convert_env_list_to_array(t_env *env_list);
+char				*find_relative_path(char *cmd, char **envp);
 
 t_command			*parser(char *line);
 void				executor(t_command *cmd, t_shell *shell);

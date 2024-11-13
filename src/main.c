@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/11 19:24:12 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/13 22:14:54 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,24 @@ static char	*generate_prompt(void)
 	ft_strlcat(prompt, "$ ", len_prompt);
 	free(cwd);
 	return (prompt);
+}
+
+static char *get_user_input(t_shell *shell)
+{
+    char *prompt;
+    char *input;
+
+    prompt = generate_prompt();
+	if (!prompt)
+	{
+		shell->exit_status = 1;
+		exit(free_shell(shell));
+	}
+    input = readline(prompt);
+    free(prompt);
+    if (!input)
+        handle_eof(shell);
+    return (input);
 }
 
 static t_shell *init_shell(int argc, char **argv, char **envp)
@@ -81,25 +99,19 @@ static void	minishell(char *line, t_shell *shell)
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*input;
-	char	*prompt;
 	t_shell *shell;
 
 	if ((shell = init_shell(argc, argv, envp)) == NULL)
 		return (EXIT_FAILURE);
 	while (1)
 	{
-		prompt = generate_prompt();
-		if (!prompt)
-			return (EXIT_FAILURE);
-		input = readline(prompt);
-		free(prompt);
+		input = get_user_input(shell);
 		if (!input)
-			handle_eof(shell);
+			continue ;
 		if (!is_empty_line(input))
 			add_history(input);
 		minishell(input, shell);
 		free(input);
 	}
-	free_shell(shell);
-	return (EXIT_SUCCESS);
+	return free_shell(shell);
 }

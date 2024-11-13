@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/10 23:39:02 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/13 21:49:23 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,16 @@ static void	free_env(t_env *lst)
 	}
 }
 
-void free_shell(t_shell *shell)
+int free_shell(t_shell *shell)
 {
-    if (!shell)
-        return;
+	int	exit_status;
+	
+	if (!shell)
+		return (EXIT_FAILURE);
+	exit_status = shell->exit_status;
     free_env(shell->env_vars);
     free(shell);
+	return (exit_status);
 }
 
 void	free_command(t_command *cmd)
