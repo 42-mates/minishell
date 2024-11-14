@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 18:31:38 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 20:12:23 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,27 @@ static char	*generate_prompt(void)
 	return (prompt);
 }
 
-static char *get_input(t_shell *shell)
+static char	*get_input(t_shell *shell)
 {
-    char *prompt;
-    char *input;
+	char	*prompt;
+	char	*input;
 
-    prompt = generate_prompt();
+	prompt = generate_prompt();
 	if (!prompt)
 	{
 		shell->exit_status = 1;
 		exit(free_shell(shell));
 	}
-    input = readline(prompt);
-    free(prompt);
-    if (!input)
-        handle_eof(shell);
-    return (input);
+	input = readline(prompt);
+	free(prompt);
+	if (!input)
+		handle_eof(shell);
+	return (input);
 }
 
-static t_shell *init_shell(int argc, char **argv, char **envp)
+static t_shell	*init_shell(int argc, char **argv, char **envp)
 {
-	t_shell *shell;
+	t_shell	*shell;
 
 	(void)argv;
 	if (argc != 1)
@@ -72,16 +72,16 @@ static t_shell *init_shell(int argc, char **argv, char **envp)
 	welcome_message();
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
-        return (NULL);
+		return (NULL);
 	shell->env_vars = init_env(envp);
 	if (!shell->env_vars)
-    {
-        free(shell);
-        return (NULL);
-    }
+	{
+		free(shell);
+		return (NULL);
+	}
 	shell->exit_status = 0;
 	// add : обработка уровней вложенности shell
-    return (shell);
+	return (shell);
 }
 
 static void	minishell(char *line, t_shell *shell)
@@ -97,7 +97,7 @@ static void	minishell(char *line, t_shell *shell)
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*input;
-	t_shell *shell;
+	t_shell	*shell;
 
 	if ((shell = init_shell(argc, argv, envp)) == NULL)
 		return (EXIT_FAILURE);
@@ -111,5 +111,5 @@ int	main(int argc, char *argv[], char *envp[])
 		minishell(input, shell);
 		free(input);
 	}
-	return free_shell(shell);
+	return (free_shell(shell));
 }

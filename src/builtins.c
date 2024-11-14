@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:28:03 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 18:11:20 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 20:08:36 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ return codes (shell->exit_status):
 0 : success
 */
 
-void ft_env(t_command *cmd, t_shell *shell)
+void	ft_env(t_command *cmd, t_shell *shell)
 {
-    t_env *current;
+	t_env	*current;
 
-    if (cmd->args[1])
-    {
+	if (cmd->args[1])
+	{
 		shell->exit_status = 2;
 		ft_putstr_fd("env: no options or arguments are allowed\n", 2);
 		return ;

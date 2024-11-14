@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:22:28 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 13:17:16 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 20:10:29 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,11 @@ static char	*create_string(const char *name, const char *value)
 {
 	size_t	name_len;
 	size_t	value_len;
+	char	*str;
 
 	name_len = ft_strlen(name);
 	value_len = ft_strlen(value);
-	char *str = malloc(name_len + 1 + value_len + 1); // name + '=' + value	+ '\0'
+	str = malloc(name_len + 1 + value_len + 1); // name + '=' + value	+ '\0'
 	if (!str)
 		return (NULL);
 	ft_memcpy(str, name, name_len);

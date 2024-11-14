@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 18:21:38 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 20:07:37 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include <errno.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -21,7 +22,6 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <errno.h>
 
 # define TOKEN_DELIM " \t\r\n\a"
 
@@ -50,8 +50,7 @@ void				handle_eof(t_shell *shell);
 void				free_command(t_command *cmd);
 void				execute_builtin(t_command *cmd, t_shell *shell);
 int					free_shell(t_shell *shell);
-void				print_command(t_command *cmd); //debug
-void				print_env_list(t_env *env_list); //debug
+void				print_command(t_command *cmd);   // debug
 void				free_memory(char **ptr);
 void				free_env(t_env *lst);
 bool				is_empty_line(const char *line);

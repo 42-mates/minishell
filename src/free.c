@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 18:21:25 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 20:11:47 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,15 @@ void	free_env(t_env *lst)
 	}
 }
 
-int free_shell(t_shell *shell)
+int	free_shell(t_shell *shell)
 {
 	int	exit_status;
-	
+
 	if (!shell)
 		return (EXIT_FAILURE);
 	exit_status = shell->exit_status;
-    free_env(shell->env_vars);
-    free(shell);
+	free_env(shell->env_vars);
+	free(shell);
 	return (exit_status);
 }
 
@@ -45,8 +45,8 @@ void	free_memory(char **ptr)
 	int	i;
 
 	i = 0;
-    if (!ptr)
-		return;
+	if (!ptr)
+		return ;
 	while (ptr[i])
 	{
 		free(ptr[i]);
