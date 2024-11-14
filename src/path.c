@@ -6,29 +6,11 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:35:00 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/13 23:52:22 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 13:08:56 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*ft_getenv(const char *name, char **envp)
-{
-	char	*value;
-	int		i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], name, ft_strlen(name)) == 0)
-		{
-			value = envp[i] + ft_strlen(name) + 1;
-			return (value);
-		}
-		i++;
-	}
-	return (NULL);
-}
 
 char	*find_relative_path(char *cmd, char **envp)
 {

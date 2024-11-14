@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 00:01:15 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 13:19:52 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,9 @@ void				print_env_list(t_env *env_list); //debug
 void				free_memory(char **ptr);
 bool				is_empty_line(const char *line);
 t_env				*init_env(char **envp);
-char				**convert_env_list_to_array(t_env *env_list);
+char				**convert_to_array(t_env *env_list);
 char				*find_relative_path(char *cmd, char **envp);
+char				*ft_getenv(const char *name, char **envp);
 
 t_command			*parser(char *line);
 void				executor(t_command *cmd, t_shell *shell);

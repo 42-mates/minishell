@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 00:14:49 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 13:01:22 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,12 @@ void	execute_command(t_command *cmd, t_shell *shell)
 	char	**envp;
 	char	*path;
 
-	envp = convert_env_list_to_array(shell->env_vars);
+	envp = convert_to_array(shell->env_vars);
+	if (!envp)
+    {
+		shell->exit_status = 1;
+		return ;
+    }
 	path = find_relative_path(cmd->name, envp);
 	if (!path)
 	{
@@ -39,7 +44,7 @@ void	execute_command(t_command *cmd, t_shell *shell)
 		ft_putstr_fd(": command not found\n", 2);
 		shell->exit_status = 127;
 		free_memory(envp);
-		return;
+		return ;
 	}
 	pid = fork();
 	if (pid == 0)

@@ -8,7 +8,8 @@ SRCS            = src/main.c \
                   src/parser.c \
 				  src/signals.c \
 				  src/free.c \
-				  src/env.c \
+				  src/env_arr.c \
+				  src/env_lst.c \
 				  src/debug.c \
 				  src/utils.c \
 				  src/builtins.c \
