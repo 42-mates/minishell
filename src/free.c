@@ -6,13 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 00:05:19 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:21:25 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	free_env(t_env *lst)
+void	free_env(t_env *lst)
 {
 	t_env	*temp;
 

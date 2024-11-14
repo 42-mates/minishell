@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/13 22:14:54 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:31:38 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*generate_prompt(void)
 	return (prompt);
 }
 
-static char *get_user_input(t_shell *shell)
+static char *get_input(t_shell *shell)
 {
     char *prompt;
     char *input;
@@ -74,8 +74,6 @@ static t_shell *init_shell(int argc, char **argv, char **envp)
 	if (!shell)
         return (NULL);
 	shell->env_vars = init_env(envp);
-	// print_env_list(shell->env_vars);
-	// add : обработка ошибок env
 	if (!shell->env_vars)
     {
         free(shell);
@@ -105,7 +103,7 @@ int	main(int argc, char *argv[], char *envp[])
 		return (EXIT_FAILURE);
 	while (1)
 	{
-		input = get_user_input(shell);
+		input = get_input(shell);
 		if (!input)
 			continue ;
 		if (!is_empty_line(input))

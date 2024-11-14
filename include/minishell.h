@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 13:19:52 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:21:38 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int					free_shell(t_shell *shell);
 void				print_command(t_command *cmd); //debug
 void				print_env_list(t_env *env_list); //debug
 void				free_memory(char **ptr);
+void				free_env(t_env *lst);
 bool				is_empty_line(const char *line);
 t_env				*init_env(char **envp);
 char				**convert_to_array(t_env *env_list);
