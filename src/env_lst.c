@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 13:25:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 20:10:49 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 20:16:32 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ static int	append_node(t_env **list, const char *name, const char *value)
 	return (0);
 }
 
+static	t_env *cleanup_init_env(char *name, char *value, t_env *env_list)
+{
+    free(name);
+    free(value);
+    free_env(env_list);
+    return (NULL);
+}
+
 // initializes t_env list with envp environment variables
 // passed at program startup
 
@@ -60,12 +68,7 @@ t_env	*init_env(char **envp)
 			name = ft_substr(envp[i], 0, equals_sign - envp[i]);
 			value = ft_strdup(equals_sign + 1);
 			if (append_node(&env_list, name, value) != 0)
-			{
-				free(name);
-				free(value);
-				free_env(env_list);
-				return (NULL);
-			}
+				return cleanup_init_env(name, value, env_list);
 			free(name);
 			free(value);
 		}
