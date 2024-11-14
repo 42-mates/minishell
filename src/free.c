@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/13 21:49:23 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 00:05:19 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,25 @@ int free_shell(t_shell *shell)
 	return (exit_status);
 }
 
-void	free_command(t_command *cmd)
+void	free_memory(char **ptr)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	if (!cmd)
-		return ;
-	while (cmd->args[i])
+    if (!ptr)
+		return;
+	while (ptr[i])
 	{
-		free(cmd->args[i]);
+		free(ptr[i]);
 		i++;
 	}
-	free(cmd->args);
+	free(ptr);
+}
+
+void	free_command(t_command *cmd)
+{
+	if (!cmd)
+		return ;
+	free_memory(cmd->args);
 	free(cmd);
 }

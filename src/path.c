@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:35:00 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/13 21:36:08 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/13 23:52:22 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,6 @@ char	*ft_getenv(const char *name, char **envp)
 		i++;
 	}
 	return (NULL);
-}
-
-void	free_memory(char **ptr)
-{
-	int	i;
-
-	i = 0;
-	while (ptr[i])
-	{
-		free(ptr[i]);
-		i++;
-	}
-	free(ptr);
 }
 
 char	*find_relative_path(char *cmd, char **envp)

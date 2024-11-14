@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 18:22:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/10 01:14:54 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/14 00:00:30 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ void	welcome_message(void)
 	ft_putstr_fd("| |  | | | | | | \\__ \\ | | |  __/ | |\n", 1);
 	ft_putstr_fd("|_|  |_|_|_| |_|_|___/_| |_|\\___|_|_|\n", 1);
 	ft_putstr_fd("\n", 1);
+}
+
+void	error_exit(char *msg)
+{
+	ft_putstr_fd(strerror(errno), 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(msg, 2);
+	exit(EXIT_FAILURE);
 }
 
 bool	is_empty_line(const char *line)
