@@ -10,7 +10,10 @@ SRCS            = src/main.c \
 				  src/free.c \
 				  src/env.c \
 				  src/debug.c \
-				  src/utils.c
+				  src/utils.c \
+				  src/exit.c \
+				  src/pwd.c \
+				  src/echo.c
 
 OBJS            = $(SRCS:src/%.c=$(OBJDIR)%.o)
 

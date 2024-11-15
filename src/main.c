@@ -73,6 +73,14 @@ static void	minishell(char *line, t_shell *shell)
 	t_command	*cmd;
 
 	cmd = parser(line);
+	// printf("cmd->name = %s\n", cmd->name);
+	// int i = 0;
+	// while (cmd->args[i] != NULL)
+	// {
+	// 	printf("cmd->args[%d] = %s\n", i, cmd->args[i]);
+	// 	i++;
+	// }
+	// printf("path = %s\n", cmd->path);
 	// print_command(cmd);
 	executor(cmd, shell);
 	free_command(cmd);

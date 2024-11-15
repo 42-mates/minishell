@@ -26,5 +26,6 @@ t_command	*parser(char *line)
 	}
 	cmd->name = tokens[0];
 	cmd->args = tokens;
+	cmd->path = NULL;
 	return (cmd);
 }
