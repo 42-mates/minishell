@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 21:28:03 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 20:08:36 by oprosvir         ###   ########.fr       */
+/*   Created: 2024/11/15 15:54:56 by oprosvir          #+#    #+#             */
+/*   Updated: 2024/11/15 15:55:18 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,4 @@ void	ft_env(t_command *cmd, t_shell *shell)
 		current = current->next;
 	}
 	shell->exit_status = 0;
-}
-
-void	ft_exit(t_command *cmd, t_shell *shell)
-{
-	free_command(cmd);
-	exit(free_shell(shell));
-}
-
-// note : нужна реализация
-void	execute_builtin(t_command *cmd, t_shell *shell)
-{
-	if (ft_strcmp(cmd->name, "exit") == 0)
-		ft_exit(cmd, shell);
-	else if (ft_strcmp(cmd->name, "env") == 0)
-		ft_env(cmd, shell);
 }

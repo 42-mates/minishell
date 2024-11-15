@@ -11,12 +11,11 @@ SRCS            = src/main.c \
 				  src/env_arr.c \
 				  src/env_lst.c \
 				  src/debug.c \
+				  src/builtins/exit.c \
+				  src/builtins/env.c \
+				  src/builtins/pwd.c \
+				  src/builtins/echo.c \
 				  src/utils.c \
-				  src/exit.c \
-				  src/pwd.c \
-				  src/echo.c
-				  src/utils.c \
-				  src/builtins.c \
 				  src/path.c
 
 OBJS            = $(SRCS:src/%.c=$(OBJDIR)%.o)
@@ -35,7 +34,7 @@ $(NAME): 	$(LIBFT) $(OBJS)
 			$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
 
 $(OBJDIR)%.o: src/%.c
-			@mkdir -p $(OBJDIR)
+			@mkdir -p $(dir $@)
 			$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):

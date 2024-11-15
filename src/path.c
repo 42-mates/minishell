@@ -6,11 +6,28 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:35:00 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 13:08:56 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:20:47 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+/*
+void 	check_absolute_path(t_command *cmd, char **envp)
+{
+	if (cmd->args[0][0] == '/')
+	{
+		if (access(cmd->args[0], X_OK) == 0)
+			cmd->path = cmd->args[0];
+		else
+		{
+			// display_error(cmd->args[0]);
+			perror(cmd->args[0]);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+		find_relative_path(cmd, envp);
+}*/
 
 char	*find_relative_path(char *cmd, char **envp)
 {
