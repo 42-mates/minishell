@@ -22,6 +22,8 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <limits.h>
+# include <errno.h>
 
 # define TOKEN_DELIM " \t\r\n\a"
 
@@ -29,6 +31,7 @@ typedef struct s_command
 {
 	char			*name;
 	char			**args;
+	char			*path;
 }					t_command;
 
 typedef struct s_env
@@ -61,5 +64,8 @@ char				*ft_getenv(const char *name, char **envp);
 
 t_command			*parser(char *line);
 void				executor(t_command *cmd, t_shell *shell);
+void    			ft_exit(t_command *cmd, t_shell *shell);
+void    			ft_pwd(t_shell *shell);
+void    			ft_echo(t_command *cmd, t_shell *shell);
 
 #endif

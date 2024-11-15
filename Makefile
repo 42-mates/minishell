@@ -12,6 +12,10 @@ SRCS            = src/main.c \
 				  src/env_lst.c \
 				  src/debug.c \
 				  src/utils.c \
+				  src/exit.c \
+				  src/pwd.c \
+				  src/echo.c
+				  src/utils.c \
 				  src/builtins.c \
 				  src/path.c
 
