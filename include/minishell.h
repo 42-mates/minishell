@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/16 13:01:09 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/16 13:17:50 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,9 @@ t_env				*init_env(char **envp);
 char				**convert_to_array(t_env *env_list);
 char				*ft_getenv(const char *name, char **envp);
 char				*get_full_exec_path(t_command *cmd, char **envp);
+int					is_builtin(const char *cmd_name);
 
-t_command			*parser(char *line);
+t_command			*parser(char *line, t_shell *shell);
 void				executor(t_command *cmd, t_shell *shell);
 void    			ft_exit(t_command *cmd, t_shell *shell);
 void    			ft_pwd(t_shell *shell);

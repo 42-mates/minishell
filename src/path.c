@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:35:00 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/16 12:31:05 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/16 13:19:35 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*get_full_exec_path(t_command *cmd, char **envp)
 	{
 		full_path = ft_strjoin(split_paths[i], "/");
 		full_path = ft_strjoin(full_path, cmd->args[0]);
-		printf("%s\n", full_path);
+		// printf("%s\n", full_path);
 		if (access(full_path, X_OK) == 0)
 		{
 			free_memory(split_paths);
