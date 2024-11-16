@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/15 16:05:03 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/16 13:01:09 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <limits.h>
-# include <errno.h>
 
 # define TOKEN_DELIM " \t\r\n\a"
 
@@ -31,7 +30,6 @@ typedef struct s_command
 {
 	char			*name;
 	char			**args;
-	char			*path;
 }					t_command;
 
 typedef struct s_env
@@ -59,9 +57,8 @@ void				free_env(t_env *lst);
 bool				is_empty_line(const char *line);
 t_env				*init_env(char **envp);
 char				**convert_to_array(t_env *env_list);
-char				*find_relative_path(char *cmd, char **envp);
 char				*ft_getenv(const char *name, char **envp);
-void				check_absolute_path(t_command *cmd, char **envp);
+char				*get_full_exec_path(t_command *cmd, char **envp);
 
 t_command			*parser(char *line);
 void				executor(t_command *cmd, t_shell *shell);

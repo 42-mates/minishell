@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/15 16:15:42 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/16 12:58:53 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	execute_command(t_command *cmd, t_shell *shell)
 	pid_t	pid;
 	int		status;
 	char	**envp;
-	char	*path;
 
 	envp = convert_to_array(shell->env_vars);
 	if (!envp)
@@ -50,23 +49,13 @@ void	execute_command(t_command *cmd, t_shell *shell)
 		shell->exit_status = 1;
 		return ;
 	}
-	path = find_relative_path(cmd->name, envp);
-	if (!path)
-	{
-		ft_putstr_fd(cmd->name, 2);
-		ft_putstr_fd(": command not found\n", 2);
-		shell->exit_status = 127;
-		free_memory(envp);
-		return ;
-	}
 	// int		pipefd[2];
-	//int		wstatus;
-
+	// int		wstatus;
 	// if (pipe(pipefd) == -1)
 	// {
 	// 	perror("pipe");
 	// 	shell->exit_status = errno;
-	// 	return;
+	// 	return ;
 	// }
 	pid = fork();
 	if (pid < 0)
@@ -76,16 +65,15 @@ void	execute_command(t_command *cmd, t_shell *shell)
 		perror("fork");
 		shell->exit_status = errno;
 		ft_putendl_fd(strerror(errno), 2);
-		return;
+		return ;
 	}
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		if (execve(path, cmd->args, envp) == -1)
+		if (execve(cmd->args[0], cmd->args, envp) == -1)
 		{
 			perror("execvp");
-			free(path);
 			free_memory(envp);
 			exit(126);
 		}
@@ -106,20 +94,13 @@ void	execute_command(t_command *cmd, t_shell *shell)
 		else
 			shell->exit_status = 1;
 	}
-	free(path);
 	free_memory(envp);
 }
 
 void	executor(t_command *cmd, t_shell *shell)
 {
-	//char	**envp;
-
 	if (is_builtin(cmd->name))
 		execute_builtin(cmd, shell);
 	else
-	{
-		// envp = convert_env_list_to_array(shell->env_vars);
-		// check_absolute_path(cmd, envp);
 		execute_command(cmd, shell);
-	}
 }
