@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/16 13:19:09 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/16 16:36:08 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ t_command	*parser(char *line, t_shell *shell)
 	char		**tokens;
 	t_command	*cmd;
 	char		*exec_path;
-	char		**envp;
 
 	tokens = ft_strtok(line, TOKEN_DELIM);
 	if (!tokens || !tokens[0])
@@ -31,12 +30,11 @@ t_command	*parser(char *line, t_shell *shell)
 		ft_printf("allocation error\n");
 		exit(EXIT_FAILURE);
 	}
-	envp = convert_to_array(shell->env_vars);
 	cmd->name = tokens[0];
 	cmd->args = tokens;
 	if (!is_builtin(cmd->name))
 	{
-		exec_path = get_full_exec_path(cmd, envp);
+		exec_path = get_path(cmd, shell->env_vars);
 		if (!exec_path)
 		{
 			ft_putstr_fd(tokens[0], 2);
@@ -50,6 +48,5 @@ t_command	*parser(char *line, t_shell *shell)
 		tokens[0] = exec_path;
 		cmd->args = tokens;
 	}
-	
 	return (cmd);
 }
