@@ -6,11 +6,28 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/16 16:36:08 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/17 19:04:43 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*
+void handle_redirections(char *command)
+{
+    // Parse and apply <, >, <<, and >> redirections
+}
+
+char *expand_env_vars(char *input)
+{
+    // Parse and replace environment variables (e.g., $USER)
+}
+
+void handle_pipes(char **commands)
+{
+    // Create a pipeline if commands contain `|`
+}
+*/
 
 t_command	*parser(char *line, t_shell *shell)
 {

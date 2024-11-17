@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/16 16:36:56 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/17 19:19:41 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@
 
 typedef struct s_command
 {
-	char			*name;
-	char			**args;
+	char				*name;
+	char				**args;
+	char				*output_file;
+	char				*input_file;	
+	struct s_command	*next;
 }					t_command;
 
 typedef struct s_env
