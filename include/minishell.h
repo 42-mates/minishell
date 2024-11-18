@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/18 14:40:49 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/18 14:58:53 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libft.h"
 # include <errno.h>
-# include <limits.h>
+#include <linux/limits.h>
 # include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
