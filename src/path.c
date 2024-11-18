@@ -6,81 +6,52 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:35:00 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/16 13:19:35 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/17 18:15:38 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-void	check_absolute_path(t_command *cmd, char **envp)
+static char	*search_in_paths(char **paths, char *cmd_name)
 {
-	if (cmd->args[0][0] == '/')
-	{
-		if (access(cmd->args[0], X_OK) == 0)
-			cmd->path = cmd->args[0];
-		else
-		{
-			// display_error(cmd->args[0]);
-			perror(cmd->args[0]);
-			exit(EXIT_FAILURE);
-		}
-	}
-	else
-		find_relative_path(cmd, envp);
-}
-
-char	*find_relative_path(char *cmd, char **envp)
-{
-	char	*path;
-	char	**split_paths;
-	char	*path_slash;
+	char	*temp;
+	char	*full_path;
 	int		i;
 
-	split_paths = ft_split(ft_getenv("PATH", envp), ':');
 	i = 0;
-	while (split_paths[i])
+	while (paths[i])
 	{
-		path_slash = ft_strjoin(split_paths[i], "/");
-		path = ft_strjoin(path_slash, cmd);
-		free(path_slash);
-		if (access(path, X_OK) == 0)
-			return (path);
-		free(path);
+		temp = ft_strjoin(paths[i], "/");
+		if (!temp)
+			return (NULL);
+		full_path = ft_strjoin(temp, cmd_name);
+		free(temp);
+		if (!full_path)
+			return (NULL);
+		if (access(full_path, X_OK) == 0)
+			return (full_path);
+		free(full_path);
 		i++;
 	}
-	free_memory(split_paths);
 	return (NULL);
 }
-*/
 
-char	*get_full_exec_path(t_command *cmd, char **envp)
+// add : malloc allocation errors
+char	*get_path(t_command *cmd, t_env *env_list)
 {
 	char	*path;
 	char	**split_paths;
 	char	*full_path;
-	int		i;
 
 	if (access(cmd->args[0], X_OK) == 0)
-		return (ft_strdup(cmd->args[0])); // Если абсолютный путь корректен
-	path = ft_getenv("PATH", envp);
+		return (ft_strdup(cmd->args[0]));
+	path = getenv_lst("PATH", env_list);
 	if (!path)
 		return (NULL);
 	split_paths = ft_split(path, ':');
-	i = 0;
-	while (split_paths[i])
-	{
-		full_path = ft_strjoin(split_paths[i], "/");
-		full_path = ft_strjoin(full_path, cmd->args[0]);
-		// printf("%s\n", full_path);
-		if (access(full_path, X_OK) == 0)
-		{
-			free_memory(split_paths);
-			return (full_path);
-		}
-		free(full_path);
-		i++;
-	}
+	if (!split_paths)
+		return (NULL);
+	full_path = search_in_paths(split_paths, cmd->args[0]);
 	free_memory(split_paths);
-	return (NULL);
+	return (full_path);
 }

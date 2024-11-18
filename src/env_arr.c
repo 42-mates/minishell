@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:22:28 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 20:10:29 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:58:54 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	**convert_to_array(t_env *env_list)
 	return (envp);
 }
 
-char	*ft_getenv(const char *name, char **envp)
+char	*getenv_arr(const char *name, char **envp)
 {
 	char	*value;
 	int		i;

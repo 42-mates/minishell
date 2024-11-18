@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 13:25:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 20:48:46 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:58:26 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,20 @@
 // t_env_var *get_env_var(t_env_var *env_list, const char *name);
 // void set_env_var(t_env_var **env_list, const char *name, const char *value);
 // void unset_env_var(t_env_var **env_list, const char *name);
+
+char	*getenv_lst(const char *name, t_env *env_list)
+{
+	t_env	*current;
+
+	current = env_list;
+	while (current)
+	{
+		if (ft_strcmp(current->name, name) == 0)
+			return (current->value);
+		current = current->next;
+	}
+	return (NULL);
+}
 
 static int	append_node(t_env **list, const char *env_entry)
 {
@@ -56,7 +70,7 @@ t_env	*init_env(char **envp)
 		if (append_node(&env_list, envp[i]) != 0)
 		{
 			free_env(env_list);
-			return(NULL);
+			return (NULL);
 		}
 		i++;
 	}

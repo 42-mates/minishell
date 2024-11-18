@@ -6,23 +6,21 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/16 13:10:48 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/17 19:25:57 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// note : заглушка для начала работы executor
-int	is_builtin(const char *cmd_name)
+int is_builtin(const char *cmd_name)
 {
-	const char	*builtins[] = {"cd", "export", "unset", "env", "exit", "pwd", "echo", NULL};
-
-	for (int i = 0; builtins[i]; i++)
-	{
-		if (ft_strcmp(cmd_name, builtins[i]) == 0)
-			return (1);
-	}
-	return (0);
+    return (ft_strcmp(cmd_name, "cd") == 0 ||
+            ft_strcmp(cmd_name, "echo") == 0 ||
+            ft_strcmp(cmd_name, "pwd") == 0 ||
+            ft_strcmp(cmd_name, "export") == 0 ||
+            ft_strcmp(cmd_name, "unset") == 0 ||
+            ft_strcmp(cmd_name, "env") == 0 ||
+            ft_strcmp(cmd_name, "exit") == 0);
 }
 
 void	execute_builtin(t_command *cmd, t_shell *shell)
