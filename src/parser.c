@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/17 22:30:28 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/18 15:05:44 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ t_command *parser(char *line, t_shell *shell)
                 continue;
             }
             new_cmd->name = exec_path;
+            new_cmd->args[0] = exec_path;
         }
 
         if (!head)
