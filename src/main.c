@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/18 15:02:54 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/25 23:57:45 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static void	minishell(char *line, t_shell *shell)
 	if (!cmd)
 		return ;	
 	// print_command(cmd);
-	executor(cmd, shell);
+	// executor(cmd, shell);
 	free_command(cmd);
 }
 

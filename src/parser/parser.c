@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/18 15:05:44 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/25 23:38:03 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,43 @@ void handle_pipes(char **commands)
 {
     // Create a pipeline if commands contain `|`
 }
+
+typedef struct s_command {
+    char *name;         // Имя команды или путь к исполняемому файлу
+    char **args;        // Аргументы команды
+    char *input_file;   // Файл для ввода (<)
+    char *output_file;  // Файл для вывода (>)
+    char *append_file;  // Файл для добавления (>>)
+    char *delimiter;    // Делимитер для << (here-document)
+    struct s_command *next; // Указатель на следующую команду в пайплайне
+} t_command;
+
+ char **tokens = split_input_into_tokens(input);
+cmd->command = find_command_path(tokens[0]); // Ищем путь к "ls"
+    cmd->args = tokens;                          // Аргументы — это все токены
+    
+
+t_command *parser(char *line, t_shell *shell) {
+    t_command *head = NULL;
+    t_command *current = NULL;
+    char **tokens = tokenize(line); // Разделяем строку на токены с учётом кавычек и редиректов
+
+    for (int i = 0; tokens[i]; i++) {
+        if (is_pipe(tokens[i])) {
+            // Учитывай пайп, чтобы создать новую команду
+            current = add_new_command(&head, current);
+        } else if (is_redirect(tokens[i])) {
+            // Обработка редиректов
+            handle_redirect(current, tokens, &i);
+        } else {
+            // Добавляем аргумент или имя команды
+            add_argument(current, tokens[i]);
+        }
+    }
+    free(tokens);
+    return head;
+}
+
 */
 
 t_command *init_command(void)
@@ -47,6 +84,8 @@ t_command *init_command(void)
     return cmd;
 }
 
+// рабочая
+/*
 t_command *parser(char *line, t_shell *shell)
 {
     char **commands;
@@ -86,6 +125,22 @@ t_command *parser(char *line, t_shell *shell)
     }
     free_memory(commands);
     return head;
+}*/
+
+t_command *parser(char *line, t_shell *shell)
+{
+    t_token *tokens;
+    t_command *head = NULL;
+    
+    tokens = lexer(line, shell);
+    if (!tokens)
+    {
+        shell->exit_status = 1;
+        return (NULL);
+    }
+    print_tokens(tokens);
+    free_tokens(tokens);
+    return (head);
 }
 
 /*

@@ -41,3 +41,41 @@ void print_command(t_command *cmd)
     }
 }
 
+const char *token_type_to_string(t_token_type type)
+{
+    switch (type)
+    {
+        case WORD:
+            return "WORD";
+        case PIPE:
+            return "PIPE";
+        case REDIRECT_IN:
+            return "REDIRECT_IN";
+        case REDIRECT_OUT:
+            return "REDIRECT_OUT";
+        case APPEND:
+            return "APPEND";
+        case HEREDOC:
+            return "HEREDOC";
+        case END:
+            return "END";
+        default:
+            return "UNKNOWN";
+    }
+}
+
+void print_tokens(t_token *tokens)
+{
+    t_token *current = tokens;
+    int index = 0;
+
+    while (current)
+    {
+        printf("Token %d:\n", index);
+        printf("  Type: %s\n", token_type_to_string(current->type));
+        printf("  Value: '%s'\n", current->value);
+        current = current->next;
+        index++;
+    }
+}
+

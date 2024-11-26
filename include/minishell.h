@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/18 14:58:53 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/26 00:32:49 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libft.h"
 # include <errno.h>
-#include <linux/limits.h>
+# include <linux/limits.h>
 # include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -25,6 +25,24 @@
 # include <unistd.h>
 
 # define TOKEN_DELIM " \t\r\n\a"
+
+typedef enum e_token_type
+{
+    WORD,
+    PIPE,				// |
+    REDIRECT_IN,		// <
+    REDIRECT_OUT,		// >
+    APPEND,				// >>
+    HEREDOC,			// <<
+    END
+} t_token_type;
+
+typedef struct s_token
+{
+    t_token_type type;
+    char *value;
+    struct s_token *next;
+} t_token;
 
 typedef struct s_command
 {
@@ -70,5 +88,15 @@ void				ft_exit(t_command *cmd, t_shell *shell);
 void				ft_pwd(t_shell *shell);
 void				ft_echo(t_command *cmd, t_shell *shell);
 void				ft_env(t_command *cmd, t_shell *shell);
+
+t_token				*lexer(char *line, t_shell *shell);
+bool   				unclosed_quotes(char *line);
+char *extract_double_quoted_token(char *line, int *i, t_env *env_list, t_shell *shell);
+char				*extract_single_quoted_token(char *line, int *i);
+char *extract_variable(char *line, int *i, t_env *env_list, t_shell *shell);
+char *extract_word(char *line, int *i, t_env *env_list, t_shell *shell);
+bool is_metacharacter(char c);
+void print_tokens(t_token *tokens);
+void free_tokens(t_token *tokens);
 
 #endif

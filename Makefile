@@ -5,18 +5,20 @@ INCDIR          = include/
 
 SRCS            = src/main.c \
                   src/executor.c \
-                  src/parser.c \
 				  src/signals.c \
 				  src/free.c \
 				  src/env_arr.c \
 				  src/env_lst.c \
 				  src/debug.c \
+				  src/parser/lexer.c \
+				  src/parser/parser.c \
+				  src/parser/path.c \
+				  src/parser/extract.c \
 				  src/builtins/exit.c \
 				  src/builtins/env.c \
 				  src/builtins/pwd.c \
 				  src/builtins/echo.c \
-				  src/utils.c \
-				  src/path.c
+				  src/utils.c
 
 OBJS            = $(SRCS:src/%.c=$(OBJDIR)%.o)
 
