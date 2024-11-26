@@ -6,13 +6,49 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/25 23:38:03 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:06:41 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+t_command	*init_command(void)
+{
+	t_command	*cmd;
+
+	cmd = malloc(sizeof(t_command));
+	if (!cmd)
+	{
+		ft_printf("allocation error\n");
+		return (NULL);
+	}
+	cmd->name = NULL;
+	cmd->args = NULL;
+	cmd->output_file = NULL;
+	cmd->input_file = NULL;
+	cmd->next = NULL;
+	return (cmd);
+}
+
+t_command	*parser(char *line, t_shell *shell)
+{
+	t_token		*tokens;
+	t_command	*head;
+
+	head = NULL;
+	tokens = lexer(line, shell);
+	if (!tokens)
+	{
+		shell->exit_status = 1;
+		return (NULL);
+	}
+	print_tokens(tokens);
+	free_tokens(tokens);
+	return (head);
+}
+
 /*
+
 void handle_redirections(char *command)
 {
     // Parse and apply <, >, <<, and >> redirections
@@ -66,24 +102,6 @@ t_command *parser(char *line, t_shell *shell) {
 
 */
 
-t_command *init_command(void)
-{
-    t_command *cmd;
-
-    cmd = malloc(sizeof(t_command));
-    if (!cmd)
-    {
-        ft_printf("allocation error\n");
-        return (NULL);
-    }
-    cmd->name = NULL;
-    cmd->args = NULL;
-    cmd->output_file = NULL;
-    cmd->input_file = NULL;
-    cmd->next = NULL;
-    return cmd;
-}
-
 // рабочая
 /*
 t_command *parser(char *line, t_shell *shell)
@@ -127,22 +145,6 @@ t_command *parser(char *line, t_shell *shell)
     return head;
 }*/
 
-t_command *parser(char *line, t_shell *shell)
-{
-    t_token *tokens;
-    t_command *head = NULL;
-    
-    tokens = lexer(line, shell);
-    if (!tokens)
-    {
-        shell->exit_status = 1;
-        return (NULL);
-    }
-    print_tokens(tokens);
-    free_tokens(tokens);
-    return (head);
-}
-
 /*
 t_command	*parser(char *line, t_shell *shell)
 {
@@ -176,4 +178,5 @@ t_command	*parser(char *line, t_shell *shell)
 		cmd->args = tokens;
 	}
 	return (cmd);
-}*/
+}
+*/

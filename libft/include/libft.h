@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 16:42:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/07/25 13:34:11 by alex             ###   ########.fr       */
+/*   Updated: 2024/11/26 19:13:27 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdarg.h>
 # include <stdbool.h>
 # include <stdint.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 
