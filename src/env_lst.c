@@ -6,15 +6,11 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 13:25:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/16 15:58:26 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:42:04 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// t_env_var *get_env_var(t_env_var *env_list, const char *name);
-// void set_env_var(t_env_var **env_list, const char *name, const char *value);
-// void unset_env_var(t_env_var **env_list, const char *name);
 
 char	*getenv_lst(const char *name, t_env *env_list)
 {

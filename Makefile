@@ -4,21 +4,26 @@ OBJDIR          = obj/
 INCDIR          = include/
 
 SRCS            = src/main.c \
-                  src/executor.c \
 				  src/signals.c \
-				  src/free.c \
 				  src/env_arr.c \
 				  src/env_lst.c \
-				  src/debug.c \
 				  src/parser/lexer.c \
+				  src/parser/tokenize.c \
+				  src/parser/quotes.c \
 				  src/parser/parser.c \
 				  src/parser/path.c \
 				  src/parser/extract.c \
+				  src/executor.c \
 				  src/builtins/exit.c \
 				  src/builtins/env.c \
 				  src/builtins/pwd.c \
 				  src/builtins/echo.c \
-				  src/utils.c
+				  src/builtins/export.c \
+				  src/builtins/unset.c \
+				  src/error.c \
+				  src/free.c \
+				  src/utils.c \
+				  src/debug.c
 
 OBJS            = $(SRCS:src/%.c=$(OBJDIR)%.o)
 

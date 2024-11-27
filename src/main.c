@@ -6,12 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/25 23:57:45 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/26 18:43:30 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// TODO : заменить getenv на кастомную
 static char	*generate_prompt(void)
 {
 	char	*user;
@@ -80,7 +81,7 @@ static t_shell	*init_shell(int argc, char **argv, char **envp)
 		return (NULL);
 	}
 	shell->exit_status = 0;
-	// add : обработка уровней вложенности shell
+	// TODO : обработка уровней вложенности shell
 	return (shell);
 }
 

@@ -6,13 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:47:23 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 14:38:26 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:44:39 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	unclosed_quotes(char *line)
+static bool	unclosed_quotes(char *line)
 {
 	bool	single_q;
 	bool	double_q;
@@ -32,111 +32,32 @@ bool	unclosed_quotes(char *line)
 	return (single_q || double_q);
 }
 
-t_token	*add_token(t_token *tokens, char *value, t_token_type type)
-{
-	t_token	*new;
-	t_token	*temp;
-
-	new = malloc(sizeof(t_token));
-	if (!new)
-		return (NULL);
-	new->type = type;
-	new->value = value;
-	new->next = NULL;
-	if (!tokens)
-		return (new);
-	temp = tokens;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new;
-	return (tokens);
-}
-
-bool	is_metacharacter(char c)
+bool	is_meta(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
 }
 
-t_token	*handle_metacharacter(t_token *tokens, char *line, int *i)
-{
-	if (line[*i] == '|')
-	{
-		tokens = add_token(tokens, ft_strdup("|"), PIPE);
-		(*i)++;
-	}
-	else if (line[*i] == '>')
-	{
-		if (line[*i + 1] == '>')
-		{
-			tokens = add_token(tokens, ft_strdup(">>"), APPEND);
-			(*i) += 2;
-		}
-		else
-		{
-			tokens = add_token(tokens, ft_strdup(">"), REDIRECT_OUT);
-			(*i)++;
-		}
-	}
-	else if (line[*i] == '<')
-	{
-		if (line[*i + 1] == '<')
-		{
-			tokens = add_token(tokens, ft_strdup("<<"), HEREDOC);
-			(*i) += 2;
-		}
-		else
-		{
-			tokens = add_token(tokens, ft_strdup("<"), REDIRECT_IN);
-			(*i)++;
-		}
-	}
-	return (tokens);
-}
-
 t_token	*lexer(char *line, t_shell *shell)
 {
-	t_token	*tokens;
 	int		i;
-	char	*value;
-
+	t_token	*tokens;
+	
 	i = 0;
 	tokens = NULL;
 	if (unclosed_quotes(line))
-	{
-		ft_putstr_fd("minishell: syntax error: unclosed quotes\n", 2);
-		shell->exit_status = 2;
-		return (NULL);
-	}
+		return (err_msg("syntax error: unmatched or unclosed quotes", shell, 2));
 	while (line[i])
 	{
 		if (ft_isspace(line[i]))
-		{
 			i++;
-			continue ;
-		}
-		else if (line[i] == '\'')
-		{
-			value = extract_single_quoted_token(line, &i);
-			tokens = add_token(tokens, value, WORD);
-		}
-		else if (line[i] == '"')
-		{
-			value = extract_double_quoted_token(line, &i, shell->env_vars,
-					shell);
-			tokens = add_token(tokens, value, WORD);
-		}
+		else if (line[i] == '\'' || line[i] == '"')
+			tokens = process_quotes(line, &i, shell, tokens);
 		else if (line[i] == '$')
-		{
-			value = extract_variable(line, &i, shell->env_vars, shell);
-			tokens = add_token(tokens, value, WORD);
-		}
-		else if (is_metacharacter(line[i]))
-			tokens = handle_metacharacter(tokens, line, &i);
+			tokens = process_variable(line, &i, shell, tokens);
+		else if (is_meta(line[i]))
+			tokens = process_meta(tokens, line, &i);
 		else
-		{
-			value = extract_word(line, &i, shell->env_vars, shell);
-			tokens = add_token(tokens, value, WORD);
-		}
+			tokens = process_word(line, &i, shell, tokens);
 	}
 	return (tokens);
 }

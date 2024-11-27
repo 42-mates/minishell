@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 19:13:34 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/26 23:40:41 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,21 @@ void					ft_env(t_command *cmd, t_shell *shell);
 
 // lexer & parser
 t_token					*lexer(char *line, t_shell *shell);
+t_token                 *process_quotes(char *line, int *i, t_shell *shell, t_token *tokens);
+t_token                 *process_variable(char *line, int *i, t_shell *shell, t_token *tokens);
+t_token                 *process_meta(t_token *tokens, char *line, int *i);
+t_token                 *process_word(char *line, int *i, t_shell *shell, t_token *tokens);
 t_command				*parser(char *line, t_shell *shell);
 char					*get_path(t_command *cmd, t_env *env_list);
-char					*extract_double_quoted_token(char *line, int *i, t_env *env_list, t_shell *shell);
-char					*extract_single_quoted_token(char *line, int *i);
-char					*extract_variable(char *line, int *i, t_env *env_list, t_shell *shell);
-char					*extract_word(char *line, int *i, t_env *env_list, t_shell *shell);
-bool					is_metacharacter(char c);
-bool					unclosed_quotes(char *line);
+char					*double_quote(char *line, int *i, t_shell *shell);
+char					*single_quote(char *line, int *i);
+char					*extract_var(char *line, int *i, t_shell *shell);
+char					*extract_word(char *line, int *i, t_shell *shell);
+char	                *ft_strjoin_char(char *str, char c);
+char                    *expand_var(char *line, int *i, t_shell *shell, char *value);
+char                    *add_char(char *line, int *i, char *value);
+bool					is_meta(char c);
+void	                *err_msg(const char *msg, t_shell *shell, int exit_status);
 
 // utils
 bool					is_empty_line(const char *line);

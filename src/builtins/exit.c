@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:13:08 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/11/15 17:56:11 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:19:22 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// TEST THIS FUNCTION FOR EXIT CODE 1 WITH MORE THAN ONE ARGUMENT, WHEN $? IS INTEGRATED
+// TODO : TEST THIS FUNCTION FOR EXIT CODE 1 WITH MORE THAN ONE ARGUMENT, WHEN $? IS INTEGRATED
 
 int     first_arg_is_numeric(t_command *cmd)
 {

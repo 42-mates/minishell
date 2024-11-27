@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/11 01:34:48 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 20:42:29 by oprosvir         ###   ########.fr       */
+/*   Created: 2024/11/26 20:06:11 by oprosvir          #+#    #+#             */
+/*   Updated: 2024/11/26 20:55:22 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	ft_putendl_fd(const char *s, int fd)
+void	*err_msg(const char *msg, t_shell *shell, int exit_status)
 {
-	if (s)
-	{
-		write(fd, s, ft_strlen(s));
-		write(fd, "\n", 1);
-	}
+	ft_putstr_fd("minishell: ", 2);
+	ft_putendl_fd(msg, 2);
+	shell->exit_status = exit_status;
+	return (NULL);
+}
+
+// TODO : rewrite to use
+void	error_exit(char *msg)
+{
+	ft_putstr_fd(strerror(errno), 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(msg, 2);
+	exit(EXIT_FAILURE);
 }
