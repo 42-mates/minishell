@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:47:23 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 21:44:39 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 01:29:43 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_token	*lexer(char *line, t_shell *shell)
 {
 	int		i;
 	t_token	*tokens;
-	
+
 	i = 0;
 	tokens = NULL;
 	if (unclosed_quotes(line))

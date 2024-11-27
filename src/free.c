@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 22:55:32 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 01:32:11 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,17 @@ void	free_memory(char **ptr)
 	free(ptr);
 }
 
-void free_tokens(t_token *tokens)
+void	free_tokens(t_token *tokens)
 {
-    t_token *temp;
+	t_token	*temp;
 
-    while (tokens)
-    {
-        temp = tokens;
-        tokens = tokens->next;
-        free(temp->value);
-        free(temp);
-    }
+	while (tokens)
+	{
+		temp = tokens;
+		tokens = tokens->next;
+		free(temp->value);
+		free(temp);
+	}
 }
 
 // TODO : нужно изменить под новую структуру

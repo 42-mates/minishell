@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 21:39:15 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 22:56:13 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 01:31:30 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,29 +48,29 @@ t_token	*process_meta(t_token *tokens, char *line, int *i)
 	return (tokens);
 }
 
-t_token *process_word(char *line, int *i, t_shell *shell, t_token *tokens)
+t_token	*process_word(char *line, int *i, t_shell *shell, t_token *tokens)
 {
-	char *value;
+	char	*value;
 
 	value = extract_word(line, i, shell);
-	return add_token(tokens, value, WORD);
+	return (add_token(tokens, value, WORD));
 }
 
-t_token *process_variable(char *line, int *i, t_shell *shell, t_token *tokens)
+t_token	*process_variable(char *line, int *i, t_shell *shell, t_token *tokens)
 {
-	char *value;
+	char	*value;
 
 	value = extract_var(line, i, shell);
-	return add_token(tokens, value, WORD);
+	return (add_token(tokens, value, WORD));
 }
 
-t_token *process_quotes(char *line, int *i, t_shell *shell, t_token *tokens)
+t_token	*process_quotes(char *line, int *i, t_shell *shell, t_token *tokens)
 {
-	char *value;
+	char	*value;
 
 	if (line[*i] == '\'')
 		value = single_quote(line, i);
 	else if (line[*i] == '"')
 		value = double_quote(line, i, shell);
-	return add_token(tokens, value, WORD);
+	return (add_token(tokens, value, WORD));
 }

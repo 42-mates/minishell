@@ -6,16 +6,16 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 22:37:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 23:40:27 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 01:31:06 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *expand_var(char *line, int *i, t_shell *shell, char *value)
+char	*expand_var(char *line, int *i, t_shell *shell, char *value)
 {
-	char *var_value;
-	char *new_value;
+	char	*var_value;
+	char	*new_value;
 
 	var_value = extract_var(line, i, shell);
 	if (!var_value)
@@ -30,9 +30,9 @@ char *expand_var(char *line, int *i, t_shell *shell, char *value)
 	return (new_value);
 }
 
-char *add_char(char *line, int *i, char *value)
+char	*add_char(char *line, int *i, char *value)
 {
-	char *new_value;
+	char	*new_value;
 
 	new_value = ft_strjoin_char(value, line[*i]);
 	if (!new_value)
@@ -66,8 +66,8 @@ char	*double_quote(char *line, int *i, t_shell *shell)
 
 char	*single_quote(char *line, int *i)
 {
-	int start;
-	char *value;
+	int		start;
+	char	*value;
 
 	start = ++(*i);
 	while (line[*i] && line[*i] != '\'')

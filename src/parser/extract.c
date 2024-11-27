@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:45:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 23:38:29 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 01:29:12 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ char	*extract_var(char *line, int *i, t_shell *shell)
 	(*i)++;
 	if (line[*i] == '?')
 	{
-        (*i)++;
-        return (ft_itoa(shell->exit_status));
-    }
+		(*i)++;
+		return (ft_itoa(shell->exit_status));
+	}
 	start = *i;
 	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
 		(*i)++;
@@ -55,21 +55,21 @@ char	*extract_var(char *line, int *i, t_shell *shell)
 		return (ft_strdup(""));
 }
 
-char *extract_word(char *line, int *i, t_shell *shell)
+char	*extract_word(char *line, int *i, t_shell *shell)
 {
-    char *value;
+	char	*value;
 
-    value = ft_strdup("");
-    if (!value)
-        return (NULL);
-    while (line[*i] && !ft_isspace(line[*i]) && !is_meta(line[*i]))
-    {
-        if (line[*i] == '$')
-            value = expand_var(line, i, shell, value);
-        else
-            value = add_char(line, i, value);
-        if (!value)
-            return (NULL);
-    }
-    return (value);
+	value = ft_strdup("");
+	if (!value)
+		return (NULL);
+	while (line[*i] && !ft_isspace(line[*i]) && !is_meta(line[*i]))
+	{
+		if (line[*i] == '$')
+			value = expand_var(line, i, shell, value);
+		else
+			value = add_char(line, i, value);
+		if (!value)
+			return (NULL);
+	}
+	return (value);
 }

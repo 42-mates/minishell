@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:35:00 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/17 18:15:38 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 01:30:29 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char	*search_in_paths(char **paths, char *cmd_name)
 	return (NULL);
 }
 
-// add : malloc allocation errors
+// TODO : malloc allocation errors
 char	*get_path(t_command *cmd, t_env *env_list)
 {
 	char	*path;
