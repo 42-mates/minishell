@@ -9,7 +9,6 @@ SRCS            = src/main.c \
 				  src/env_lst.c \
 				  src/parser/lexer.c \
 				  src/parser/tokenize.c \
-				  src/parser/quotes.c \
 				  src/parser/parser.c \
 				  src/parser/path.c \
 				  src/parser/extract.c \

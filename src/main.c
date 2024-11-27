@@ -6,21 +6,20 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 18:43:30 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 10:58:31 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// TODO : заменить getenv на кастомную
-static char	*generate_prompt(void)
+static char	*generate_prompt(t_env *env_list)
 {
 	char	*user;
 	char	*cwd;
 	char	*prompt;
 	size_t	len_prompt;
 
-	user = getenv("USER");
+	user = getenv_lst("USER", env_list);
 	if (!user)
 		user = "user";
 	cwd = getcwd(NULL, 0);
@@ -46,12 +45,9 @@ static char	*get_input(t_shell *shell)
 	char	*prompt;
 	char	*input;
 
-	prompt = generate_prompt();
+	prompt = generate_prompt(shell->env_vars);
 	if (!prompt)
-	{
-		shell->exit_status = 1;
-		exit(free_shell(shell));
-	}
+		prompt = ft_strdup("minishell$ ");
 	input = readline(prompt);
 	free(prompt);
 	if (!input)

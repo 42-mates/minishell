@@ -6,26 +6,11 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:45:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/27 01:29:12 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 10:22:24 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*ft_strjoin_char(char *str, char c)
-{
-	size_t	len;
-	char	*new_str;
-
-	len = ft_strlen(str);
-	new_str = malloc(len + 2);
-	if (!new_str)
-		return (NULL);
-	ft_memcpy(new_str, str, len);
-	new_str[len] = c;
-	new_str[len + 1] = '\0';
-	return (new_str);
-}
 
 char	*extract_var(char *line, int *i, t_shell *shell)
 {
@@ -55,6 +40,24 @@ char	*extract_var(char *line, int *i, t_shell *shell)
 		return (ft_strdup(""));
 }
 
+char	*expand_var(char *line, int *i, t_shell *shell, char *value)
+{
+	char	*var_value;
+	char	*new_value;
+
+	var_value = extract_var(line, i, shell);
+	if (!var_value)
+		return (NULL);
+	new_value = ft_strjoin(value, var_value);
+	free(var_value);
+	if (!new_value)
+	{
+		free(value);
+		return (NULL);
+	}
+	return (new_value);
+}
+
 char	*extract_word(char *line, int *i, t_shell *shell)
 {
 	char	*value;
@@ -71,5 +74,39 @@ char	*extract_word(char *line, int *i, t_shell *shell)
 		if (!value)
 			return (NULL);
 	}
+	return (value);
+}
+
+char	*double_quote(char *line, int *i, t_shell *shell)
+{
+	char	*value;
+
+	++(*i);
+	value = ft_strdup("");
+	while (line[*i] && line[*i] != '"')
+	{
+		if (line[*i] == '$')
+			value = expand_var(line, i, shell, value);
+		else
+			value = add_char(line, i, value);
+		if (!value)
+			return (NULL);
+	}
+	if (line[*i] == '"')
+		(*i)++;
+	return (value);
+}
+
+char	*single_quote(char *line, int *i)
+{
+	int		start;
+	char	*value;
+
+	start = ++(*i);
+	while (line[*i] && line[*i] != '\'')
+		(*i)++;
+	value = ft_substr(line, start, *i - start);
+	if (line[*i] == '\'')
+		(*i)++;
 	return (value);
 }

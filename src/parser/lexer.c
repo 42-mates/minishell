@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:47:23 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/27 01:29:43 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 10:23:43 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,6 @@ static bool	unclosed_quotes(char *line)
 		i++;
 	}
 	return (single_q || double_q);
-}
-
-bool	is_meta(char c)
-{
-	return (c == '|' || c == '<' || c == '>');
 }
 
 t_token	*lexer(char *line, t_shell *shell)
