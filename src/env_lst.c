@@ -6,11 +6,36 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 13:25:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 19:42:04 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:51:58 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	setenv_lst(const char *name, const char *value, t_env **env_vars)
+{
+	t_env	*current;
+	t_env	*new_node;
+
+	current = *env_vars;
+	while (current)
+	{
+		if (ft_strcmp(current->name, name) == 0)
+		{
+			free(current->value);
+			current->value = ft_strdup(value);
+			return ;
+		}
+		current = current->next;
+	}
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return ;
+	new_node->name = ft_strdup(name);
+	new_node->value = ft_strdup(value);
+	new_node->next = *env_vars;
+	*env_vars = new_node;
+}
 
 char	*getenv_lst(const char *name, t_env *env_list)
 {

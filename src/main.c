@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/27 10:58:31 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:32:36 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,17 @@ static char	*generate_prompt(t_env *env_list)
 	user = getenv_lst("USER", env_list);
 	if (!user)
 		user = "user";
-	cwd = getcwd(NULL, 0);
+	cwd = getenv_lst("PWD", env_list);
 	if (!cwd)
-		cwd = ft_strdup("?");
+		cwd = "?";
 	len_prompt = ft_strlen(user) + ft_strlen(cwd) + 14;
 	prompt = malloc(len_prompt);
 	if (!prompt)
-	{
-		free(cwd);
 		return (NULL);
-	}
 	ft_strlcpy(prompt, user, len_prompt);
 	ft_strlcat(prompt, "@minishell:", len_prompt);
 	ft_strlcat(prompt, cwd, len_prompt);
 	ft_strlcat(prompt, "$ ", len_prompt);
-	free(cwd);
 	return (prompt);
 }
 
@@ -53,32 +49,6 @@ static char	*get_input(t_shell *shell)
 	if (!input)
 		handle_eof(shell);
 	return (input);
-}
-
-static t_shell	*init_shell(int argc, char **argv, char **envp)
-{
-	t_shell	*shell;
-
-	(void)argv;
-	if (argc != 1)
-	{
-		ft_putstr_fd("Error: This program does not accept arguments.\n", 2);
-		return (NULL);
-	}
-	setup_signals();
-	welcome_message();
-	shell = malloc(sizeof(t_shell));
-	if (!shell)
-		return (NULL);
-	shell->env_vars = init_env(envp);
-	if (!shell->env_vars)
-	{
-		free(shell);
-		return (NULL);
-	}
-	shell->exit_status = 0;
-	// TODO : обработка уровней вложенности shell
-	return (shell);
 }
 
 static void	minishell(char *line, t_shell *shell)

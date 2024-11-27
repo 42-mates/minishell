@@ -6,13 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:12:56 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/11/18 14:58:57 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/27 11:49:56 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// note : add pwd & oldpwd in shell struct
+// TODO : add pwd & oldpwd in shell struct
 // error man : no PWD
 void    ft_pwd(t_shell *shell)
 {

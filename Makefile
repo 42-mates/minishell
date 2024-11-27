@@ -5,6 +5,7 @@ INCDIR          = include/
 
 SRCS            = src/main.c \
 				  src/signals.c \
+				  src/init.c \
 				  src/env_arr.c \
 				  src/env_lst.c \
 				  src/parser/lexer.c \
