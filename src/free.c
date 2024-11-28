@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 19:28:45 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/28 22:48:37 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	free_command(t_command *cmd)
 
 void	free_commands(t_command *cmd)
 {
-	t_command *temp;
+	t_command	*temp;
 
 	while (cmd)
 	{

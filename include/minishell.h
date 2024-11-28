@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 20:11:05 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/28 22:53:58 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,11 @@
 typedef enum e_token_type
 {
 	WORD,
-	PIPE,         // |
-	REDIRECT_IN,  // <
-	REDIRECT_OUT, // >
-	APPEND,       // >>
-	HEREDOC,      // <<
-	END
+	PIPE,
+	REDIRECT_IN,
+	REDIRECT_OUT,
+	APPEND,
+	HEREDOC
 }						t_token_type;
 
 typedef struct s_token
@@ -97,6 +96,10 @@ char	                *ft_strjoin_char(char *str, char c);
 char                    *expand_var(char *line, int *i, t_shell *shell, char *value);
 char                    *add_char(char *line, int *i, char *value);
 bool					is_meta(char c);
+int						parse_redirects(t_token **tokens, t_command *cmd, t_shell *shell);
+void					parse_args(t_token **tokens, t_command *cmd);
+int						parse_pipe(t_token **tokens, t_command **current, t_shell *shell);
+t_command				*init_command(t_shell *shell);
 void					*err_msg(char *cmd, char *msg, t_shell *shell, int exit_status);
 
 // utils
@@ -105,6 +108,7 @@ char					**convert_to_array(t_env *env_list);
 char					*getenv_lst(const char *name, t_env *env_list);
 void					setenv_lst(const char *name, const char *value, t_env **env_vars);
 void					*set_status(t_shell *shell, int status);
+char					**append_to_array(char **array, const char *new_elem);
 
 // free
 void					free_memory(char **ptr);

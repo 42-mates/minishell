@@ -13,6 +13,7 @@ SRCS            = src/main.c \
 				  src/parser/parser.c \
 				  src/parser/path.c \
 				  src/parser/extract.c \
+				  src/parser/syntax.c \
 				  src/executor.c \
 				  src/builtins/exit.c \
 				  src/builtins/env.c \
@@ -23,6 +24,7 @@ SRCS            = src/main.c \
 				  src/error.c \
 				  src/free.c \
 				  src/utils.c \
+				  src/string_utils.c \
 				  src/debug.c
 
 OBJS            = $(SRCS:src/%.c=$(OBJDIR)%.o)

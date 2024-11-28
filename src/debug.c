@@ -52,8 +52,6 @@ const char *token_type_to_string(t_token_type type)
             return "APPEND";
         case HEREDOC:
             return "HEREDOC";
-        case END:
-            return "END";
         default:
             return "UNKNOWN";
     }

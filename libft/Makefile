@@ -1,6 +1,6 @@
 NAME		= libft.a
 
-CC			= gcc -Wall -Wextra -Werror
+CC			= cc -Wall -Wextra -Werror
 
 SRCDIR		= src/check src/convert src/ft_printf src/get_next_line src/list src/mem src/put src/str
 INCDIR		= include/
