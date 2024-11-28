@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:13:08 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/11/26 19:19:22 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:35:07 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,6 @@ void    ft_exit(t_command *cmd, t_shell *shell)
         else
             builtin_syntax_error(cmd, shell);
     }
-    free_command(cmd);
+    free_commands(cmd);
     exit(free_shell(shell));
 }

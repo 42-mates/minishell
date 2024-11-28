@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:45:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/27 10:22:24 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:11:31 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ char	*expand_var(char *line, int *i, t_shell *shell, char *value)
 		return (NULL);
 	new_value = ft_strjoin(value, var_value);
 	free(var_value);
+	free(value);
 	if (!new_value)
 	{
 		free(value);

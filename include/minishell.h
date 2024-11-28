@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/27 12:53:27 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/28 20:11:05 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
-
-// # define TOKEN_DELIM " \t\r\n\a"
 
 typedef enum e_token_type
 {
@@ -49,6 +47,8 @@ typedef struct s_command
 	char				**args;
 	char				*output_file;
 	char				*input_file;
+	char				*append_file;
+	char				*delimiter;
 	struct s_command	*next;
 }						t_command;
 
@@ -88,7 +88,7 @@ t_token                 *process_variable(char *line, int *i, t_shell *shell, t_
 t_token                 *process_meta(t_token *tokens, char *line, int *i);
 t_token                 *process_word(char *line, int *i, t_shell *shell, t_token *tokens);
 t_command				*parser(char *line, t_shell *shell);
-char					*get_path(t_command *cmd, t_env *env_list);
+char					*get_path(char *cmd_name, t_env *env_list);
 char					*double_quote(char *line, int *i, t_shell *shell);
 char					*single_quote(char *line, int *i);
 char					*extract_var(char *line, int *i, t_shell *shell);
@@ -97,19 +97,20 @@ char	                *ft_strjoin_char(char *str, char c);
 char                    *expand_var(char *line, int *i, t_shell *shell, char *value);
 char                    *add_char(char *line, int *i, char *value);
 bool					is_meta(char c);
-void	                *err_msg(const char *msg, t_shell *shell, int exit_status);
+void					*err_msg(char *cmd, char *msg, t_shell *shell, int exit_status);
 
 // utils
 bool					is_empty_line(const char *line);
 char					**convert_to_array(t_env *env_list);
 char					*getenv_lst(const char *name, t_env *env_list);
 void					setenv_lst(const char *name, const char *value, t_env **env_vars);
+void					*set_status(t_shell *shell, int status);
 
 // free
 void					free_memory(char **ptr);
 void					free_env(t_env *lst);
 void					free_tokens(t_token *tokens);
-void					free_command(t_command *cmd);
+void					free_commands(t_command *cmd);
 int						free_shell(t_shell *shell);
 
 // debug

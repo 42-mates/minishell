@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/27 01:32:11 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:28:45 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,39 @@ void	free_tokens(t_token *tokens)
 	{
 		temp = tokens;
 		tokens = tokens->next;
-		free(temp->value);
+		if (temp->value)
+			free(temp->value);
 		free(temp);
 	}
 }
 
-// TODO : нужно изменить под новую структуру
 void	free_command(t_command *cmd)
 {
 	if (!cmd)
 		return ;
-	free_memory(cmd->args);
+	if (cmd->name)
+		free(cmd->name);
+	if (cmd->args)
+		free_memory(cmd->args);
+	if (cmd->input_file)
+		free(cmd->input_file);
+	if (cmd->output_file)
+		free(cmd->output_file);
+	if (cmd->append_file)
+		free(cmd->append_file);
+	if (cmd->delimiter)
+		free(cmd->delimiter);
 	free(cmd);
+}
+
+void	free_commands(t_command *cmd)
+{
+	t_command *temp;
+
+	while (cmd)
+	{
+		temp = cmd;
+		cmd = cmd->next;
+		free_command(temp);
+	}
 }

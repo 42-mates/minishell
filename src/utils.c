@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 18:22:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/27 10:23:50 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:12:34 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ char	*add_char(char *line, int *i, char *value)
 		free(value);
 		return (NULL);
 	}
+	free(value);
 	(*i)++;
 	return (new_value);
 }

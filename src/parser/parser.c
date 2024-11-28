@@ -6,177 +6,170 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 19:06:41 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/28 20:16:32 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_command	*init_command(void)
+t_command	*init_command(t_shell *shell)
 {
 	t_command	*cmd;
 
 	cmd = malloc(sizeof(t_command));
 	if (!cmd)
-	{
-		ft_printf("allocation error\n");
-		return (NULL);
-	}
+		return (set_status(shell, 1));
 	cmd->name = NULL;
 	cmd->args = NULL;
 	cmd->output_file = NULL;
 	cmd->input_file = NULL;
+    cmd->append_file = NULL;
+    cmd->delimiter = NULL;
 	cmd->next = NULL;
 	return (cmd);
 }
 
-t_command	*parser(char *line, t_shell *shell)
+bool	is_redirect(t_token_type type)
 {
-	t_token		*tokens;
-	t_command	*head;
+	return (type == REDIRECT_OUT ||
+			type == REDIRECT_IN ||
+			type == APPEND ||
+			type == HEREDOC);
+}
 
-	head = NULL;
-	tokens = lexer(line, shell);
-	if (!tokens)
-	{
-		shell->exit_status = 1;
+char	**append_to_array(char **array, const char *new_elem)
+{
+	int		i;
+	int		size;
+	char	**new_array;
+
+	size = 0;
+	while (array && array[size])
+		size++;
+	new_array = malloc(sizeof(char *) * (size + 2));
+	if (!new_array)
 		return (NULL);
-	}
-	print_tokens(tokens);
-	free_tokens(tokens);
-	return (head);
-}
-
-/*
-
-void handle_redirections(char *command)
-{
-    // Parse and apply <, >, <<, and >> redirections
-}
-
-char *expand_env_vars(char *input)
-{
-    // Parse and replace environment variables (e.g., $USER)
-}
-
-void handle_pipes(char **commands)
-{
-    // Create a pipeline if commands contain `|`
-}
-
-typedef struct s_command {
-    char *name;         // Имя команды или путь к исполняемому файлу
-    char **args;        // Аргументы команды
-    char *input_file;   // Файл для ввода (<)
-    char *output_file;  // Файл для вывода (>)
-    char *append_file;  // Файл для добавления (>>)
-    char *delimiter;    // Делимитер для << (here-document)
-    struct s_command *next; // Указатель на следующую команду в пайплайне
-} t_command;
-
- char **tokens = split_input_into_tokens(input);
-cmd->command = find_command_path(tokens[0]); // Ищем путь к "ls"
-    cmd->args = tokens;                          // Аргументы — это все токены
-    
-
-t_command *parser(char *line, t_shell *shell) {
-    t_command *head = NULL;
-    t_command *current = NULL;
-    char **tokens = tokenize(line); // Разделяем строку на токены с учётом кавычек и редиректов
-
-    for (int i = 0; tokens[i]; i++) {
-        if (is_pipe(tokens[i])) {
-            // Учитывай пайп, чтобы создать новую команду
-            current = add_new_command(&head, current);
-        } else if (is_redirect(tokens[i])) {
-            // Обработка редиректов
-            handle_redirect(current, tokens, &i);
-        } else {
-            // Добавляем аргумент или имя команды
-            add_argument(current, tokens[i]);
-        }
-    }
-    free(tokens);
-    return head;
-}
-
-*/
-
-// рабочая
-/*
-t_command *parser(char *line, t_shell *shell)
-{
-    char **commands;
-    t_command *head = NULL;
-    t_command *current = NULL;
-    int i = 0;
-
-    commands = ft_split(line, '|'); // Разделяем команды по '|'
-    while (commands[i])
-    {
-        t_command *new_cmd = init_command();
-        new_cmd->args = ft_strtok(commands[i], TOKEN_DELIM);
-        new_cmd->name = new_cmd->args[0];
-
-        if (!is_builtin(new_cmd->name))
-        {
-            char *exec_path = get_path(new_cmd, shell->env_vars);
-            if (!exec_path)
-            {
-                ft_putstr_fd(new_cmd->name, 2);
-                ft_putstr_fd(": command not found\n", 2);
-                shell->exit_status = 127;
-                free(new_cmd);
-                continue;
-            }
-            new_cmd->name = exec_path;
-            new_cmd->args[0] = exec_path;
-        }
-
-        if (!head)
-            head = new_cmd;
-        else
-            current->next = new_cmd;
-
-        current = new_cmd;
-        i++;
-    }
-    free_memory(commands);
-    return head;
-}*/
-
-/*
-t_command	*parser(char *line, t_shell *shell)
-{
-	char		**tokens;
-	t_command	*cmd;
-	char		*exec_path;
-
-	tokens = ft_strtok(line, TOKEN_DELIM);
-	if (!tokens || !tokens[0])
+	i = 0;
+	while (array && array[i])
 	{
-		free(tokens);
-		return (NULL);
-	}
-	cmd = init_command();
-	cmd->name = tokens[0];
-	cmd->args = tokens;
-	if (!is_builtin(cmd->name))
-	{
-		exec_path = get_path(cmd, shell->env_vars);
-		if (!exec_path)
+		new_array[i] = ft_strdup(array[i]);
+		if (!new_array[i])
 		{
-			ft_putstr_fd(tokens[0], 2);
-			ft_putstr_fd(": command not found\n", 2);
-			shell->exit_status = 127;
-			free_memory(tokens);
-			free(cmd);
+			free_memory(new_array);
 			return (NULL);
 		}
-		cmd->name = exec_path;
-		tokens[0] = exec_path;
-		cmd->args = tokens;
+		i++;
 	}
-	return (cmd);
+	new_array[i] = ft_strdup(new_elem);
+	new_array[i + 1] = NULL;
+	free_memory(array);
+	return (new_array);
 }
-*/
+
+void	handle_args(t_token **tokens, t_command *cmd)
+{
+	if (!cmd->name)
+	{
+		cmd->name = ft_strdup((*tokens)->value);
+		cmd->args = append_to_array(NULL, cmd->name);
+	}
+	else
+		cmd->args = append_to_array(cmd->args, (*tokens)->value);
+	(*tokens) = (*tokens)->next;
+}
+
+int	handle_redirects(t_token **tokens, t_command *cmd, t_shell *shell)
+{
+	if (!(*tokens)->next || (*tokens)->next->type != WORD)
+		return (err_msg(NULL, "syntax error near unexpected token", shell, 2), -1);
+	if ((*tokens)->type == REDIRECT_OUT)
+		cmd->output_file = ft_strdup((*tokens)->next->value);
+	else if ((*tokens)->type == APPEND)
+		cmd->append_file = ft_strdup((*tokens)->next->value);
+	else if ((*tokens)->type == REDIRECT_IN)
+		cmd->input_file = ft_strdup((*tokens)->next->value);
+	else if ((*tokens)->type == HEREDOC)
+		cmd->delimiter = ft_strdup((*tokens)->next->value);
+	(*tokens) = (*tokens)->next->next;
+	return (0);
+}
+
+static int handle_pipe(t_token **tokens, t_command **current, t_shell *shell)
+{
+    if (!(*current) || !(*tokens)->next || (*tokens)->next->type != WORD)
+        return (err_msg(NULL, "syntax error near unexpected token `|`", shell, 2), -1);
+    (*current)->next = init_command(shell);
+    if (!(*current)->next)
+        return (-1);
+    *current = (*current)->next;
+    *tokens = (*tokens)->next;
+    return (0);
+}
+
+int process_token(t_token **tokens, t_command *current, t_shell *shell)
+{
+	char *exec_path;
+	
+    if (is_redirect((*tokens)->type))
+    {
+        if (handle_redirects(tokens, current, shell) == -1)
+            return (-1);
+    }
+    else
+    {
+        handle_args(tokens, current);
+        if (current->name && !is_builtin(current->name))
+        {
+            exec_path = get_path(current->name, shell->env_vars);
+            if (!exec_path)
+				return (err_msg(current->name, "command not found", shell, 127), -1);
+            free(current->name);
+            current->name = exec_path;
+			free(current->args[0]);
+            current->args[0] = ft_strdup(current->name);
+        }
+    }
+    return (0);
+}
+
+t_command *parse_tokens(t_token *tokens, t_shell *shell)
+{
+    t_command *head = NULL;
+    t_command *current = NULL;
+
+    while (tokens)
+    {
+        if (tokens->type == PIPE)
+        {
+            if (handle_pipe(&tokens, &current, shell) == -1)
+                return (free_commands(head), NULL);
+        }
+        else
+        {
+            if (!current)
+            {
+                current = init_command(shell);
+                if (!current)
+                    return (free_commands(head), NULL);
+                if (!head)
+                    head = current;
+            }
+            if (process_token(&tokens, current, shell) == -1)
+                return (free_commands(head), NULL);
+        }
+    }
+    return (head);
+}
+
+t_command *parser(char *line, t_shell *shell)
+{
+    t_token *tokens;
+    t_command *head;
+
+    tokens = lexer(line, shell);
+    if (!tokens)
+        return (set_status(shell, 1));
+    head = parse_tokens(tokens, shell);
+    free_tokens(tokens);
+    return (head);
+}

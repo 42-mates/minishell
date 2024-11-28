@@ -3,33 +3,28 @@
 void print_command(t_command *cmd)
 {
     int i;
-
     if (!cmd)
     {
         printf("Command is NULL\n");
         return;
     }
-
     printf("Command name: %s\n", cmd->name ? cmd->name : "NULL");
-
     printf("Arguments:\n");
     if (cmd->args)
     {
-        i = 0;
-        while (cmd->args[i])
+        for (i = 0; cmd->args[i]; i++)
         {
             printf("  args[%d]: %s\n", i, cmd->args[i]);
-            i++;
         }
     }
     else
     {
-        printf("  No arguments\n");
+        printf("  (No arguments)\n");
     }
-
-    printf("Input file: %s\n", cmd->input_file ? cmd->input_file : "NULL");
-    printf("Output file: %s\n", cmd->output_file ? cmd->output_file : "NULL");
-
+    printf("Input file: %s\n", cmd->input_file ? cmd->input_file : "(NULL)");
+    printf("Output file: %s\n", cmd->output_file ? cmd->output_file : "(NULL)");
+    printf("Append file: %s\n", cmd->append_file ? cmd->append_file : "(NULL)");
+    printf("Delimiter: %s\n", cmd->delimiter ? cmd->delimiter : "(NULL)");
     if (cmd->next)
     {
         printf("\n--- Next command ---\n");

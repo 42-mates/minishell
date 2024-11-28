@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 12:31:52 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/27 14:03:55 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:59:06 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	init_shlvl(t_env **env_vars)
 {
 	char	*shlvl_str;
+	char    *new_shlvl;
 	int		shlvl;
 
     shlvl = 0;
@@ -25,7 +26,9 @@ static void	init_shlvl(t_env **env_vars)
 		shlvl = 0;
 	else
 		shlvl++;
-	setenv_lst("SHLVL", ft_itoa(shlvl), env_vars);
+	new_shlvl = ft_itoa(shlvl);
+	setenv_lst("SHLVL", new_shlvl, env_vars);
+	free(new_shlvl);
 }
 
 t_shell	*init_shell(int argc, char **argv, char **envp)
