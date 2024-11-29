@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 20:24:11 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:02:13 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,21 @@ static char	*generate_prompt(t_env *env_list)
 	user = getenv_lst("USER", env_list);
 	if (!user)
 		user = "user";
-	cwd = getenv_lst("PWD", env_list);
+	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		cwd = "?";
 	len_prompt = ft_strlen(user) + ft_strlen(cwd) + 14;
 	prompt = malloc(len_prompt);
 	if (!prompt)
+	{
+		free(cwd);
 		return (NULL);
+	}
 	ft_strlcpy(prompt, user, len_prompt);
 	ft_strlcat(prompt, "@minishell:", len_prompt);
 	ft_strlcat(prompt, cwd, len_prompt);
 	ft_strlcat(prompt, "$ ", len_prompt);
+	free(cwd);
 	return (prompt);
 }
 

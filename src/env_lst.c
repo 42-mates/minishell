@@ -6,11 +6,36 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 13:25:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/27 13:51:58 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:36:04 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	remove_var(t_env **env_list, const char *name)
+{
+	t_env	*current;
+	t_env	*prev;
+
+	prev = NULL;
+	current = *env_list;
+	while (current)
+	{
+		if (ft_strcmp(current->name, name) == 0)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				*env_list = current->next;
+			free(current->name);
+			free(current->value);
+			free(current);
+			return ;
+		}
+		prev = current;
+		current = current->next;
+	}
+}
 
 void	setenv_lst(const char *name, const char *value, t_env **env_vars)
 {
@@ -76,8 +101,10 @@ static int	append_node(t_env **list, const char *env_entry)
 	return (0);
 }
 
-// initializes t_env list with envp environment variables
-// passed at program startup
+/**
+ * initializes t_env list with envp environment variables
+ * passed at program startup
+ */
 
 t_env	*init_env(char **envp)
 {
