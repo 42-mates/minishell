@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/29 17:22:00 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/30 15:17:56 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void					ft_pwd(t_shell *shell);
 void					ft_echo(t_command *cmd, t_shell *shell);
 void					ft_env(t_command *cmd, t_shell *shell);
 void					ft_unset(t_command *cmd, t_shell *shell);
+void					ft_export(t_command *cmd, t_shell *shell);
 
 // lexer & parser
 t_token					*lexer(char *line, t_shell *shell);

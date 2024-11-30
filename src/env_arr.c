@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:22:28 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 18:44:41 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/30 14:49:08 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static int	list_size(t_env *env_list)
 	return (count);
 }
 
+// TODO : rename free_array_n after merge
 static void	*free_array(char **envp, int n)
 {
 	while (n > 0)
@@ -51,6 +52,7 @@ static char	*create_string(const char *name, const char *value)
 	return (str);
 }
 
+// TODO : rename list_to_array after merge
 char	**convert_to_array(t_env *env_list)
 {
 	int		i;

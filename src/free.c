@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 22:48:37 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/30 14:04:48 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	free_shell(t_shell *shell)
 	return (exit_status);
 }
 
+// TODO : rename free_array after merge
 void	free_memory(char **ptr)
 {
 	int	i;
