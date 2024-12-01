@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/18 14:58:53 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/01 13:05:12 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@
 # include <unistd.h>
 
 # define TOKEN_DELIM " \t\r\n\a"
+# define MAX_PIPES 20
+
+typedef struct s_pipe
+{
+	int	n_pipes;
+	int	pipefd[MAX_PIPES][2];
+	int	read_end;
+	int	write_end;
+} 	t_pipe;
 
 typedef struct s_command
 {
@@ -33,6 +42,7 @@ typedef struct s_command
 	char				*output_file;
 	char				*input_file;	
 	struct s_command	*next;
+	int					n_cmds;
 }					t_command;
 
 typedef struct s_env
