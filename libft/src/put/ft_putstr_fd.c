@@ -6,15 +6,14 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 01:34:12 by oprosvir          #+#    #+#             */
-/*   Updated: 2023/06/11 01:34:12 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/26 20:36:01 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	ft_putstr_fd(const char *s, int fd)
 {
 	if (s)
-		while (*s)
-			write(fd, s++, 1);
+		write(fd, s, ft_strlen(s));
 }

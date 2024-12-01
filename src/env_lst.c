@@ -6,15 +6,61 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 13:25:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/16 15:58:26 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:36:04 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// t_env_var *get_env_var(t_env_var *env_list, const char *name);
-// void set_env_var(t_env_var **env_list, const char *name, const char *value);
-// void unset_env_var(t_env_var **env_list, const char *name);
+void	remove_var(t_env **env_list, const char *name)
+{
+	t_env	*current;
+	t_env	*prev;
+
+	prev = NULL;
+	current = *env_list;
+	while (current)
+	{
+		if (ft_strcmp(current->name, name) == 0)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				*env_list = current->next;
+			free(current->name);
+			free(current->value);
+			free(current);
+			return ;
+		}
+		prev = current;
+		current = current->next;
+	}
+}
+
+void	setenv_lst(const char *name, const char *value, t_env **env_vars)
+{
+	t_env	*current;
+	t_env	*new_node;
+
+	current = *env_vars;
+	while (current)
+	{
+		if (ft_strcmp(current->name, name) == 0)
+		{
+			free(current->value);
+			current->value = ft_strdup(value);
+			return ;
+		}
+		current = current->next;
+	}
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return ;
+	new_node->name = ft_strdup(name);
+	new_node->value = ft_strdup(value);
+	new_node->next = *env_vars;
+	*env_vars = new_node;
+}
 
 char	*getenv_lst(const char *name, t_env *env_list)
 {
@@ -55,8 +101,10 @@ static int	append_node(t_env **list, const char *env_entry)
 	return (0);
 }
 
-// initializes t_env list with envp environment variables
-// passed at program startup
+/**
+ * initializes t_env list with envp environment variables
+ * passed at program startup
+ */
 
 t_env	*init_env(char **envp)
 {

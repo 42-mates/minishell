@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/01 14:29:31 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/01 14:43:46 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,25 @@ void	execute_builtin(t_command *cmd, t_shell *shell)
 		ft_echo(cmd, shell);
 	else if (ft_strcmp(cmd->name, "env") == 0)
 		ft_env(cmd, shell);
+	else if (ft_strcmp(cmd->name, "unset") == 0)
+		ft_unset(cmd, shell);
+	else if (ft_strcmp(cmd->name, "export") == 0)
+		ft_export(cmd, shell);
 }
 
-void	count_cmds(t_command *cmd)
+int	count_cmds(t_command *cmd)
 {
 	t_command	*current;
+	int			n_cmds;
 
+	n_cmds = 0;
 	current = cmd;
 	while (current)
 	{
-		cmd->n_cmds++;
+		n_cmds++;
 		current = current->next;
 	}
+	return (n_cmds);
 }
 
 void	display_error_and_return(char *msg)
@@ -169,6 +176,7 @@ void	execute_extern(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 void	executor(t_command *cmd, t_shell *shell)
 {
 	t_pipe	*pipeline;
+	int		n_cmds;
 
 	pipeline = malloc(sizeof(t_pipe));
 	if (!pipeline)
@@ -177,15 +185,15 @@ void	executor(t_command *cmd, t_shell *shell)
 		return ;
 	}
 	ft_memset(pipeline, 0, sizeof(t_pipe));
-	count_cmds(cmd);
-	pipeline->n_pipes = cmd->n_cmds - 1;
+	n_cmds = count_cmds(cmd);
+	pipeline->n_pipes = n_cmds - 1;
 	// if (pipeline->n_pipes > MAX_PIPES)
 	// {
 	// 	ft_putendl_fd("pipe limit exceeded", 2);
 	// 	free(pipeline);
 	// 	return ;
 	// }
-	if (is_builtin(cmd->name) && cmd->n_cmds < 2)
+	if (is_builtin(cmd->name) && n_cmds < 2)
 		execute_builtin(cmd, shell);
 	else
 		execute_extern(cmd, shell, pipeline);

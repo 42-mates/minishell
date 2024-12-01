@@ -6,25 +6,25 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/18 15:02:54 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:02:13 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*generate_prompt(void)
+static char	*generate_prompt(t_env *env_list)
 {
 	char	*user;
 	char	*cwd;
 	char	*prompt;
 	size_t	len_prompt;
 
-	user = getenv("USER");
+	user = getenv_lst("USER", env_list);
 	if (!user)
 		user = "user";
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		cwd = ft_strdup("?");
+		cwd = "?";
 	len_prompt = ft_strlen(user) + ft_strlen(cwd) + 14;
 	prompt = malloc(len_prompt);
 	if (!prompt)
@@ -45,43 +45,14 @@ static char	*get_input(t_shell *shell)
 	char	*prompt;
 	char	*input;
 
-	prompt = generate_prompt();
+	prompt = generate_prompt(shell->env_vars);
 	if (!prompt)
-	{
-		shell->exit_status = 1;
-		exit(free_shell(shell));
-	}
+		prompt = ft_strdup("minishell$ ");
 	input = readline(prompt);
 	free(prompt);
 	if (!input)
 		handle_eof(shell);
 	return (input);
-}
-
-static t_shell	*init_shell(int argc, char **argv, char **envp)
-{
-	t_shell	*shell;
-
-	(void)argv;
-	if (argc != 1)
-	{
-		ft_putstr_fd("Error: This program does not accept arguments.\n", 2);
-		return (NULL);
-	}
-	setup_signals();
-	welcome_message();
-	shell = malloc(sizeof(t_shell));
-	if (!shell)
-		return (NULL);
-	shell->env_vars = init_env(envp);
-	if (!shell->env_vars)
-	{
-		free(shell);
-		return (NULL);
-	}
-	shell->exit_status = 0;
-	// add : обработка уровней вложенности shell
-	return (shell);
 }
 
 static void	minishell(char *line, t_shell *shell)
@@ -93,7 +64,7 @@ static void	minishell(char *line, t_shell *shell)
 		return ;	
 	// print_command(cmd);
 	executor(cmd, shell);
-	free_command(cmd);
+	free_commands(cmd);
 }
 
 int	main(int argc, char *argv[], char *envp[])

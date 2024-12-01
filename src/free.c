@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/14 20:11:47 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/30 14:04:48 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	free_shell(t_shell *shell)
 	return (exit_status);
 }
 
+// TODO : rename free_array after merge
 void	free_memory(char **ptr)
 {
 	int	i;
@@ -55,10 +56,47 @@ void	free_memory(char **ptr)
 	free(ptr);
 }
 
+void	free_tokens(t_token *tokens)
+{
+	t_token	*temp;
+
+	while (tokens)
+	{
+		temp = tokens;
+		tokens = tokens->next;
+		if (temp->value)
+			free(temp->value);
+		free(temp);
+	}
+}
+
 void	free_command(t_command *cmd)
 {
 	if (!cmd)
 		return ;
-	free_memory(cmd->args);
+	if (cmd->name)
+		free(cmd->name);
+	if (cmd->args)
+		free_memory(cmd->args);
+	if (cmd->input_file)
+		free(cmd->input_file);
+	if (cmd->output_file)
+		free(cmd->output_file);
+	if (cmd->append_file)
+		free(cmd->append_file);
+	if (cmd->delimiter)
+		free(cmd->delimiter);
 	free(cmd);
+}
+
+void	free_commands(t_command *cmd)
+{
+	t_command	*temp;
+
+	while (cmd)
+	{
+		temp = cmd;
+		cmd = cmd->next;
+		free_command(temp);
+	}
 }

@@ -6,18 +6,17 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 01:34:48 by oprosvir          #+#    #+#             */
-/*   Updated: 2023/06/11 01:34:48 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/11/26 20:42:29 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "libft.h"
 
-void	ft_putendl_fd(char *s, int fd)
+void	ft_putendl_fd(const char *s, int fd)
 {
 	if (s)
 	{
-		while (*s)
-			write(fd, s++, 1);
+		write(fd, s, ft_strlen(s));
 		write(fd, "\n", 1);
 	}
 }
