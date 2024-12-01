@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/01 14:43:46 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/01 17:19:39 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,16 @@ void	create_pipe(t_pipe *pipeline, int i)
 		}
 		display_error_and_return("minishell: pipe: ");
 	}
-	if (i == 0)
-		pipeline->read_end = STDIN_FILENO;
-	else
-		pipeline->read_end = pipeline->pipefd[i - 1][0];
-	if (i == pipeline->n_pipes)
-		pipeline->write_end = STDOUT_FILENO;
-	else
-		pipeline->write_end = pipeline->pipefd[i][1];
+	// if (i == 0)
+	// 	pipeline->read_end = STDIN_FILENO;
+	// else
+	// 	pipeline->read_end = pipeline->pipefd[i - 1][0];
+	// if (i == pipeline->n_pipes)
+	// 	pipeline->write_end = STDOUT_FILENO;
+	// else
+	// 	pipeline->write_end = pipeline->pipefd[i][1];
+	// printf("pipefd[%d][0] = %d, pipefd[%d][1] = %d\n", i, pipeline->pipefd[i][0], i, pipeline->pipefd[i][1]);
+	// printf("read = %d, write = %d\n", pipeline->read_end, pipeline->write_end);
 }
 
 void	duplicate_fds(t_pipe *pipeline, int i)
@@ -89,19 +91,19 @@ void	duplicate_fds(t_pipe *pipeline, int i)
 	{
 		if (dup2(pipeline->pipefd[i - 1][0], STDIN_FILENO) == -1)
 		{
-			perror("dup2");
+			perror("dup2 read");
 			exit(EXIT_FAILURE);
 		}
-		close(pipeline->read_end);
+		close(pipeline->pipefd[i - 1][0]);
 	}
 	if (i < pipeline->n_pipes)
 	{
 		if (dup2(pipeline->pipefd[i][1], STDOUT_FILENO) == -1)
 		{
-			perror("dup2");
+			perror("dup2 write");
 			exit(EXIT_FAILURE);
 		}
-		close(pipeline->write_end);
+		close(pipeline->pipefd[i][1]);
 	}
 }
 
@@ -116,6 +118,13 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		return ;
 	}
 	duplicate_fds(pipeline, i);
+	// int j = 0;
+	// while (j < pipeline->n_pipes)
+	// {
+	// 	close(pipeline->pipefd[j][0]);
+	// 	close(pipeline->pipefd[j][1]);
+	// 	j++;
+	// }
 	if (is_builtin(cmd->name))
 		execute_builtin(cmd, shell);
 	else
@@ -123,9 +132,11 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		if (execve(cmd->name, cmd->args, envp) == -1)
 		{
 			free_memory(envp);
-			display_error_and_return("minishell: execve: ");
+			perror("execve");
+			exit(EXIT_FAILURE);
 		}
 	}
+	// exit(shell->exit_status);
 }
 
 void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1])
@@ -134,10 +145,10 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1])
 	int	status;
 
 	i = 0;
-	while (i < pipeline->n_pipes)
+	while (i <= pipeline->n_pipes)
 	{
 		close(pipeline->pipefd[i][0]);
-		close(pipeline->pipefd[i][0]);
+		close(pipeline->pipefd[i][1]);
 		i++;
 	}
 	i = 0;
@@ -161,14 +172,25 @@ void	execute_extern(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		create_pipe(pipeline, i);
 		pids[i] = fork();
 		if (pids[i] == 0)
-			child_process(cmd, shell, pipeline, i);
+		{
+			child_process(current_cmd, shell, pipeline, i);
+			exit(shell->exit_status);
+		}
 		else if (pids[i] < 0)
 		{
 			perror("fork");
 			exit(EXIT_FAILURE);
 		}
+		if (i > 0)
+			close(pipeline->pipefd[i][0]);
+		if (i < pipeline->n_pipes)
+			close(pipeline->pipefd[i][1]);
 		current_cmd = current_cmd->next;
 		i++;
+	}
+	if (i > 0)
+	{
+		
 	}
 	parent_process(pipeline, pids);
 }
@@ -187,12 +209,12 @@ void	executor(t_command *cmd, t_shell *shell)
 	ft_memset(pipeline, 0, sizeof(t_pipe));
 	n_cmds = count_cmds(cmd);
 	pipeline->n_pipes = n_cmds - 1;
-	// if (pipeline->n_pipes > MAX_PIPES)
-	// {
-	// 	ft_putendl_fd("pipe limit exceeded", 2);
-	// 	free(pipeline);
-	// 	return ;
-	// }
+	if (pipeline->n_pipes > MAX_PIPES)
+	{
+		ft_putendl_fd("pipe limit exceeded", 2);
+		free(pipeline);
+		return ;
+	}
 	if (is_builtin(cmd->name) && n_cmds < 2)
 		execute_builtin(cmd, shell);
 	else
