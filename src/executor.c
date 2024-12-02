@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/02 18:44:28 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:59:18 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,10 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 	}
 	duplicate_fds(pipeline, i);
 	if (is_builtin(cmd->name))
+	{
 		execute_builtin(cmd, shell);
+		exit(shell->exit_status);
+	}
 	else
 	{
 		if (execve(cmd->name, cmd->args, envp) == -1)
