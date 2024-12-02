@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/01 15:14:23 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:46:19 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ typedef struct s_pipe
 {
 	int	n_pipes;
 	int	pipefd[MAX_PIPES][2];
-	int	read_end;
-	int	write_end;
 } 	t_pipe;
 
 typedef enum e_token_type

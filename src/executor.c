@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/01 17:19:39 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:44:28 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,26 @@ void	display_error_and_return(char *msg)
 	return ;
 }
 
-void	create_pipe(t_pipe *pipeline, int i)
+void	create_pipes(t_pipe *pipeline)
 {
-	if (pipe(pipeline->pipefd[i]) == -1 && i < pipeline->n_pipes)
+	int	i;
+
+	i = 0;
+	while (i <= pipeline->n_pipes)
 	{
-		while (i > 0)
+		if (pipe(pipeline->pipefd[i]) == -1 && i < pipeline->n_pipes)
 		{
-			close(pipeline->pipefd[i - 1][0]);
-			close(pipeline->pipefd[i - 1][1]);
-			i--;
+			while (i > 0)
+			{
+				close(pipeline->pipefd[i - 1][0]);
+				close(pipeline->pipefd[i - 1][1]);
+				i--;
+			}
+			display_error_and_return("minishell: pipe: ");
+			exit (EXIT_FAILURE);
 		}
-		display_error_and_return("minishell: pipe: ");
+		i++;
 	}
-	// if (i == 0)
-	// 	pipeline->read_end = STDIN_FILENO;
-	// else
-	// 	pipeline->read_end = pipeline->pipefd[i - 1][0];
-	// if (i == pipeline->n_pipes)
-	// 	pipeline->write_end = STDOUT_FILENO;
-	// else
-	// 	pipeline->write_end = pipeline->pipefd[i][1];
-	// printf("pipefd[%d][0] = %d, pipefd[%d][1] = %d\n", i, pipeline->pipefd[i][0], i, pipeline->pipefd[i][1]);
-	// printf("read = %d, write = %d\n", pipeline->read_end, pipeline->write_end);
 }
 
 void	duplicate_fds(t_pipe *pipeline, int i)
@@ -116,15 +114,9 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 	{
 		shell->exit_status = 1;
 		return ;
+		// exit(EXIT_FAILURE); --??
 	}
 	duplicate_fds(pipeline, i);
-	// int j = 0;
-	// while (j < pipeline->n_pipes)
-	// {
-	// 	close(pipeline->pipefd[j][0]);
-	// 	close(pipeline->pipefd[j][1]);
-	// 	j++;
-	// }
 	if (is_builtin(cmd->name))
 		execute_builtin(cmd, shell);
 	else
@@ -136,7 +128,6 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 			exit(EXIT_FAILURE);
 		}
 	}
-	// exit(shell->exit_status);
 }
 
 void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1])
@@ -166,31 +157,24 @@ void	execute_extern(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 	int			i;
 	
 	current_cmd = cmd;
+	create_pipes(pipeline);
 	i = 0;
 	while (i <= pipeline->n_pipes)
 	{
-		create_pipe(pipeline, i);
 		pids[i] = fork();
 		if (pids[i] == 0)
-		{
 			child_process(current_cmd, shell, pipeline, i);
-			exit(shell->exit_status);
-		}
 		else if (pids[i] < 0)
 		{
 			perror("fork");
 			exit(EXIT_FAILURE);
 		}
 		if (i > 0)
-			close(pipeline->pipefd[i][0]);
+			close(pipeline->pipefd[i - 1][0]);
 		if (i < pipeline->n_pipes)
 			close(pipeline->pipefd[i][1]);
 		current_cmd = current_cmd->next;
 		i++;
-	}
-	if (i > 0)
-	{
-		
 	}
 	parent_process(pipeline, pids);
 }
