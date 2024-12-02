@@ -21,6 +21,7 @@ SRCS            = src/main.c \
 				  src/builtins/echo.c \
 				  src/builtins/export.c \
 				  src/builtins/unset.c \
+				  src/builtins/cd.c \
 				  src/error.c \
 				  src/free.c \
 				  src/utils.c \

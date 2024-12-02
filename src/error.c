@@ -6,11 +6,24 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 20:06:11 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 20:40:00 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/02 03:43:24 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void errmsg_cmd(char *cmd, char *arg, char *error_msg)
+{
+    ft_putstr_fd("minishell: ", 2);
+    ft_putstr_fd(cmd, 2);
+    ft_putstr_fd(": ", 2);
+    if (arg)
+    {
+        ft_putstr_fd(arg, 2);
+        ft_putstr_fd(": ", 2);
+    }
+    ft_putendl_fd(error_msg, 2);
+}
 
 void *set_status(t_shell *shell, int status)
 {
@@ -39,8 +52,9 @@ void	error_exit(char *msg)
 	exit(EXIT_FAILURE);
 }
 
+
 /*
-void handle_exec_error(const char *cmd, t_shell *shell)
+void exec_error(const char *cmd, t_shell *shell)
 {
     if (errno == EACCES) // Permission denied
     {
@@ -55,6 +69,13 @@ void handle_exec_error(const char *cmd, t_shell *shell)
         ft_putstr_fd(cmd, 2);
         ft_putendl_fd(": command not found", 2);
         shell->exit_status = 127;
+    }
+    else if (errno == ENOTDIR)
+    {
+        ft_putstr_fd("minishell: ", 2);
+        ft_putstr_fd(cmd, 2);
+        ft_putendl_fd(": Not a directory", 2);
+        shell->exit_status = 127; // какой код
     }
     else
     {
