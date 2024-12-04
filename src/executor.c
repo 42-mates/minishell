@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/02 01:11:47 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:13:43 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	execute_builtin(t_command *cmd, t_shell *shell)
 	else if (ft_strcmp(cmd->name, "export") == 0)
 		ft_export(cmd, shell);
 	else if (ft_strcmp(cmd->name, "cd") == 0)
-		ft_cd(cmd, shell);
+		shell->exit_status = ft_cd(cmd, shell);
 }
 
 void	execute_command(t_command *cmd, t_shell *shell)

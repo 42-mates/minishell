@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 12:31:52 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 18:59:06 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/03 23:39:53 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_shell	*init_shell(int argc, char **argv, char **envp)
 		return (NULL);
 	}
 	setup_signals();
-	welcome_message();
+	// welcome_message();
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
 		return (NULL);
