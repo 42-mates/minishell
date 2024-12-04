@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 18:50:14 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/04 20:46:24 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void					executor(t_command *cmd, t_shell *shell);
 void					ft_exit(t_command *cmd, t_shell *shell);
 void					ft_pwd(t_shell *shell);
 void					ft_echo(t_command *cmd, t_shell *shell);
-void					ft_env(t_command *cmd, t_shell *shell);
+int						ft_env(t_command *cmd, t_shell *shell);
 int						ft_unset(t_command *cmd, t_shell *shell);
 int						ft_export(t_command *cmd, t_shell *shell);
 int						ft_cd(t_command *cmd, t_shell *shell);
