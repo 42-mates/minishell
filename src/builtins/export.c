@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:18:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/30 15:57:30 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:39:58 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * in ascending order based on the variable names
  * using bubble sort
  */
-void	sort_env_array(t_env **array)
+static void	sort_env_array(t_env **array)
 {
 	int		size;
 	int		i;
@@ -45,7 +45,7 @@ void	sort_env_array(t_env **array)
 	}
 }
 
-t_env	**list_to_array(t_env *env_list)
+static t_env	**list_to_array(t_env *env_list)
 {
 	int		size;
 	t_env	*current;
@@ -73,14 +73,14 @@ t_env	**list_to_array(t_env *env_list)
 	return (array);
 }
 
-void	print_env_vars(t_env *env_list)
+static int	print_env_vars(t_env *env_list)
 {
 	t_env	**array;
 	int		i;
 
 	array = list_to_array(env_list);
 	if (!array)
-		return ;
+		return (cmd_err("export", NULL, "failed to fetch env vars", ERROR));
 	sort_env_array(array);
 	i = 0;
 	while (array[i])
@@ -97,21 +97,25 @@ void	print_env_vars(t_env *env_list)
 		i++;
 	}
 	free(array);
+	return (SUCCESS);
 }
-
-bool	is_valid_identifier(const char *str)
+bool is_valid_identifier(const char *str)
 {
-	if (!str || !ft_isalpha(str[0]))
+	int i;
+
+	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
 		return (false);
-	for (int i = 1; str[i]; i++)
+	i = 1;
+	while (str[i])
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (false);
+			return false;
+		i++;
 	}
 	return (true);
 }
 
-void	ft_export(t_command *cmd, t_shell *shell)
+int	ft_export(t_command *cmd, t_shell *shell)
 {
 	int		i;
 	int		status;
@@ -122,31 +126,88 @@ void	ft_export(t_command *cmd, t_shell *shell)
 	i = 1;
 	status = 0;
 	if (!cmd->args[1])
-	{
-		print_env_vars(shell->env_vars);
-		shell->exit_status = 0;
-		return ;
-	}
+		return (print_env_vars(shell->env_vars));
 	while (cmd->args[i])
 	{
 		equals_sign = ft_strchr(cmd->args[i], '=');
-		if (!is_valid_identifier(cmd->args[i]) || (!equals_sign	&& !ft_isalpha(cmd->args[i][0])))
-		{
-			ft_putstr_fd("minishell: export: `", 2);
-			ft_putstr_fd(cmd->args[i], 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
-			status = 1;
-		}
-		else if (equals_sign)
+		if (equals_sign)
 		{
 			name = ft_substr(cmd->args[i], 0, equals_sign - cmd->args[i]);
 			value = ft_strdup(equals_sign + 1);
-			setenv_lst(name, value, &(shell->env_vars));
+			if (!is_valid_identifier(name))
+			{
+				ft_putstr_fd("minishell: export: `", 2);
+				ft_putstr_fd(cmd->args[i], 2);
+				ft_putstr_fd("': not a valid identifier\n", 2);
+				status = 1;
+			}
+			else
+				setenv_lst(name, value, &(shell->env_vars));
 			free(name);
 			free(value);
+		}
+		else
+		{
+			if (!is_valid_identifier(cmd->args[i]))
+			{
+				ft_putstr_fd("minishell: export: `", 2);
+				ft_putstr_fd(cmd->args[i], 2);
+				ft_putstr_fd("': not a valid identifier\n", 2);
+				status = 1;
+			}
+			else
+				setenv_lst(cmd->args[i], "", &(shell->env_vars));
+		}
+		i++;
+	}
+	return (status);
+}
+ /*
+int	ft_export(t_command *cmd, t_shell *shell)
+{
+	int		i;
+	int		status;
+	char	*equals_sign;
+	char	*name;
+	char	*value;
+
+	i = 1;
+	status = 0;
+	if (!cmd->args[1])
+		return (print_env_vars);
+	while (cmd->args[i])
+	{
+		equals_sign = ft_strchr(cmd->args[i], '=');
+		if (equals_sign)
+		{
+			name = ft_substr(cmd->args[i], 0, equals_sign - cmd->args[i]);
+			value = ft_strdup(equals_sign + 1);
+			if (!is_valid_identifier(name))
+			{
+				ft_putstr_fd("minishell: export: `", 2);
+				ft_putstr_fd(cmd->args[i], 2);
+				ft_putstr_fd("': not a valid identifier\n", 2);
+				status = 1;
+			}
+			else
+				setenv_lst(name, value, &(shell->env_vars));
+			free(name);
+			free(value);
+		}
+		else
+		{
+			if (!is_valid_identifier(cmd->args[i]))
+			{
+				ft_putstr_fd("minishell: export: `", 2);
+				ft_putstr_fd(cmd->args[i], 2);
+				ft_putstr_fd("': not a valid identifier\n", 2);
+				status = 1;
+			}
+			else
+				setenv_lst(cmd->args[i], "", &(shell->env_vars));
 		}
 		i++;
 	}
 	shell->exit_status = status;
 	return ;
-}
+}*/

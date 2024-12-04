@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 22:49:25 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:55:14 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ t_command	*parser(char *line, t_shell *shell)
 	tokens = lexer(line, shell);
 	if (!tokens)
 		return (set_status(shell, 1));
+	// print_tokens(tokens);	
 	head = build_command(tokens, shell);
 	free_tokens(tokens);
 	return (head);

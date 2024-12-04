@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 11:13:43 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:38:16 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	execute_builtin(t_command *cmd, t_shell *shell)
 	else if (ft_strcmp(cmd->name, "unset") == 0)
 		ft_unset(cmd, shell);
 	else if (ft_strcmp(cmd->name, "export") == 0)
-		ft_export(cmd, shell);
+		shell->exit_status = ft_export(cmd, shell);
 	else if (ft_strcmp(cmd->name, "cd") == 0)
 		shell->exit_status = ft_cd(cmd, shell);
 }
