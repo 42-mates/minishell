@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/02 18:46:19 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/04 22:46:42 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <fcntl.h>
 
 # define MAX_PIPES 20
 
@@ -83,6 +84,11 @@ t_shell					*init_shell(int argc, char **argv, char **envp);
 int						is_builtin(const char *cmd_name);
 void					execute_builtin(t_command *cmd, t_shell *shell);
 void					executor(t_command *cmd, t_shell *shell);
+t_pipe					*set_pipeline(t_shell *shell, t_command *cmd);
+int						create_pipes(t_pipe *pipeline, t_shell *shell);
+void					close_pipes(t_pipe *pipeline);
+void					set_redirection(t_command *cmd, t_shell *shell);
+void					open_redirect(char *file, int flags, int newfd, t_shell *shell);
 void					ft_exit(t_command *cmd, t_shell *shell);
 void					ft_pwd(t_shell *shell);
 void					ft_echo(t_command *cmd, t_shell *shell);
@@ -120,6 +126,7 @@ void					setenv_lst(const char *name, const char *value, t_env **env_vars);
 void					remove_var(t_env **env_list, const char *name);
 void					*set_status(t_shell *shell, int status);
 char					**append_to_array(char **array, const char *new_elem);
+int						count_cmds(t_command *cmd);
 
 // free
 void					free_memory(char **ptr);
@@ -131,5 +138,8 @@ int						free_shell(t_shell *shell);
 // debug
 void	                print_command(t_command *cmd);
 void					print_tokens(t_token *tokens);
+
+void					display_error_and_return(char *msg);
+int						count_cmds(t_command *cmd);
 
 #endif

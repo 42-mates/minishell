@@ -14,7 +14,10 @@ SRCS            = src/main.c \
 				  src/parser/path.c \
 				  src/parser/extract.c \
 				  src/parser/syntax.c \
-				  src/executor.c \
+				  src/executor/exec.c \
+				  src/executor/pipes.c \
+				  src/executor/redirect.c \
+				  src/executor/utils.c \
 				  src/builtins/exit.c \
 				  src/builtins/env.c \
 				  src/builtins/pwd.c \
