@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.c                                         :+:      :+:    :+:   */
+/*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 21:49:55 by oprosvir         ###   ########.fr       */
+/*   Created: 2024/12/05 10:00:57 by oprosvir          #+#    #+#             */
+/*   Updated: 2024/12/05 12:35:34 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,72 +39,4 @@ void	execute_builtin(t_command *cmd, t_shell *shell)
 		shell->exit_status = ft_export(cmd, shell);
 	else if (ft_strcmp(cmd->name, "cd") == 0)
 		shell->exit_status = ft_cd(cmd, shell);
-}
-
-void	execute_command(t_command *cmd, t_shell *shell)
-{
-	pid_t	pid;
-	int		status;
-	char	**envp;
-
-	envp = convert_to_array(shell->env_vars);
-	if (!envp)
-	{
-		shell->exit_status = 1;
-		return ;
-	}
-	// int		pipefd[2];
-	// int		wstatus;
-	// if (pipe(pipefd) == -1)
-	// {
-	// 	perror("pipe");
-	// 	shell->exit_status = errno;
-	// 	return ;
-	// }
-	pid = fork();
-	if (pid < 0)
-	{
-		// close(pipefd[0]);
-		// close(pipefd[1]);
-		perror("fork");
-		shell->exit_status = errno;
-		ft_putendl_fd(strerror(errno), 2);
-		return ;
-	}
-	if (pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		if (execve(cmd->args[0], cmd->args, envp) == -1)
-		{
-			perror("execvp");
-			free_memory(envp);
-			exit(126);
-		}
-	}
-	else if (pid < 0)
-	{
-		perror("fork");
-		shell->exit_status = 1;
-	}
-	else
-	{
-		status = 0;
-		waitpid(pid, &status, WUNTRACED);
-		if (WIFEXITED(status))
-			shell->exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			shell->exit_status = 128 + WTERMSIG(status);
-		else
-			shell->exit_status = 1;
-	}
-	free_memory(envp);
-}
-
-void	executor(t_command *cmd, t_shell *shell)
-{
-	if (is_builtin(cmd->name))
-		execute_builtin(cmd, shell);
-	else
-		execute_command(cmd, shell);
 }

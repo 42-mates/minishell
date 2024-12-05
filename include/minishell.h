@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 21:50:08 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:34:27 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libft.h"
 # include <errno.h>
-# include <linux/limits.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -25,6 +25,13 @@
 
 # define SUCCESS 0
 # define ERROR 1
+# define MAX_PIPES 20
+
+typedef struct s_pipe
+{
+	int	n_pipes;
+	int	pipefd[MAX_PIPES][2];
+} 	t_pipe;
 
 typedef enum e_token_type
 {
@@ -52,7 +59,7 @@ typedef struct s_command
 	char				*append_file;
 	char				*delimiter;
 	struct s_command	*next;
-}						t_command;
+}					t_command;
 
 typedef struct s_env
 {
@@ -78,6 +85,11 @@ t_shell					*init_shell(int argc, char **argv, char **envp);
 int						is_builtin(const char *cmd_name);
 void					execute_builtin(t_command *cmd, t_shell *shell);
 void					executor(t_command *cmd, t_shell *shell);
+t_pipe					*set_pipeline(t_shell *shell, t_command *cmd);
+int						create_pipes(t_pipe *pipeline, t_shell *shell);
+void					close_pipes(t_pipe *pipeline);
+void					set_redirection(t_command *cmd, t_shell *shell);
+void					open_redirect(char *file, int flags, int newfd, t_shell *shell);
 void					ft_exit(t_command *cmd, t_shell *shell);
 int						ft_pwd(t_command *cmd);
 int						ft_echo(t_command *cmd);
@@ -117,7 +129,7 @@ void					setenv_lst(const char *name, const char *value, t_env **env_vars);
 void					remove_var(t_env **env_list, const char *name);
 void					*set_status(t_shell *shell, int status);
 char					**append_to_array(char **array, const char *new_elem);
-void					exec_error(const char *cmd, t_shell *shell);
+int						count_cmds(t_command *cmd);
 
 // free
 void					free_memory(char **ptr);
@@ -129,5 +141,6 @@ int						free_shell(t_shell *shell);
 // debug
 void	                print_command(t_command *cmd);
 void					print_tokens(t_token *tokens);
+void					display_error_and_return(char *msg);
 
 #endif
