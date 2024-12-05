@@ -15,6 +15,7 @@ SRCS            = src/main.c \
 				  src/parser/extract.c \
 				  src/parser/syntax.c \
 				  src/executor/exec.c \
+				  src/executor/builtin.c \
 				  src/executor/pipes.c \
 				  src/executor/redirect.c \
 				  src/executor/utils.c \

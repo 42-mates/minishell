@@ -3,41 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 22:55:15 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/05 11:58:54 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int is_builtin(const char *cmd_name)
-{
-    return (ft_strcmp(cmd_name, "cd") == 0 ||
-            ft_strcmp(cmd_name, "echo") == 0 ||
-            ft_strcmp(cmd_name, "pwd") == 0 ||
-            ft_strcmp(cmd_name, "export") == 0 ||
-            ft_strcmp(cmd_name, "unset") == 0 ||
-            ft_strcmp(cmd_name, "env") == 0 ||
-            ft_strcmp(cmd_name, "exit") == 0);
-}
-
-void	execute_builtin(t_command *cmd, t_shell *shell)
-{
-	if (ft_strcmp(cmd->name, "exit") == 0)
-		ft_exit(cmd, shell);
-	else if (ft_strcmp(cmd->name, "pwd") == 0)
-		ft_pwd(shell);
-	else if (ft_strcmp(cmd->name, "echo") == 0)
-		ft_echo(cmd, shell);
-	else if (ft_strcmp(cmd->name, "env") == 0)
-		ft_env(cmd, shell);
-	else if (ft_strcmp(cmd->name, "unset") == 0)
-		ft_unset(cmd, shell);
-	else if (ft_strcmp(cmd->name, "export") == 0)
-		ft_export(cmd, shell);
-}
 
 // void	display_error_and_return(char *msg)
 // {
@@ -72,16 +45,19 @@ void	duplicate_fds(t_pipe *pipeline, int i)
 	}
 }
 
-void	execute_extern(t_command *cmd, t_pipe *pipeline, t_shell *shell, char **envp)
+void	execute_extern(t_command *cmd, t_pipe *pipeline, char **envp)
 {
-	if (execve(cmd->name, cmd->args, envp) == -1)
-	{
+	if (execve(cmd->name, cmd->args, envp) == -1) // если успешно, новая программа (например /bin/ls) сама вызывает
+	{											//   exit(code) внутри себя, и этот code получает род-ль через waitpid()	
 		free_memory(envp);
 		close_pipes(pipeline);
 		free(pipeline);
 		perror("minishell: execve:");
-		shell->exit_status = errno;
-		return ;
+		// shell->exit_status = errno; // излишне, будет установлен в род.процессе
+		exit(errno); 				//	при ошибке вызова execve выходим из ПРОЦЕССА через EXIT
+		// return ; 					а не из ФУНКЦИИ через return
+		// errno тоже нужно обработать
+		// пример: errno EACCES =-13 (126 exit status в bash)
 	}
 }
 
@@ -94,10 +70,15 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 	{
 		close_pipes(pipeline);
 		free(pipeline);
-		// error message
-		return ;
+		perror("minishell: failed to convert environment variables");
+		exit(EXIT_FAILURE);
+		// return ;
+		// return НЕ завершает детский процесс, вызванный через fork() 
+		// return завершает только текущую функцию
 	}
 	duplicate_fds(pipeline, i);
+	if (cmd->input_file || cmd->output_file || cmd->append_file)
+		set_redirection(cmd, shell);
 	if (is_builtin(cmd->name))
 	{
 		execute_builtin(cmd, shell);
@@ -105,11 +86,12 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		exit(shell->exit_status);
 	}
 	else
-		execute_extern(cmd, pipeline, shell, envp);
-	free_memory(envp);
+		execute_extern(cmd, pipeline, envp);
+	// после вызова execute_extern, процесс завершится внутри функции execute_extern
+	// free_memory(envp); эта строка никогда НЕ будет достигнута
 }
 
-void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1])
+void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
 {
 	int	i;
 	int	status;
@@ -118,9 +100,9 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1])
 	i = 0;
 	while (i <= pipeline->n_pipes)
 	{
-		// if (WIFEXITED(status))
-		// 	shell->exit_status = WEXITSTATUS(status);
-		waitpid(pids[i], &status, 0);
+		waitpid(pids[i], &status, 0); // waitpid ждет ВЫХОДА из детского процесса
+		if (WIFEXITED(status)) // получить код выхода доч. процесса
+			shell->exit_status = WEXITSTATUS(status);
 		i++;
 	}
 }
@@ -154,7 +136,7 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		current_cmd = current_cmd->next;
 		i++;
 	}
-	parent_process(pipeline, pids);
+	parent_process(pipeline, pids, shell); // передаем shell, чтобы сохранить код выхода посл. комманды
 }
 
 void	executor(t_command *cmd, t_shell *shell)
