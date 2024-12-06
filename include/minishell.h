@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 22:14:05 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 23:17:58 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ typedef struct s_shell
 }						t_shell;
 
 // init
-void					welcome_message(void);
 void					setup_signals(void);
 void					handle_eof(t_shell *shell);
 t_env					*init_env(char **envp);
@@ -91,7 +90,6 @@ t_pipe					*set_pipeline(t_shell *shell, t_command *cmd);
 int						create_pipes(t_pipe *pipeline, t_shell *shell);
 void					close_pipes(t_pipe *pipeline);
 void					set_redirection(t_command *cmd, t_shell *shell);
-void					open_redirect(char *file, int flags, int newfd, t_shell *shell);
 void					ft_exit(t_command *cmd, t_shell *shell);
 int						ft_pwd(t_command *cmd, t_shell *shell);
 int						ft_echo(t_command *cmd);
@@ -112,16 +110,12 @@ char					*double_quote(char *line, int *i, t_shell *shell);
 char					*single_quote(char *line, int *i);
 char					*extract_var(char *line, int *i, t_shell *shell);
 char					*extract_word(char *line, int *i, t_shell *shell);
-char	                *ft_strjoin_char(char *str, char c);
-char                    *expand_var(char *line, int *i, t_shell *shell, char *value);
 char                    *add_char(char *line, int *i, char *value);
 bool					is_meta(char c);
 int						parse_redirects(t_token **tokens, t_command *cmd, t_shell *shell);
 void					parse_args(t_token **tokens, t_command *cmd);
 int						parse_pipe(t_token **tokens, t_command **current, t_shell *shell);
 t_command				*init_command(t_shell *shell);
-void					*err_msg(char *cmd, char *msg, t_shell *shell, int exit_status);
-int						cmd_err(char *cmd, char *arg, char *msg, int err_num);
 bool					is_redirect(t_token_type type);
 
 // utils
@@ -134,6 +128,8 @@ void					*set_status(t_shell *shell, int status);
 char					**append_to_array(char **array, const char *new_elem);
 int						count_cmds(t_command *cmd);
 long					ft_atol(char *str, int *out_of_range);
+void					*err_msg(char *cmd, char *msg, t_shell *shell, int exit_status);
+int						cmd_err(char *cmd, char *arg, char *msg, int err_num);
 
 // free
 void					free_array(char **ptr);
