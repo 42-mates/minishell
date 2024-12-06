@@ -24,8 +24,8 @@ SRCS            = src/main.c \
 				  src/builtins/export.c \
 				  src/builtins/unset.c \
 				  src/builtins/cd.c \
-				  src/utils/env_arr.c \
-				  src/utils/env_lst.c \
+				  src/utils/env.c \
+				  src/utils/env_utils.c \
 				  src/utils/error.c \
 				  src/utils/free.c \
 				  src/utils/utils.c \

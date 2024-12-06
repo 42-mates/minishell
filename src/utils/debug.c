@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+// TODO : delete before pushing to intra
+// TODO : also delete all // comments && unnecessary comments 
 void print_command(t_command *cmd)
 {
     int i;

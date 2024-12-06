@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 01:48:21 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 15:23:28 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 21:31:30 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ char	**append_to_array(char **array, const char *new_elem)
 		new_array[i] = ft_strdup(array[i]);
 		if (!new_array[i])
 		{
-			free_memory(new_array);
+			free_array(new_array);
 			return (NULL);
 		}
 		i++;
 	}
 	new_array[i] = ft_strdup(new_elem);
 	new_array[i + 1] = NULL;
-	free_memory(array);
+	free_array(array);
 	return (new_array);
 }
 

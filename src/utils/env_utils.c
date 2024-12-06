@@ -1,16 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_arr.c                                          :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:22:28 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/30 14:49:08 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 21:27:45 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_env(t_env *lst)
+{
+	t_env	*temp;
+
+	if (!lst)
+		return ;
+	while (lst)
+	{
+		temp = lst;
+		lst = lst->next;
+		free(temp->name);
+		free(temp->value);
+		free(temp);
+	}
+}
 
 static int	list_size(t_env *env_list)
 {
@@ -25,8 +41,7 @@ static int	list_size(t_env *env_list)
 	return (count);
 }
 
-// TODO : rename free_array_n after merge
-static void	*free_array(char **envp, int n)
+static void	*free_array_n(char **envp, int n)
 {
 	while (n > 0)
 		free(envp[--n]);
@@ -52,8 +67,7 @@ static char	*create_string(const char *name, const char *value)
 	return (str);
 }
 
-// TODO : rename list_to_array after merge
-char	**convert_to_array(t_env *env_list)
+char	**list_to_array(t_env *env_list)
 {
 	int		i;
 	int		count;
@@ -70,28 +84,10 @@ char	**convert_to_array(t_env *env_list)
 	{
 		envp[i] = create_string(current->name, current->value);
 		if (!envp[i])
-			return (free_array(envp, i));
+			return (free_array_n(envp, i));
 		current = current->next;
 		i++;
 	}
 	envp[i] = NULL;
 	return (envp);
-}
-
-char	*getenv_arr(const char *name, char **envp)
-{
-	char	*value;
-	int		i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], name, ft_strlen(name)) == 0)
-		{
-			value = envp[i] + ft_strlen(name) + 1;
-			return (value);
-		}
-		i++;
-	}
-	return (NULL);
 }

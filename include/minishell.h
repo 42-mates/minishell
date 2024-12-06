@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 18:04:11 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 21:38:07 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int						cmd_err(char *cmd, char *arg, char *msg, int err_num);
 
 // utils
 bool					is_empty_line(const char *line);
-char					**convert_to_array(t_env *env_list);
+char					**list_to_array(t_env *env_list);
 char					*getenv_lst(const char *name, t_env *env_list);
 void					setenv_lst(const char *name, const char *value, t_env **env_vars);
 void					remove_var(t_env **env_list, const char *name);
@@ -135,7 +135,7 @@ int						count_cmds(t_command *cmd);
 long					ft_atol(char *str, int *out_of_range);
 
 // free
-void					free_memory(char **ptr);
+void					free_array(char **ptr);
 void					free_env(t_env *lst);
 void					free_tokens(t_token *tokens);
 void					free_commands(t_command *cmd);
