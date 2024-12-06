@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/05 12:34:27 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:47:44 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "libft.h"
 # include <errno.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -130,6 +131,7 @@ void					remove_var(t_env **env_list, const char *name);
 void					*set_status(t_shell *shell, int status);
 char					**append_to_array(char **array, const char *new_elem);
 int						count_cmds(t_command *cmd);
+long					ft_atol(char *str, int *out_of_range);
 
 // free
 void					free_memory(char **ptr);

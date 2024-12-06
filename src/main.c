@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 12:49:15 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 13:18:18 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,5 @@ int	main(int argc, char *argv[], char *envp[])
 		minishell(input, shell);
 		free(input);
 	}
-	return (free_shell(shell));
+	return (free_shell(shell)); // unreachable
 }
