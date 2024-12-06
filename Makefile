@@ -32,37 +32,38 @@ SRCS            = src/main.c \
 				  src/utils/utils_string.c \
 				  src/utils/debug.c
 
-OBJS            = $(SRCS:src/%.c=$(OBJDIR)%.o)
+OBJS			= $(SRCS:src/%.c=$(OBJDIR)%.o)
 
 LIBFT_DIR       = ./libft
 LIBFT           = $(LIBFT_DIR)/libft.a
 
 CC              = cc
-CFLAGS          = -Wall -Wextra -Werror -I $(INCDIR) -I $(LIBFT_DIR)/include
+INCLUDES		= -I $(INCDIR) -I $(LIBFT_DIR)/include
+CFLAGS          = -Wall -Wextra -Werror
 LDFLAGS         = -lreadline
 RM              = rm -f
 
-all:		$(NAME)
+all:			$(NAME)
 
-$(NAME): 	$(LIBFT) $(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
+$(NAME): 		$(LIBFT) $(OBJS)
+				$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
 
-$(OBJDIR)%.o: src/%.c
-			@mkdir -p $(dir $@)
-			$(CC) $(CFLAGS) -c $< -o $@
+$(OBJDIR)%.o:	src/%.c $(INCDIR)/minishell.h
+				@mkdir -p $(dir $@)
+				$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT):
-			@$(MAKE) -C $(LIBFT_DIR)
+				@$(MAKE) -C $(LIBFT_DIR)
 
 clean:
-			$(RM) $(OBJS)
-			@$(MAKE) -C $(LIBFT_DIR) clean
+				$(RM) $(OBJS)
+				@$(MAKE) -C $(LIBFT_DIR) clean
 
-fclean: 	clean
-			$(RM) $(NAME)
-			@$(MAKE) -C $(LIBFT_DIR) fclean
-			rm -rf $(OBJDIR)
+fclean: 		clean
+				$(RM) $(NAME)
+				@$(MAKE) -C $(LIBFT_DIR) fclean
+				rm -rf $(OBJDIR)
 
-re: 		fclean all
+re: 			fclean all
 
-.PHONY: 	all clean fclean re
+.PHONY: 		all clean fclean re
