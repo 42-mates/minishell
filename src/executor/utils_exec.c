@@ -1,18 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/03 18:22:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 17:35:37 by oprosvir         ###   ########.fr       */
+/*   Created: 2024/12/04 22:46:05 by mglikenf          #+#    #+#             */
+/*   Updated: 2024/12/06 22:08:25 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_meta(char c)
+int	count_cmds(t_command *cmd)
 {
-	return (c == '|' || c == '<' || c == '>');
+	t_command	*current;
+	int			n_cmds;
+
+	n_cmds = 0;
+	current = cmd;
+	while (current)
+	{
+		n_cmds++;
+		current = current->next;
+	}
+	return (n_cmds);
 }

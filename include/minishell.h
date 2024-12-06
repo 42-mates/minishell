@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 21:38:07 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 22:14:05 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int						parse_pipe(t_token **tokens, t_command **current, t_shell *shell);
 t_command				*init_command(t_shell *shell);
 void					*err_msg(char *cmd, char *msg, t_shell *shell, int exit_status);
 int						cmd_err(char *cmd, char *arg, char *msg, int err_num);
+bool					is_redirect(t_token_type type);
 
 // utils
 bool					is_empty_line(const char *line);

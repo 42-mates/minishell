@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 20:36:13 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/26 18:59:28 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:22:01 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	handle_sigint(int sig)
 // EOF (ctrl-D)
 void	handle_eof(t_shell *shell)
 {
-	printf("exit\n");
+	ft_putendl_fd("exit", 1);
 	exit(free_shell(shell));
 }
 
