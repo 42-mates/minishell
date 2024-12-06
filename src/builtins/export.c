@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:18:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 18:39:58 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 23:35:41 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	sort_env_array(t_env **array)
 	}
 }
 
-static t_env	**list_to_array(t_env *env_list)
+static t_env	**list_to_env_array(t_env *env_list)
 {
 	int		size;
 	t_env	*current;
@@ -78,7 +78,7 @@ static int	print_env_vars(t_env *env_list)
 	t_env	**array;
 	int		i;
 
-	array = list_to_array(env_list);
+	array = list_to_env_array(env_list);
 	if (!array)
 		return (cmd_err("export", NULL, "failed to fetch env vars", ERROR));
 	sort_env_array(array);
@@ -115,6 +115,9 @@ bool is_valid_identifier(const char *str)
 	return (true);
 }
 
+// TODO : need to test and bugfix
+// export var shouldn't add var to env but to export
+// export HELLO="123 A-" makes 2 tokens
 int	ft_export(t_command *cmd, t_shell *shell)
 {
 	int		i;
