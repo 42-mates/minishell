@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 01:12:37 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 13:19:04 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 18:42:54 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ static void update_pwd(t_shell *shell)
 	if (new_pwd)
 	{
 		setenv_lst("PWD", new_pwd, &(shell->env_vars));
+		free(shell->pwd);
+        shell->pwd = ft_strdup(new_pwd);
 		free(new_pwd);
 	}
-	else
-        setenv_lst("PWD", "?", &(shell->env_vars)); // not sure about it TODO : test w/export
 }
 
 static void *cd_err(char *msg)
@@ -64,7 +64,6 @@ static char *cd_path(t_command *cmd, t_shell *shell)
 		path = expand_oldpwd(shell);
 		if (!path)
 			return (cd_err("OLDPWD not set"));
-		ft_putendl_fd(path, 1);
 		return (path);
 	}
 	return ft_strdup(cmd->args[1]);
@@ -85,6 +84,8 @@ int ft_cd(t_command *cmd, t_shell *shell)
 		free(path);
 		return (ERROR);
 	}
+	if (cmd->args[1] && ft_strcmp(cmd->args[1], "-") == 0)
+		ft_putendl_fd(path, 1);
 	update_pwd(shell);
 	free(path);
 	return (SUCCESS);

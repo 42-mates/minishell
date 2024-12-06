@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 12:31:52 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/03 23:39:53 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 19:36:50 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,11 @@ static void	init_shlvl(t_env **env_vars)
 	free(new_shlvl);
 }
 
+// TODO : minishell should work WITHOUT env vars `env -i ./minishell`
 t_shell	*init_shell(int argc, char **argv, char **envp)
 {
 	t_shell	*shell;
+	char	*pwd;
 
 	(void)argv;
 	if (argc != 1)
@@ -54,5 +56,7 @@ t_shell	*init_shell(int argc, char **argv, char **envp)
 	}
 	shell->exit_status = 0;
 	init_shlvl(&shell->env_vars);
+	pwd = getenv_lst("PWD", shell->env_vars);
+	shell->pwd = ft_strdup(pwd);
 	return (shell);
 }

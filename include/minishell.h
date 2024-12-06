@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 15:47:44 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 18:04:11 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_shell
 {
 	int                 exit_status;
 	t_env				*env_vars;
+	char				*pwd;
 }						t_shell;
 
 // init
@@ -92,7 +93,7 @@ void					close_pipes(t_pipe *pipeline);
 void					set_redirection(t_command *cmd, t_shell *shell);
 void					open_redirect(char *file, int flags, int newfd, t_shell *shell);
 void					ft_exit(t_command *cmd, t_shell *shell);
-int						ft_pwd(t_command *cmd);
+int						ft_pwd(t_command *cmd, t_shell *shell);
 int						ft_echo(t_command *cmd);
 int						ft_env(t_command *cmd, t_shell *shell);
 int						ft_unset(t_command *cmd, t_shell *shell);

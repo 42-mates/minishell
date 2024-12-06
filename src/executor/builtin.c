@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 10:00:57 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/05 12:35:34 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 18:04:26 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	execute_builtin(t_command *cmd, t_shell *shell)
 	if (ft_strcmp(cmd->name, "exit") == 0)
 		ft_exit(cmd, shell);
 	else if (ft_strcmp(cmd->name, "pwd") == 0)
-		shell->exit_status = ft_pwd(cmd);
+		shell->exit_status = ft_pwd(cmd, shell);
 	else if (ft_strcmp(cmd->name, "echo") == 0)
 		shell->exit_status = ft_echo(cmd);
 	else if (ft_strcmp(cmd->name, "env") == 0)
