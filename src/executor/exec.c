@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/07 07:31:10 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 09:00:42 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,13 @@ void	duplicate_fds(t_pipe *pipeline, int i)
 
 void	execute_extern(t_command *cmd, t_pipe *pipeline, char **envp)
 {
-	if (execve(cmd->name, cmd->args, envp) == -1) // если успешно, новая программа (например /bin/ls) сама вызывает
-	{											//   exit(code) внутри себя, и этот code получает род-ль через waitpid()	
+	if (execve(cmd->name, cmd->args, envp) == -1)
+	{	
 		free_array(envp);
 		close_pipes(pipeline);
 		free(pipeline);
 		perror("minishell: execve:");
-		// shell->exit_status = errno; // излишне, будет установлен в род.процессе
-		exit(errno); 				//	при ошибке вызова execve выходим из ПРОЦЕССА через EXIT
-		// return ; 					а не из ФУНКЦИИ через return
+		exit(errno);
 		// errno тоже нужно обработать
 		// пример: errno EACCES =-13 (126 exit status в bash)
 	}
@@ -66,6 +64,7 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 	char	**envp;
 
 	signal(SIGQUIT, child_signals);
+	signal(SIGINT, child_signals);
 	envp = list_to_array(shell->env_vars);
 	if (!envp)
 	{
@@ -73,9 +72,6 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		free(pipeline);
 		perror("minishell: failed to convert environment variables");
 		exit(EXIT_FAILURE);
-		// return ;
-		// return НЕ завершает детский процесс, вызванный через fork() 
-		// return завершает только текущую функцию
 	}
 	duplicate_fds(pipeline, i);
 	if (cmd->input_file || cmd->output_file || cmd->append_file)
@@ -88,8 +84,6 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 	}
 	else
 		execute_extern(cmd, pipeline, envp);
-	// после вызова execute_extern, процесс завершится внутри функции execute_extern
-	// free_memory(envp); эта строка никогда НЕ будет достигнута
 }
 
 void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
@@ -101,8 +95,8 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
 	i = 0;
 	while (i <= pipeline->n_pipes)
 	{
-		waitpid(pids[i], &status, 0); // waitpid ждет ВЫХОДА из детского процесса
-		if (WIFEXITED(status)) // получить код выхода доч. процесса
+		waitpid(pids[i], &status, 0);
+		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 			shell->exit_status = 128 + WTERMSIG(status);
@@ -139,7 +133,7 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		current_cmd = current_cmd->next;
 		i++;
 	}
-	parent_process(pipeline, pids, shell); // передаем shell, чтобы сохранить код выхода посл. комманды
+	parent_process(pipeline, pids, shell);
 }
 
 void	executor(t_command *cmd, t_shell *shell)
