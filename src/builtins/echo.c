@@ -3,35 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:12:35 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/11/15 15:12:46 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/04 21:29:30 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    ft_echo(t_command *cmd, t_shell *shell)
+static int parse_options(char **args, int *newline)
 {
-    int i;
+	int i;
+	int j;
 
-    if (cmd->args[1] == NULL)
-        ft_putendl_fd("", 1);
-    else
-    {
-        i = 1;
-        if (ft_strcmp(cmd->args[i], "-n") == 0)
-            i++;
-        while (cmd->args[i] != NULL)
-        {
-            ft_putstr_fd(cmd->args[i], 1);
-            if (cmd->args[i + 1] != NULL)
-                ft_putstr_fd(" ", 1);
-            i++;
-        }
-        if (ft_strcmp(cmd->args[1], "-n") != 0)
-            ft_putendl_fd("", 1);
-    }
-    shell->exit_status = 0;
+	i = 1;
+	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')
+	{
+		j = 1;
+		while (args[i][j] == 'n')
+			j++;
+		if (args[i][j] != '\0')
+			break;
+		*newline = 0;
+		i++;
+	}
+	return i;
+}
+
+int	ft_echo(t_command *cmd)
+{
+	int i;
+	int newline;
+
+	newline = 1;
+	if (cmd->args[1] == NULL)
+		ft_putendl_fd("", 1);
+	else
+	{
+		i = parse_options(cmd->args, &newline);
+		while (cmd->args[i])
+		{
+			ft_putstr_fd(cmd->args[i], 1);
+			if (cmd->args[i + 1])
+				ft_putstr_fd(" ", 1);
+			i++;
+		}
+		if (newline)
+			ft_putchar_fd('\n', 1);
+	}
+	return (SUCCESS);
 }

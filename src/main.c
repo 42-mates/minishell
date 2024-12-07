@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/29 15:02:13 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:40:31 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char	*generate_prompt(t_env *env_list)
 		user = "user";
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		cwd = "?";
+		cwd = ft_strdup(".");
 	len_prompt = ft_strlen(user) + ft_strlen(cwd) + 14;
 	prompt = malloc(len_prompt);
 	if (!prompt)
@@ -84,5 +84,5 @@ int	main(int argc, char *argv[], char *envp[])
 		minishell(input, shell);
 		free(input);
 	}
-	return (free_shell(shell));
+	return (free_shell(shell)); // unreachable
 }

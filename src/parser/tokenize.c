@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 21:39:15 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/27 01:31:30 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:32:12 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ t_token	*process_quotes(char *line, int *i, t_shell *shell, t_token *tokens)
 {
 	char	*value;
 
+	value = NULL;
 	if (line[*i] == '\'')
 		value = single_quote(line, i);
 	else if (line[*i] == '"')

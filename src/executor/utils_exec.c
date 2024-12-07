@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/03 18:22:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 22:47:27 by oprosvir         ###   ########.fr       */
+/*   Created: 2024/12/04 22:46:05 by mglikenf          #+#    #+#             */
+/*   Updated: 2024/12/06 22:08:25 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	welcome_message(void)
+int	count_cmds(t_command *cmd)
 {
-	ft_putstr_fd(" __  __ _       _     _          _ _ \n", 1);
-	ft_putstr_fd("|  \\/  (_)_ __ (_)___| |__   ___| | |\n", 1);
-	ft_putstr_fd("| |\\/| | | '_ \\| / __| '_ \\ / _ \\ | |\n", 1);
-	ft_putstr_fd("| |  | | | | | | \\__ \\ | | |  __/ | |\n", 1);
-	ft_putstr_fd("|_|  |_|_|_| |_|_|___/_| |_|\\___|_|_|\n", 1);
-	ft_putstr_fd("\n", 1);
-}
+	t_command	*current;
+	int			n_cmds;
 
-bool	is_meta(char c)
-{
-	return (c == '|' || c == '<' || c == '>');
+	n_cmds = 0;
+	current = cmd;
+	while (current)
+	{
+		n_cmds++;
+		current = current->next;
+	}
+	return (n_cmds);
 }

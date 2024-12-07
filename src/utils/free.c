@@ -6,42 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/30 14:04:48 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 21:30:41 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_env(t_env *lst)
-{
-	t_env	*temp;
-
-	if (!lst)
-		return ;
-	while (lst)
-	{
-		temp = lst;
-		lst = lst->next;
-		free(temp->name);
-		free(temp->value);
-		free(temp);
-	}
-}
-
-int	free_shell(t_shell *shell)
-{
-	int	exit_status;
-
-	if (!shell)
-		return (EXIT_FAILURE);
-	exit_status = shell->exit_status;
-	free_env(shell->env_vars);
-	free(shell);
-	return (exit_status);
-}
-
-// TODO : rename free_array after merge
-void	free_memory(char **ptr)
+void	free_array(char **ptr)
 {
 	int	i;
 
@@ -77,7 +48,7 @@ void	free_command(t_command *cmd)
 	if (cmd->name)
 		free(cmd->name);
 	if (cmd->args)
-		free_memory(cmd->args);
+		free_array(cmd->args);
 	if (cmd->input_file)
 		free(cmd->input_file);
 	if (cmd->output_file)
@@ -99,4 +70,19 @@ void	free_commands(t_command *cmd)
 		cmd = cmd->next;
 		free_command(temp);
 	}
+}
+
+int	free_shell(t_shell *shell)
+{
+	int	exit_status;
+
+	if (!shell)
+		return (EXIT_FAILURE);
+	exit_status = shell->exit_status;
+	if (shell->pwd)
+		free(shell->pwd);
+	free_env(shell->env_vars);
+	rl_clear_history();
+	free(shell);
+	return (exit_status);
 }
