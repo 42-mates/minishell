@@ -6,16 +6,16 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:12:35 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/04 21:29:30 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:28:51 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int parse_options(char **args, int *newline)
+static int	parse_options(char **args, int *newline)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 1;
 	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')
@@ -24,17 +24,17 @@ static int parse_options(char **args, int *newline)
 		while (args[i][j] == 'n')
 			j++;
 		if (args[i][j] != '\0')
-			break;
+			break ;
 		*newline = 0;
 		i++;
 	}
-	return i;
+	return (i);
 }
 
 int	ft_echo(t_command *cmd)
 {
-	int i;
-	int newline;
+	int	i;
+	int	newline;
 
 	newline = 1;
 	if (cmd->args[1] == NULL)

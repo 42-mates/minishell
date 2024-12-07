@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 01:48:21 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 22:07:18 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:24:29 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 long	ft_atol(char *str, int *out_of_range)
 {
-	long	res = 0;
-	long	sign = 1;
+	long	res;
+	long	sign;
 
 	*out_of_range = 0;
-    res = 0;
+	res = 0;
 	sign = 1;
 	if (*str == '-' || *str == '+')
 	{
@@ -28,8 +28,8 @@ long	ft_atol(char *str, int *out_of_range)
 	}
 	while (*str >= '0' && *str <= '9')
 	{
-		if ((res > (LONG_MAX / 10)) ||
-			(res == (LONG_MAX / 10) && (*str - '0') > (LONG_MAX % 10)))
+		if ((res > (LONG_MAX / 10)) || (res == (LONG_MAX / 10) && (*str
+					- '0') > (LONG_MAX % 10)))
 		{
 			*out_of_range = 1;
 			return (0);

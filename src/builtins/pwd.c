@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:12:56 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/06 18:59:05 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:28:22 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@
  * 0 : success (current working directory printed)
  */
 // TODO : discuss with Marina, run tests
-int ft_pwd(t_command *cmd, t_shell *shell)
+int	ft_pwd(t_command *cmd, t_shell *shell)
 {
-	//char *cwd;
-
+	// char *cwd;
 	if (cmd->args[1] && cmd->args[1][0] == '-' && cmd->args[1][1] != '\0')
 		return (cmd_err("pwd", cmd->args[1], "invalid option", 2));
 	ft_putendl_fd(shell->pwd, 1);

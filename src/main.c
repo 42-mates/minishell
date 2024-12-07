@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 17:40:31 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:22:21 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void	minishell(char *line, t_shell *shell)
 
 	cmd = parser(line, shell);
 	if (!cmd)
-		return ;	
+		return ;
 	// print_command(cmd);
 	executor(cmd, shell);
 	free_commands(cmd);
@@ -72,6 +72,7 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*input;
 	t_shell	*shell;
 
+	// TODO : Assignment in control structure
 	if ((shell = init_shell(argc, argv, envp)) == NULL)
 		return (EXIT_FAILURE);
 	while (1)
@@ -84,5 +85,6 @@ int	main(int argc, char *argv[], char *envp[])
 		minishell(input, shell);
 		free(input);
 	}
-	return (free_shell(shell)); // unreachable
+	// unreachable
+	return (free_shell(shell));
 }

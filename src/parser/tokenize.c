@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 21:39:15 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/05 12:32:12 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:30:59 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ t_token	*process_meta(t_token *tokens, char *line, int *i)
 	if (line[*i] == '|')
 		tokens = add_token(tokens, ft_strdup("|"), PIPE);
 	else if (line[*i] == '>' && line[*i + 1] == '>')
+	// TODO : Too many instructions on a single line	
 		tokens = add_token(tokens, ft_strdup(">>"), APPEND), (*i)++;
 	else if (line[*i] == '>')
 		tokens = add_token(tokens, ft_strdup(">"), REDIRECT_OUT);
 	else if (line[*i] == '<' && line[*i + 1] == '<')
+	// TODO : Too many instructions on a single line
 		tokens = add_token(tokens, ft_strdup("<<"), HEREDOC), (*i)++;
 	else if (line[*i] == '<')
 		tokens = add_token(tokens, ft_strdup("<"), REDIRECT_IN);

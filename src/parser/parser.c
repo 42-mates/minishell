@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 22:03:11 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:32:05 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	current_token(t_token **tokens, t_command *current, t_shell *shell)
 		{
 			exec_path = get_path(current->name, shell->env_vars);
 			if (!exec_path)
-				return (err_msg(current->name, "command not found", shell, 127), -1);
+				return (err_msg(current->name, "command not found", shell, 127),
+					-1);
 			free(current->name);
 			current->name = exec_path;
 			free(current->args[0]);
@@ -38,6 +39,7 @@ int	current_token(t_token **tokens, t_command *current, t_shell *shell)
 	return (0);
 }
 
+// TODO : Function has more than 25 lines 
 t_command	*build_command(t_token *tokens, t_shell *shell)
 {
 	t_command	*head;
@@ -77,7 +79,7 @@ t_command	*parser(char *line, t_shell *shell)
 	tokens = lexer(line, shell);
 	if (!tokens)
 		return (set_status(shell, 1));
-	// print_tokens(tokens);	
+	// print_tokens(tokens);
 	head = build_command(tokens, shell);
 	free_tokens(tokens);
 	return (head);

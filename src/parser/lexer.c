@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:47:23 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 20:17:15 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:25:39 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ t_token	*lexer(char *line, t_shell *shell)
 	i = 0;
 	tokens = NULL;
 	if (unclosed_quotes(line))
-		return (err_msg(NULL, "syntax error: unmatched or unclosed quotes", shell, 2));
+		return (err_msg(NULL, "syntax error: unmatched or unclosed quotes",
+				shell, 2));
 	while (line[i])
 	{
 		if (ft_isspace(line[i]))
