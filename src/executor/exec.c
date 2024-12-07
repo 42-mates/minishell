@@ -6,11 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/07 09:00:42 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 09:54:58 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <signal.h>
+
 
 // void	display_error_and_return(char *msg)
 // {
@@ -63,8 +65,8 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 {
 	char	**envp;
 
-	signal(SIGQUIT, child_signals);
-	signal(SIGINT, child_signals);
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
 	envp = list_to_array(shell->env_vars);
 	if (!envp)
 	{
@@ -90,6 +92,10 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
 {
 	int	i;
 	int	status;
+	//struct sigaction sa;
+
+	//sa.sa_handler = SIG_IGN;
+    //sigaction(SIGINT, &sa, NULL);
 
 	close_pipes(pipeline);
 	i = 0;
@@ -99,7 +105,13 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
 		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
+		{
 			shell->exit_status = 128 + WTERMSIG(status);
+			if (WTERMSIG(status) == SIGQUIT)
+				write(STDERR_FILENO, "Quit (core dumped)\n", 19);
+			if (WTERMSIG(status) == SIGINT)
+				write(STDERR_FILENO, "\n", 1);
+		}
 		i++;
 	}
 }
@@ -134,6 +146,11 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		i++;
 	}
 	parent_process(pipeline, pids, shell);
+	//struct sigaction sa;
+	//sa.sa_handler = handle_sigint;
+	//sa.sa_flags = SA_RESTART;
+	//sigaction(SIGINT, &sa, NULL);
+
 }
 
 void	executor(t_command *cmd, t_shell *shell)
