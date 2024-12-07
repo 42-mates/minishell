@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 23:17:58 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 07:22:03 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ t_pipe					*set_pipeline(t_shell *shell, t_command *cmd);
 int						create_pipes(t_pipe *pipeline, t_shell *shell);
 void					close_pipes(t_pipe *pipeline);
 void					set_redirection(t_command *cmd, t_shell *shell);
+void					child_signals(int sig);
 void					ft_exit(t_command *cmd, t_shell *shell);
 int						ft_pwd(t_command *cmd, t_shell *shell);
 int						ft_echo(t_command *cmd);

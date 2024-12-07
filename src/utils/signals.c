@@ -6,11 +6,19 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 20:36:13 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 16:22:01 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 07:31:43 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	child_signals(int sig)
+{
+	if (sig == SIGQUIT)
+		write(2, "Quit (core dumped)\n", 19);
+		//ft_putendl_fd("Quit (core dumped)", 2);
+	//signal(SIGINT, handle_sigint);
+}
 
 // SIGINT (ctrl-C)
 // TODO : exit_status = 130 (global?)

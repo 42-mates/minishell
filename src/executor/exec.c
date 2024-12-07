@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 21:30:08 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 07:31:10 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 {
 	char	**envp;
 
+	signal(SIGQUIT, child_signals);
 	envp = list_to_array(shell->env_vars);
 	if (!envp)
 	{
@@ -103,6 +104,8 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
 		waitpid(pids[i], &status, 0); // waitpid ждет ВЫХОДА из детского процесса
 		if (WIFEXITED(status)) // получить код выхода доч. процесса
 			shell->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			shell->exit_status = 128 + WTERMSIG(status);
 		i++;
 	}
 }
