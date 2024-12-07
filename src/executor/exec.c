@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 21:30:08 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 14:35:10 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// void	display_error_and_return(char *msg)
-// {
-// 	ft_putstr_fd(msg, 2);
-// 	ft_putendl_fd(strerror(errno), 2);
-// 	return ;
-// }
 
 void	duplicate_fds(t_pipe *pipeline, int i)
 {
@@ -45,7 +38,7 @@ void	duplicate_fds(t_pipe *pipeline, int i)
 	}
 }
 
-void	execute_extern(t_command *cmd, t_pipe *pipeline, char **envp)
+void	execute_extern(t_command *cmd, t_pipe *pipeline, char **envp, t_shell *shell)
 {
 	if (execve(cmd->name, cmd->args, envp) == -1) // если успешно, новая программа (например /bin/ls) сама вызывает
 	{											//   exit(code) внутри себя, и этот code получает род-ль через waitpid()	
@@ -53,8 +46,9 @@ void	execute_extern(t_command *cmd, t_pipe *pipeline, char **envp)
 		close_pipes(pipeline);
 		free(pipeline);
 		perror("minishell: execve:");
-		// shell->exit_status = errno; // излишне, будет установлен в род.процессе
-		exit(errno); 				//	при ошибке вызова execve выходим из ПРОЦЕССА через EXIT
+		//exit(shell->exit_status);
+		shell->exit_status = errno; // излишне, будет установлен в род.процессе
+		// exit(errno); 				//	при ошибке вызова execve выходим из ПРОЦЕССА через EXIT
 		// return ; 					а не из ФУНКЦИИ через return
 		// errno тоже нужно обработать
 		// пример: errno EACCES =-13 (126 exit status в bash)
@@ -86,7 +80,7 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		exit(shell->exit_status);
 	}
 	else
-		execute_extern(cmd, pipeline, envp);
+		execute_extern(cmd, pipeline, envp, shell);
 	// после вызова execute_extern, процесс завершится внутри функции execute_extern
 	// free_memory(envp); эта строка никогда НЕ будет достигнута
 }
@@ -139,27 +133,19 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 	parent_process(pipeline, pids, shell); // передаем shell, чтобы сохранить код выхода посл. комманды
 }
 
-void	executor(t_command *cmd, t_shell *shell)
+void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 {
-	t_pipe	*pipeline;
+	int	original_in;
+	int	original_out;
 
-	pipeline = set_pipeline(shell, cmd);
-	if (!pipeline)
-		return ;
-	if (pipeline->n_pipes > MAX_PIPES)
-	{
-		ft_putendl_fd("too many commands, pipe limit exceeded", 2);
-		free(pipeline);
-		return ;
-	}
 	if (is_builtin(cmd->name) && count_cmds(cmd) == 1)
 	{
-		int	original_in = dup(STDIN_FILENO);
-		int	original_out = dup(STDOUT_FILENO);
+		original_in = dup(STDIN_FILENO);
+		original_out = dup(STDOUT_FILENO);
 		if (original_in == -1 || original_out == -1)
 		{
 			perror("dup");
-			exit(EXIT_FAILURE);
+			shell->exit_status = 1;
 		}
 		if (cmd->input_file || cmd->output_file || cmd->append_file)
 			set_redirection(cmd, shell);

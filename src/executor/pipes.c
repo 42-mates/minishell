@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 00:46:41 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/04 21:48:49 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/07 14:09:29 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,16 @@ t_pipe	*set_pipeline(t_shell *shell, t_command *cmd)
 	{
 		perror("malloc");
 		shell->exit_status = 1;
-		// exit(shell->exit_status = 1);
+		return (NULL);
 	}
 	ft_memset(pipeline, 0, sizeof(t_pipe));
 	pipeline->n_pipes = count_cmds(cmd) - 1;
+	if (pipeline->n_pipes > MAX_PIPES)
+	{
+		ft_putendl_fd("too many commands, pipe limit exceeded", 2);
+		shell->exit_status = 1;
+		free(pipeline);
+		return (NULL);
+	}
 	return (pipeline);
 }

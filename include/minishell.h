@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/07 12:53:59 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/07 14:06:24 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ t_shell					*init_shell(int argc, char **argv, char **envp);
 // executor & builtins
 int						is_builtin(const char *cmd_name);
 void					execute_builtin(t_command *cmd, t_shell *shell);
-void					executor(t_command *cmd, t_shell *shell);
+void					executor(t_command *cmd, t_shell *shell, t_pipe *pipeline);
 t_pipe					*set_pipeline(t_shell *shell, t_command *cmd);
 int						create_pipes(t_pipe *pipeline, t_shell *shell);
 void					close_pipes(t_pipe *pipeline);
