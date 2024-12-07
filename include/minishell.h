@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 22:46:42 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/07 12:51:10 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void					ft_echo(t_command *cmd, t_shell *shell);
 void					ft_env(t_command *cmd, t_shell *shell);
 void					ft_unset(t_command *cmd, t_shell *shell);
 void					ft_export(t_command *cmd, t_shell *shell);
+void					ft_cd(t_command *cmd, t_shell *shell);
 
 // lexer & parser
 t_token					*lexer(char *line, t_shell *shell);
@@ -116,7 +117,7 @@ int						parse_redirects(t_token **tokens, t_command *cmd, t_shell *shell);
 void					parse_args(t_token **tokens, t_command *cmd);
 int						parse_pipe(t_token **tokens, t_command **current, t_shell *shell);
 t_command				*init_command(t_shell *shell);
-void					*err_msg(char *cmd, char *msg, t_shell *shell, int exit_status);
+void					errmsg_cmd(char *cmd, char *arg, char *error_msg);
 
 // utils
 bool					is_empty_line(const char *line);
@@ -126,6 +127,7 @@ void					setenv_lst(const char *name, const char *value, t_env **env_vars);
 void					remove_var(t_env **env_list, const char *name);
 void					*set_status(t_shell *shell, int status);
 char					**append_to_array(char **array, const char *new_elem);
+void					exec_error(const char *cmd, t_shell *shell);
 int						count_cmds(t_command *cmd);
 
 // free
