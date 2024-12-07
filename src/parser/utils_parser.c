@@ -1,25 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 18:22:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 22:47:27 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 22:05:24 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	welcome_message(void)
+t_command	*init_command(t_shell *shell)
 {
-	ft_putstr_fd(" __  __ _       _     _          _ _ \n", 1);
-	ft_putstr_fd("|  \\/  (_)_ __ (_)___| |__   ___| | |\n", 1);
-	ft_putstr_fd("| |\\/| | | '_ \\| / __| '_ \\ / _ \\ | |\n", 1);
-	ft_putstr_fd("| |  | | | | | | \\__ \\ | | |  __/ | |\n", 1);
-	ft_putstr_fd("|_|  |_|_|_| |_|_|___/_| |_|\\___|_|_|\n", 1);
-	ft_putstr_fd("\n", 1);
+	t_command	*cmd;
+
+	cmd = malloc(sizeof(t_command));
+	if (!cmd)
+		return (set_status(shell, 1));
+	cmd->name = NULL;
+	cmd->args = NULL;
+	cmd->output_file = NULL;
+	cmd->input_file = NULL;
+	cmd->append_file = NULL;
+	cmd->delimiter = NULL;
+	cmd->next = NULL;
+	return (cmd);
+}
+
+bool	is_redirect(t_token_type type)
+{
+	return (type == REDIRECT_OUT ||
+			type == REDIRECT_IN ||
+			type == APPEND ||
+			type == HEREDOC);
 }
 
 bool	is_meta(char c)

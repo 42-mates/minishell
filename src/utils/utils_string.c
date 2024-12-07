@@ -1,16 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   string_utils.c                                     :+:      :+:    :+:   */
+/*   utils_string.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 01:48:21 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/27 01:49:15 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 22:07:18 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+long	ft_atol(char *str, int *out_of_range)
+{
+	long	res = 0;
+	long	sign = 1;
+
+	*out_of_range = 0;
+    res = 0;
+	sign = 1;
+	if (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	while (*str >= '0' && *str <= '9')
+	{
+		if ((res > (LONG_MAX / 10)) ||
+			(res == (LONG_MAX / 10) && (*str - '0') > (LONG_MAX % 10)))
+		{
+			*out_of_range = 1;
+			return (0);
+		}
+		res = res * 10 + (*str - '0');
+		str++;
+	}
+	return (res * sign);
+}
 
 char	**append_to_array(char **array, const char *new_elem)
 {
@@ -30,14 +58,14 @@ char	**append_to_array(char **array, const char *new_elem)
 		new_array[i] = ft_strdup(array[i]);
 		if (!new_array[i])
 		{
-			free_memory(new_array);
+			free_array(new_array);
 			return (NULL);
 		}
 		i++;
 	}
 	new_array[i] = ft_strdup(new_elem);
 	new_array[i + 1] = NULL;
-	free_memory(array);
+	free_array(array);
 	return (new_array);
 }
 

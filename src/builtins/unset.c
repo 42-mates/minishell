@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:41:18 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/29 17:32:48 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/04 19:03:52 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,17 @@
 * 2 : one of arguments is option
 * 0 : success / no args
 */
-
-// TODO : check with pipes
-void	ft_unset(t_command *cmd, t_shell *shell)
+int	ft_unset(t_command *cmd, t_shell *shell)
 {
 	int	i;
 
 	i = 1;
 	if (!cmd->args[1])
-	{
-		shell->exit_status = 0;
-		return ;
-	}
+		return (SUCCESS);
 	while (cmd->args[i])
 	{
 		if (cmd->args[i][0] == '-')
-		{
-			ft_putstr_fd("minishell: unset: ", 2);
-			ft_putstr_fd(cmd->args[i], 2);
-			ft_putendl_fd(": invalid option", 2);
-			shell->exit_status = 2;
-			return ;
-		}
+			return (cmd_err("unset", cmd->args[i], "invalid option", 2));
 		i++;
 	}
 	i = 1;
@@ -47,5 +36,5 @@ void	ft_unset(t_command *cmd, t_shell *shell)
 		remove_var(&(shell->env_vars), cmd->args[i]);
 		i++;
 	}
-	shell->exit_status = 0;
+	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/05 11:58:54 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/06 21:30:08 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	execute_extern(t_command *cmd, t_pipe *pipeline, char **envp)
 {
 	if (execve(cmd->name, cmd->args, envp) == -1) // если успешно, новая программа (например /bin/ls) сама вызывает
 	{											//   exit(code) внутри себя, и этот code получает род-ль через waitpid()	
-		free_memory(envp);
+		free_array(envp);
 		close_pipes(pipeline);
 		free(pipeline);
 		perror("minishell: execve:");
@@ -65,7 +65,7 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 {
 	char	**envp;
 
-	envp = convert_to_array(shell->env_vars);
+	envp = list_to_array(shell->env_vars);
 	if (!envp)
 	{
 		close_pipes(pipeline);
@@ -82,7 +82,7 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 	if (is_builtin(cmd->name))
 	{
 		execute_builtin(cmd, shell);
-		free_memory(envp);
+		free_array(envp);
 		exit(shell->exit_status);
 	}
 	else

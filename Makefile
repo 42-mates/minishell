@@ -4,21 +4,18 @@ OBJDIR          = obj/
 INCDIR          = include/
 
 SRCS            = src/main.c \
-				  src/signals.c \
-				  src/init.c \
-				  src/env_arr.c \
-				  src/env_lst.c \
 				  src/parser/lexer.c \
 				  src/parser/tokenize.c \
 				  src/parser/parser.c \
 				  src/parser/path.c \
 				  src/parser/extract.c \
 				  src/parser/syntax.c \
+				  src/parser/utils_parser.c \
 				  src/executor/exec.c \
 				  src/executor/builtin.c \
 				  src/executor/pipes.c \
 				  src/executor/redirect.c \
-				  src/executor/utils.c \
+				  src/executor/utils_exec.c \
 				  src/builtins/exit.c \
 				  src/builtins/env.c \
 				  src/builtins/pwd.c \
@@ -26,43 +23,47 @@ SRCS            = src/main.c \
 				  src/builtins/export.c \
 				  src/builtins/unset.c \
 				  src/builtins/cd.c \
-				  src/error.c \
-				  src/free.c \
-				  src/utils.c \
-				  src/string_utils.c \
-				  src/debug.c
+				  src/utils/init.c \
+				  src/utils/signals.c \
+				  src/utils/env.c \
+				  src/utils/error.c \
+				  src/utils/free.c \
+				  src/utils/utils_env.c \
+				  src/utils/utils_string.c \
+				  src/utils/debug.c
 
-OBJS            = $(SRCS:src/%.c=$(OBJDIR)%.o)
+OBJS			= $(SRCS:src/%.c=$(OBJDIR)%.o)
 
 LIBFT_DIR       = ./libft
 LIBFT           = $(LIBFT_DIR)/libft.a
 
 CC              = cc
-CFLAGS          = -Wall -Wextra -Werror -I $(INCDIR) -I $(LIBFT_DIR)/include
+INCLUDES		= -I $(INCDIR) -I $(LIBFT_DIR)/include
+CFLAGS          = -Wall -Wextra -Werror
 LDFLAGS         = -lreadline
 RM              = rm -f
 
-all:		$(NAME)
+all:			$(NAME)
 
-$(NAME): 	$(LIBFT) $(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
+$(NAME): 		$(LIBFT) $(OBJS)
+				$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
 
-$(OBJDIR)%.o: src/%.c
-			@mkdir -p $(dir $@)
-			$(CC) $(CFLAGS) -c $< -o $@
+$(OBJDIR)%.o:	src/%.c $(INCDIR)/minishell.h
+				@mkdir -p $(dir $@)
+				$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT):
-			@$(MAKE) -C $(LIBFT_DIR)
+				@$(MAKE) -C $(LIBFT_DIR)
 
 clean:
-			$(RM) $(OBJS)
-			@$(MAKE) -C $(LIBFT_DIR) clean
+				$(RM) $(OBJS)
+				@$(MAKE) -C $(LIBFT_DIR) clean
 
-fclean: 	clean
-			$(RM) $(NAME)
-			@$(MAKE) -C $(LIBFT_DIR) fclean
-			rm -rf $(OBJDIR)
+fclean: 		clean
+				$(RM) $(NAME)
+				@$(MAKE) -C $(LIBFT_DIR) fclean
+				rm -rf $(OBJDIR)
 
-re: 		fclean all
+re: 			fclean all
 
-.PHONY: 	all clean fclean re
+.PHONY: 		all clean fclean re
