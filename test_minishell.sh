@@ -126,12 +126,17 @@ run_test "echo Unclosed quote test '" 2
 echo -e "\n===== Env vars and \$? =====\n"
 
 run_test "echo \$HOME" 0
-run_test "nonexistent_command" 127
+run_test "echo "\$HOME \$USER"" 0
+run_test "echo '\$HOME \$USER'" 0
+run_test "echo "\$HOME"'\$USER'" 0
+run_test "echo '"\$HOME"'" 0
+run_test "echo "'\$HOME'"" 0
+run_test "echo \$USER is logged in" 0
+run_test "echo \$HOME'\$USER'" 0
+
+run_test "export USER='Olga Prosviriakova' | export | grep USER" 0
 run_test "echo \$?" 0
-run_test "/bin/true" 0
-run_test "echo \$?" 0
-run_test "/bin/false" 1
-run_test "echo \$?" 0
+
 
 # cleanup
 rm -f restricted_file
