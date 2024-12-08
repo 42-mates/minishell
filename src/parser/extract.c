@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:45:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 19:11:31 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/08 06:28:43 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,52 +62,26 @@ char	*expand_var(char *line, int *i, t_shell *shell, char *value)
 char	*extract_word(char *line, int *i, t_shell *shell)
 {
 	char	*value;
+	char	*quoted;
+	char	*temp;
 
 	value = ft_strdup("");
-	if (!value)
-		return (NULL);
 	while (line[*i] && !ft_isspace(line[*i]) && !is_meta(line[*i]))
 	{
 		if (line[*i] == '$')
 			value = expand_var(line, i, shell, value);
+		else if (line[*i] == '\'' || line[*i] == '"')
+		{
+			quoted = quotes_internal(line, i, shell);
+			temp = value;
+			value = ft_strjoin(value, quoted);
+			free(temp);
+			free(quoted);
+		}
 		else
 			value = add_char(line, i, value);
 		if (!value)
 			return (NULL);
 	}
-	return (value);
-}
-
-char	*double_quote(char *line, int *i, t_shell *shell)
-{
-	char	*value;
-
-	++(*i);
-	value = ft_strdup("");
-	while (line[*i] && line[*i] != '"')
-	{
-		if (line[*i] == '$')
-			value = expand_var(line, i, shell, value);
-		else
-			value = add_char(line, i, value);
-		if (!value)
-			return (NULL);
-	}
-	if (line[*i] == '"')
-		(*i)++;
-	return (value);
-}
-
-char	*single_quote(char *line, int *i)
-{
-	int		start;
-	char	*value;
-
-	start = ++(*i);
-	while (line[*i] && line[*i] != '\'')
-		(*i)++;
-	value = ft_substr(line, start, *i - start);
-	if (line[*i] == '\'')
-		(*i)++;
 	return (value);
 }

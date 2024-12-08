@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 21:39:15 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/07 15:30:59 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/08 05:55:40 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,17 @@ t_token	*process_meta(t_token *tokens, char *line, int *i)
 	if (line[*i] == '|')
 		tokens = add_token(tokens, ft_strdup("|"), PIPE);
 	else if (line[*i] == '>' && line[*i + 1] == '>')
-	// TODO : Too many instructions on a single line	
-		tokens = add_token(tokens, ft_strdup(">>"), APPEND), (*i)++;
+	{
+		tokens = add_token(tokens, ft_strdup(">>"), APPEND);
+		(*i)++;
+	}
 	else if (line[*i] == '>')
 		tokens = add_token(tokens, ft_strdup(">"), REDIRECT_OUT);
 	else if (line[*i] == '<' && line[*i + 1] == '<')
-	// TODO : Too many instructions on a single line
-		tokens = add_token(tokens, ft_strdup("<<"), HEREDOC), (*i)++;
+	{
+		tokens = add_token(tokens, ft_strdup("<<"), HEREDOC);
+		(*i)++;
+	}
 	else if (line[*i] == '<')
 		tokens = add_token(tokens, ft_strdup("<"), REDIRECT_IN);
 	(*i)++;
@@ -55,7 +59,9 @@ t_token	*process_word(char *line, int *i, t_shell *shell, t_token *tokens)
 	char	*value;
 
 	value = extract_word(line, i, shell);
-	return (add_token(tokens, value, WORD));
+	if (value)
+		tokens = add_token(tokens, value, WORD);
+	return (tokens);
 }
 
 t_token	*process_variable(char *line, int *i, t_shell *shell, t_token *tokens)
@@ -63,7 +69,9 @@ t_token	*process_variable(char *line, int *i, t_shell *shell, t_token *tokens)
 	char	*value;
 
 	value = extract_var(line, i, shell);
-	return (add_token(tokens, value, WORD));
+	if (value)
+		add_token(tokens, value, WORD);
+	return (tokens);
 }
 
 t_token	*process_quotes(char *line, int *i, t_shell *shell, t_token *tokens)
@@ -73,7 +81,9 @@ t_token	*process_quotes(char *line, int *i, t_shell *shell, t_token *tokens)
 	value = NULL;
 	if (line[*i] == '\'')
 		value = single_quote(line, i);
-	else if (line[*i] == '"')
+	else
 		value = double_quote(line, i, shell);
-	return (add_token(tokens, value, WORD));
+	if (value)
+		tokens = add_token(tokens, value, WORD);
+	return (tokens);
 }

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/07 15:17:15 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/08 06:14:28 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,11 @@ t_token					*process_word(char *line, int *i, t_shell *shell,
 							t_token *tokens);
 t_command				*parser(char *line, t_shell *shell);
 char					*get_path(char *cmd_name, t_env *env_list);
+char					*quotes_internal(char *line, int *i, void *shell);
 char					*double_quote(char *line, int *i, t_shell *shell);
 char					*single_quote(char *line, int *i);
 char					*extract_var(char *line, int *i, t_shell *shell);
+char					*expand_var(char *line, int *i, t_shell *shell, char *value);
 char					*extract_word(char *line, int *i, t_shell *shell);
 char					*add_char(char *line, int *i, char *value);
 bool					is_meta(char c);

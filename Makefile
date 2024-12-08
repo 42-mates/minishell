@@ -5,6 +5,7 @@ INCDIR          = include/
 
 SRCS            = src/main.c \
 				  src/parser/lexer.c \
+				  src/parser/quotes.c \
 				  src/parser/tokenize.c \
 				  src/parser/parser.c \
 				  src/parser/path.c \
