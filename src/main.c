@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/07 15:22:21 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 21:54:56 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*input;
 	t_shell	*shell;
 
-	// TODO : Assignment in control structure
-	if ((shell = init_shell(argc, argv, envp)) == NULL)
+	shell = init_shell(argc, argv, envp);
+	if (!shell)
 		return (EXIT_FAILURE);
 	while (1)
 	{
@@ -85,6 +85,5 @@ int	main(int argc, char *argv[], char *envp[])
 		minishell(input, shell);
 		free(input);
 	}
-	// unreachable
-	return (free_shell(shell));
+	return (SUCCESS);
 }
