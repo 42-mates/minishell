@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:46:05 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/06 22:08:25 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:33:48 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,37 @@ int	count_cmds(t_command *cmd)
 		current = current->next;
 	}
 	return (n_cmds);
+}
+
+/**
+ * Sorts an array of environment variables
+ * in ascending order based on the variable names
+ * using bubble sort
+ */
+void	sort_env_array(t_env **array)
+{
+	int		size;
+	int		i;
+	int		j;
+	t_env	*temp;
+
+	size = 0;
+	i = 0;
+	while (array[size])
+		size++;
+	while (i < size - 1)
+	{
+		j = 0;
+		while (j < size - i - 1)
+		{
+			if (ft_strcmp(array[j]->name, array[j + 1]->name) > 0)
+			{
+				temp = array[j];
+				array[j] = array[j + 1];
+				array[j + 1] = temp;
+			}
+			j++;
+		}
+		i++;
+	}
 }

@@ -25,13 +25,13 @@ run_test() {
     bash_status=$?
 
     # put under comment to check output
-    # if [ "$minishell_status" -eq "$bash_status" ]; then
-    #     status_result="${GREEN}PASS${RESET}"
-    # else
-    #     status_result="${RED}FAIL${RESET}"
-    # fi
+    if [ "$minishell_status" -eq "$bash_status" ]; then
+        status_result="${GREEN}PASS${RESET}"
+    else
+        status_result="${RED}FAIL${RESET}"
+    fi
 
-    # echo -e "$status_result: (minishell: $minishell_status, expected: $bash_status)"
+    echo -e "$status_result: (minishell: $minishell_status, expected: $bash_status)"
 
     # put under comment to check only exit statuses
     echo -e "\n${BLUE}Minishell Output:${RESET}"
@@ -85,6 +85,33 @@ run_test "cd restricted_dir"
 run_test "pwd"
 
 ### export и env
+run_test "export -t"
+run_test "export -6"
+run_test "export -?"
+run_test "export ---" 1
+run_test "export -" 1
+run_test "export )" 1 # not a synax error in minishell. status 1
+run_test "export ?"
+run_test "export 5"
+run_test "export %"
+run_test "export . ---j"
+
+run_test "export 1INVALID=value"
+run_test "export INVALID-NAME=value"
+run_test "export INVALID.NAME=value"
+run_test "export INVALID@NAME=value"
+run_test "export =no_name"
+run_test "export ''=empty"
+run_test "export ""=empty"
+run_test "export VAR%=value" 
+
+run_test "export MULTI_EQUALS1=a=b=c"
+run_test "export MULTI_EQUALS2==value"
+run_test "export MULTI_EQUALS3=value="
+
+run_test "export VAR23=value23 VAR24='value with spaces' VAR25=\$USER"
+run_test "export VAR27=\$USER \$?"
+
 run_test "export TEST_VAR='Hello, Env!'"
 run_test "env | grep TEST_VAR"
 run_test "echo \$TEST_VAR"
