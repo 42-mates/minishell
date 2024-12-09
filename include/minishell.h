@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/08 06:14:28 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:38:18 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,16 +100,12 @@ int						ft_cd(t_command *cmd, t_shell *shell);
 
 // lexer & parser
 t_token					*lexer(char *line, t_shell *shell);
-t_token					*process_quotes(char *line, int *i, t_shell *shell,
-							t_token *tokens);
-t_token					*process_variable(char *line, int *i, t_shell *shell,
-							t_token *tokens);
-t_token					*process_meta(t_token *tokens, char *line, int *i);
-t_token					*process_word(char *line, int *i, t_shell *shell,
+t_token					*meta_token(t_token *tokens, char *line, int *i);
+t_token					*word_token(char *line, int *i, t_shell *shell,
 							t_token *tokens);
 t_command				*parser(char *line, t_shell *shell);
 char					*get_path(char *cmd_name, t_env *env_list);
-char					*quotes_internal(char *line, int *i, void *shell);
+char					*quotes(char *line, int *i, void *shell);
 char					*double_quote(char *line, int *i, t_shell *shell);
 char					*single_quote(char *line, int *i);
 char					*extract_var(char *line, int *i, t_shell *shell);
@@ -150,6 +146,5 @@ int						free_shell(t_shell *shell);
 // debug
 void					print_command(t_command *cmd);
 void					print_tokens(t_token *tokens);
-void					display_error_and_return(char *msg);
 
 #endif

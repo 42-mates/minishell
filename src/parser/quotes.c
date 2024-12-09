@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 03:35:23 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/08 06:22:25 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:37:35 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*single_quote(char *line, int *i)
 	return (value);
 }
 
-char	*quotes_internal(char *line, int *i, void *shell)
+char	*quotes(char *line, int *i, void *shell)
 {
 	if (line[*i] == '\'')
 		return (single_quote(line, i));

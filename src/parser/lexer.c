@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:47:23 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/08 22:30:08 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:28:13 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,10 @@ t_token	*lexer(char *line, t_shell *shell)
 	{
 		if (ft_isspace(line[i]))
 			i++;
-		// else if (line[i] == '\'' || line[i] == '"')
-		// 	tokens = process_quotes(line, &i, shell, tokens);
-		// else if (line[i] == '$')
-		// 	tokens = process_variable(line, &i, shell, tokens);
 		else if (is_meta(line[i]))
-			tokens = process_meta(tokens, line, &i);
+			tokens = meta_token(tokens, line, &i);
 		else
-			tokens = process_word(line, &i, shell, tokens);
+			tokens = word_token(line, &i, shell, tokens);
 	}
 	return (tokens);
 }
