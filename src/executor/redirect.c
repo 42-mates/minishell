@@ -3,42 +3,82 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:45:48 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/08 23:40:04 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:00:29 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    open_redirect(char *file, int flags, int newfd, t_shell *shell)
+int	redirect(int oldfd, int newfd, t_shell *shell)
+{
+	if (dup2(oldfd, newfd) == -1)
+	{
+		close(oldfd);
+		// close(newfd);
+		perror("dup2 in redirect()");
+		shell->exit_status = 1;
+		return (-1);
+	}
+	close(oldfd);
+	return(0);
+}
+
+int	open_file(t_command *cmd, char *file, int flags, int newfd,
+		t_shell *shell)
 {
 	int	oldfd;
 
 	oldfd = open(file, flags, 0644);
 	if (oldfd == -1)
 	{
-		perror("open file for redirection"); // test cat <"1""2""3""4""5" (busywaiting) exit ??
-        shell->exit_status = 1;
-        return ;
+		perror(file);
+		shell->exit_status = 1;
+		return(-1);
 	}
-	if (dup2(oldfd, newfd) == -1)
-    {
-        close(oldfd);
-        perror("dup2");
-        shell->exit_status = 1;
-        return ;
-    }
+	if (cmd->name)
+		redirect(oldfd, newfd, shell);
 	close(oldfd);
+	return (0);
 }
 
-void    set_redirection(t_command *cmd, t_shell *shell)
+int	set_redirection(t_command *cmd, t_shell *shell)
 {
 	if (cmd->input_file)
-		open_redirect(cmd->input_file, O_RDONLY, STDIN_FILENO, shell);
+		if (open_file(cmd, cmd->input_file, O_RDONLY, STDIN_FILENO, shell) == -1)
+			return (-1);
 	if (cmd->output_file)
-		open_redirect(cmd->output_file, O_WRONLY | O_CREAT | O_TRUNC, STDOUT_FILENO, shell);
+		if (open_file(cmd, cmd->output_file, O_WRONLY | O_CREAT | O_TRUNC,
+			STDOUT_FILENO, shell) == -1)
+			return (-1);
 	if (cmd->append_file)
-		open_redirect(cmd->append_file, O_WRONLY | O_CREAT | O_APPEND, STDOUT_FILENO, shell);
+		if (open_file(cmd, cmd->append_file, O_WRONLY | O_CREAT | O_APPEND,
+			STDOUT_FILENO, shell) == -1)
+			return (-1);
+	if (cmd->delimiter)
+		heredoc(cmd->delimiter);
+	return(0);
+}
+
+void	backup_original_fds(int *fds, t_shell *shell, t_pipe *pipeline)
+{
+	fds[0] = dup(STDIN_FILENO);
+	fds[1] = dup(STDOUT_FILENO);
+	if (fds[0] == -1 || fds[1] == -1)
+	{
+		perror("dup");
+		shell->exit_status = 1;
+		free(pipeline);
+		exit(EXIT_FAILURE);
+	}
+}
+
+void	restore_original_fds(int *fds)
+{
+	dup2(fds[0], STDIN_FILENO);
+	dup2(fds[1], STDOUT_FILENO);
+	close(fds[0]);
+	close(fds[1]);
 }
