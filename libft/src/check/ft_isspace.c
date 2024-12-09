@@ -6,13 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 21:37:27 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/05/08 21:42:49 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:18:52 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-bool ft_isspace(int c)
+bool	ft_isspace(int c)
 {
 	if ((c >= 9 && c <= 13) || c == ' ')
 		return (1);

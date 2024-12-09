@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/07 14:35:10 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/09 10:14:01 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,6 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		free(pipeline);
 		perror("minishell: failed to convert environment variables");
 		exit(EXIT_FAILURE);
-		// return ;
-		// return НЕ завершает детский процесс, вызванный через fork() 
-		// return завершает только текущую функцию
 	}
 	duplicate_fds(pipeline, i);
 	if (cmd->input_file || cmd->output_file || cmd->append_file)
@@ -80,9 +77,7 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		exit(shell->exit_status);
 	}
 	else
-		execute_extern(cmd, pipeline, envp, shell);
-	// после вызова execute_extern, процесс завершится внутри функции execute_extern
-	// free_memory(envp); эта строка никогда НЕ будет достигнута
+		execute_extern(cmd, pipeline, envp);
 }
 
 void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
@@ -94,8 +89,8 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
 	i = 0;
 	while (i <= pipeline->n_pipes)
 	{
-		waitpid(pids[i], &status, 0); // waitpid ждет ВЫХОДА из детского процесса
-		if (WIFEXITED(status)) // получить код выхода доч. процесса
+		waitpid(pids[i], &status, 0);
+		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
 		i++;
 	}
@@ -130,7 +125,7 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		current_cmd = current_cmd->next;
 		i++;
 	}
-	parent_process(pipeline, pids, shell); // передаем shell, чтобы сохранить код выхода посл. комманды
+	parent_process(pipeline, pids, shell);
 }
 
 void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)

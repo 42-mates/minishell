@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 12:17:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/10/29 02:18:14 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:19:06 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ static int	count_words(char *str, char *charset)
 	i = 0;
 	while (str[i])
 	{
-		if (in_separator(str[i + 1], charset) == 1
-			&& in_separator(str[i], charset) == 0)
+		if (in_separator(str[i + 1], charset) == 1 && in_separator(str[i],
+				charset) == 0)
 			words++;
 		i++;
 	}
@@ -60,9 +60,9 @@ static void	write_word(char *dest, char *from, char *charset)
 
 static void	write_split(char **split, char *str, char *charset)
 {
-	int		i;
-	int		j;
-	int		word;
+	int	i;
+	int	j;
+	int	word;
 
 	word = 0;
 	i = 0;

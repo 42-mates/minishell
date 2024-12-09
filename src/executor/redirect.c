@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:45:48 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/04 16:42:46 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/08 23:40:04 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void    open_redirect(char *file, int flags, int newfd, t_shell *shell)
 	oldfd = open(file, flags, 0644);
 	if (oldfd == -1)
 	{
-		perror("open file for redirection");
+		perror("open file for redirection"); // test cat <"1""2""3""4""5" (busywaiting) exit ??
         shell->exit_status = 1;
         return ;
 	}

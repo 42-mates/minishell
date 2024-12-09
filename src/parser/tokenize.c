@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 21:39:15 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/07 13:25:28 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/09 10:14:11 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,46 +32,34 @@ static t_token	*add_token(t_token *tokens, char *value, t_token_type type)
 	return (tokens);
 }
 
-t_token	*process_meta(t_token *tokens, char *line, int *i)
+t_token	*meta_token(t_token *tokens, char *line, int *i)
 {
 	if (line[*i] == '|')
 		tokens = add_token(tokens, ft_strdup("|"), PIPE);
 	else if (line[*i] == '>' && line[*i + 1] == '>')
-		tokens = add_token(tokens, ft_strdup(">>"), APPEND), (*i)++;
+	{
+		tokens = add_token(tokens, ft_strdup(">>"), APPEND);
+		(*i)++;
+	}
 	else if (line[*i] == '>')
 		tokens = add_token(tokens, ft_strdup(">"), REDIRECT_OUT);
 	else if (line[*i] == '<' && line[*i + 1] == '<')
-		tokens = add_token(tokens, ft_strdup("<<"), HEREDOC), (*i)++;
+	{
+		tokens = add_token(tokens, ft_strdup("<<"), HEREDOC);
+		(*i)++;
+	}
 	else if (line[*i] == '<')
 		tokens = add_token(tokens, ft_strdup("<"), REDIRECT_IN);
 	(*i)++;
 	return (tokens);
 }
 
-t_token	*process_word(char *line, int *i, t_shell *shell, t_token *tokens)
+t_token	*word_token(char *line, int *i, t_shell *shell, t_token *tokens)
 {
 	char	*value;
 
 	value = extract_word(line, i, shell);
-	return (add_token(tokens, value, WORD));
-}
-
-t_token	*process_variable(char *line, int *i, t_shell *shell, t_token *tokens)
-{
-	char	*value;
-
-	value = extract_var(line, i, shell);
-	return (add_token(tokens, value, WORD));
-}
-
-t_token	*process_quotes(char *line, int *i, t_shell *shell, t_token *tokens)
-{
-	char	*value;
-
-	value = NULL;
-	if (line[*i] == '\'')
-		value = single_quote(line, i);
-	else if (line[*i] == '"')
-		value = double_quote(line, i, shell);
-	return (add_token(tokens, value, WORD));
+	if (value)
+		tokens = add_token(tokens, value, WORD);
+	return (tokens);
 }
