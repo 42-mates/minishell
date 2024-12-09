@@ -6,37 +6,11 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 10:14:01 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:30:28 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	duplicate_fds(t_pipe *pipeline, int i)
-{
-	if (i > 0)
-	{
-		if (dup2(pipeline->pipefd[i - 1][0], STDIN_FILENO) == -1)
-		{
-			perror("minishell: dup2: ");
-			close_pipes(pipeline);
-			free(pipeline);
-			exit(EXIT_FAILURE);
-		}
-		close(pipeline->pipefd[i - 1][0]);
-	}
-	if (i < pipeline->n_pipes)
-	{
-		if (dup2(pipeline->pipefd[i][1], STDOUT_FILENO) == -1)
-		{
-			perror("minishell: dup2:");
-			close_pipes(pipeline);
-			free(pipeline);
-			exit(EXIT_FAILURE);
-		}
-		close(pipeline->pipefd[i][1]);
-	}
-}
 
 void	execute_extern(t_command *cmd, t_pipe *pipeline, char **envp, t_shell *shell)
 {
@@ -68,8 +42,7 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		exit(EXIT_FAILURE);
 	}
 	duplicate_fds(pipeline, i);
-	if (cmd->input_file || cmd->output_file || cmd->append_file)
-		set_redirection(cmd, shell);
+	set_redirection(cmd, shell);
 	if (is_builtin(cmd->name))
 	{
 		execute_builtin(cmd, shell);
@@ -77,7 +50,7 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		exit(shell->exit_status);
 	}
 	else
-		execute_extern(cmd, pipeline, envp);
+		execute_extern(cmd, pipeline, envp, shell);
 }
 
 void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
@@ -102,26 +75,21 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 	pid_t		pids[MAX_PIPES + 1];
 	int			i;
 	
+	i = 0;
 	current_cmd = cmd;
 	if (create_pipes(pipeline, shell) == -1)
 		return ;
-	i = 0;
 	while (current_cmd)
 	{
 		pids[i] = fork();
 		if (pids[i] < 0)
 		{
-			perror("minishell: fork: ");
-			close_pipes(pipeline);
-			shell->exit_status = 1;
+			err_msg(cmd->name, "failed to create child process", shell, 1);
 			return ;
 		}
 		else if (pids[i] == 0)
 			child_process(current_cmd, shell, pipeline, i);
-		if (current_cmd->next)
-			close(pipeline->pipefd[i][1]);
-		if (i > 0)
-			close(pipeline->pipefd[i - 1][0]);
+		close_pipe_ends(i, pipeline, current_cmd);
 		current_cmd = current_cmd->next;
 		i++;
 	}
@@ -130,28 +98,51 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 
 void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 {
-	int	original_in;
-	int	original_out;
+	int	original_fds[2];
 
-	if (is_builtin(cmd->name) && count_cmds(cmd) == 1)
-	{
-		original_in = dup(STDIN_FILENO);
-		original_out = dup(STDOUT_FILENO);
-		if (original_in == -1 || original_out == -1)
-		{
-			perror("dup");
-			shell->exit_status = 1;
-		}
-		if (cmd->input_file || cmd->output_file || cmd->append_file)
-			set_redirection(cmd, shell);
-		execute_builtin(cmd, shell);
-		dup2(original_in, STDIN_FILENO);
-		dup2(original_out, STDOUT_FILENO);
-	}
-	else
+	if (count_cmds(cmd) > 1)
 		execute_multi(cmd, shell, pipeline);
+	else
+	{
+		if (!cmd->name)
+			set_redirection(cmd, shell);
+		else if (is_builtin(cmd->name))
+		{
+			backup_original_fds(original_fds, shell, pipeline);
+			set_redirection(cmd, shell);
+			execute_builtin(cmd, shell);
+			restore_original_fds(original_fds);
+		}
+		else
+			execute_multi(cmd, shell, pipeline);
+	}
 	free(pipeline);
 }
+
+// void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
+// {
+// 	int	original_in;
+// 	int	original_out;
+
+// 	if (is_builtin(cmd->name) && count_cmds(cmd) == 1)
+// 	{
+// 		original_in = dup(STDIN_FILENO);
+// 		original_out = dup(STDOUT_FILENO);
+// 		if (original_in == -1 || original_out == -1)
+// 		{
+// 			perror("dup");
+// 			shell->exit_status = 1;
+// 		}
+// 		if (cmd->input_file || cmd->output_file || cmd->append_file)
+// 			set_redirection(cmd, shell);
+// 		execute_builtin(cmd, shell);
+// 		dup2(original_in, STDIN_FILENO);
+// 		dup2(original_out, STDOUT_FILENO);
+// 	}
+// 	else
+// 		execute_multi(cmd, shell, pipeline);
+// 	free(pipeline);
+// }
 
 // void	execute_command(t_command *cmd, t_shell *shell)
 // {
@@ -210,21 +201,3 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 // 	else
 // 		execute_command(cmd, shell);
 // }
-
-// ###########################################################
-
-	// if (cmd->input_file && i == 0)
-	// {
-	// 	int fd_input = open(cmd->input_file, O_RDONLY, 0777);
-	// 	if (fd_input == -1)
-	// 	{
-	// 		perror("failed openning input file");
-	// 		free_memory(envp);
-	// 	}
-	// 	dup2(fd_input, pipeline->pipefd[i][0]);
-	// 	close(fd_input);
-	// }
-	// if (cmd->output_file != NULL && i == pipeline->n_pipes)
-	// {
-	// 	int fd_output = open(cmd->output_file, O_WRONLY)
-	// }
