@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 12:34:54 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:36:16 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void    				open_file(t_command *cmd, char *file, int flags, int newfd, t_shell 
 void					redirect(int oldfd, int newfd, t_shell *shell);
 void					backup_original_fds(int *fds, t_shell *shell, t_pipe *pipeline);
 void					restore_original_fds(int *fds);
+void    heredoc(char *delimiter);
 void					ft_exit(t_command *cmd, t_shell *shell);
 int						ft_pwd(t_command *cmd, t_shell *shell);
 int						ft_echo(t_command *cmd);

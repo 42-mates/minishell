@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:45:48 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/09 12:33:29 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/09 13:43:32 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,13 @@
 
 void	redirect(int oldfd, int newfd, t_shell *shell)
 {
+	// (void)oldfd;
+	// int old = 7755;
 	if (dup2(oldfd, newfd) == -1)
 	{
-		close(oldfd);
-		perror("dup2");
+		//close(oldfd);
+		close(newfd);
+		//perror("dup2 123");
 		shell->exit_status = 1;
 		return ;
 	}
@@ -28,6 +31,7 @@ void	open_file(t_command *cmd, char *file, int flags, int newfd,
 		t_shell *shell)
 {
 	int	oldfd;
+	(void)cmd;	
 
 	oldfd = open(file, flags, 0644);
 	if (oldfd == -1)
