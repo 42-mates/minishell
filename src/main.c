@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 10:12:50 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:19:46 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static char	*get_input(t_shell *shell)
 static void	minishell(char *line, t_shell *shell)
 {
 	t_command	*cmd;
-	t_pipe	*pipeline;
+	t_pipe		*pipeline;
 
 	cmd = parser(line, shell);
 	if (!cmd)
@@ -85,6 +85,7 @@ int	main(int argc, char *argv[], char *envp[])
 			continue ;
 		if (!is_empty_line(input))
 			add_history(input);
+		handle_signal(shell);
 		minishell(input, shell);
 		free(input);
 	}

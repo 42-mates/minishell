@@ -6,13 +6,11 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 18:59:40 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 20:29:10 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <signal.h>
-
 
 void	execute_extern(t_command *cmd, t_pipe *pipeline, char **envp, t_shell *shell)
 {
@@ -35,8 +33,8 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 {
 	char	**envp;
 
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, child_signals);
+	signal(SIGINT, child_signals);
 	envp = list_to_array(shell->env_vars);
 	if (!envp)
 	{
@@ -62,10 +60,6 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
 {
 	int	i;
 	int	status;
-	//struct sigaction sa;
-
-	//sa.sa_handler = SIG_IGN;
-    //sigaction(SIGINT, &sa, NULL);
 
 	close_pipes(pipeline);
 	i = 0;
@@ -73,16 +67,14 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
 	{
 		waitpid(pids[i], &status, 0);
 		if (WIFEXITED(status))
-		waitpid(pids[i], &status, 0);
-		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 		{
 			shell->exit_status = 128 + WTERMSIG(status);
-			if (WTERMSIG(status) == SIGQUIT)
-				write(STDERR_FILENO, "Quit (core dumped)\n", 19);
-			if (WTERMSIG(status) == SIGINT)
-				write(STDERR_FILENO, "\n", 1);
+			// if (WTERMSIG(status) == SIGQUIT)
+			// 	write(STDERR_FILENO, "Quit (core dumped)\n", 19);
+			// if (WTERMSIG(status) == SIGINT)
+			// 	write(STDERR_FILENO, "\n", 1);
 		}
 		i++;
 	}
@@ -113,12 +105,6 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		i++;
 	}
 	parent_process(pipeline, pids, shell);
-	parent_process(pipeline, pids, shell);
-	//struct sigaction sa;
-	//sa.sa_handler = handle_sigint;
-	//sa.sa_flags = SA_RESTART;
-	//sigaction(SIGINT, &sa, NULL);
-
 }
 
 void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)

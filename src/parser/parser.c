@@ -6,13 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/08 23:16:49 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:23:41 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static	int current_token(t_token **tokens, t_command *current, t_shell *shell)
+static int	current_token(t_token **tokens, t_command *current, t_shell *shell)
 {
 	char	*exec_path;
 
@@ -33,17 +33,18 @@ static	int current_token(t_token **tokens, t_command *current, t_shell *shell)
 	return (0);
 }
 
-static t_command	*parse_command(t_token **tokens, t_shell *shell, t_command **current)
+static t_command	*parse_command(t_token **tokens, t_shell *shell,
+		t_command **current)
 {
 	if (!*current)
 	{
 		*current = init_command(shell);
 		if (!*current)
-			return NULL;
+			return (NULL);
 	}
 	if (current_token(tokens, *current, shell) == -1)
 		return (NULL);
-	return *current;
+	return (*current);
 }
 
 static t_command	*build_command(t_token *tokens, t_shell *shell)
@@ -80,7 +81,7 @@ t_command	*parser(char *line, t_shell *shell)
 	tokens = lexer(line, shell);
 	if (!tokens)
 		return (NULL);
-	//print_tokens(tokens);
+	// print_tokens(tokens);
 	head = build_command(tokens, shell);
 	free_tokens(tokens);
 	return (head);

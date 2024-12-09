@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 18:58:23 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:10:06 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_shell
 // init
 void					setup_signals(void);
 void					handle_eof(t_shell *shell);
+void					handle_signal(t_shell *shell);
 t_env					*init_env(char **envp);
 t_shell					*init_shell(int argc, char **argv, char **envp);
 

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:45:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 01:37:50 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:21:22 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,22 +59,22 @@ char	*expand_var(char *line, int *i, t_shell *shell, char *value)
 	return (new_value);
 }
 
-static char *get_unquoted(char *line, int *i)
+static char	*get_unquoted(char *line, int *i)
 {
-	int start;
-	
+	int	start;
+
 	start = *i;
 	while (line[*i] && !ft_isspace(line[*i]) && !is_meta(line[*i])
-		   && line[*i] != '\'' && line[*i] != '"' && line[*i] != '$')
+		&& line[*i] != '\'' && line[*i] != '"' && line[*i] != '$')
 		(*i)++;
 	return (ft_substr(line, start, *i - start));
 }
 
-char *extract_word(char *line, int *i, t_shell *shell)
+char	*extract_word(char *line, int *i, t_shell *shell)
 {
-	char *value;
-	char *chunk;
-	char *tmp;
+	char	*value;
+	char	*chunk;
+	char	*tmp;
 
 	value = ft_strdup("");
 	while (line[*i] && !ft_isspace(line[*i]) && !is_meta(line[*i]))
@@ -95,4 +95,3 @@ char *extract_word(char *line, int *i, t_shell *shell)
 	}
 	return (value);
 }
-
