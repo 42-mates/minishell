@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 17:40:31 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 10:12:50 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,15 @@ static char	*get_input(t_shell *shell)
 static void	minishell(char *line, t_shell *shell)
 {
 	t_command	*cmd;
+	t_pipe	*pipeline;
 
 	cmd = parser(line, shell);
 	if (!cmd)
-		return ;	
+		return ;
 	// print_command(cmd);
-	executor(cmd, shell);
+	pipeline = set_pipeline(shell, cmd);
+	if (pipeline)
+		executor(cmd, shell, pipeline);
 	free_commands(cmd);
 }
 
@@ -72,7 +75,8 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*input;
 	t_shell	*shell;
 
-	if ((shell = init_shell(argc, argv, envp)) == NULL)
+	shell = init_shell(argc, argv, envp);
+	if (!shell)
 		return (EXIT_FAILURE);
 	while (1)
 	{
@@ -84,5 +88,5 @@ int	main(int argc, char *argv[], char *envp[])
 		minishell(input, shell);
 		free(input);
 	}
-	return (free_shell(shell)); // unreachable
+	return (SUCCESS);
 }

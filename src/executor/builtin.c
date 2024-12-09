@@ -3,24 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 10:00:57 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 18:04:26 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 10:12:58 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int is_builtin(const char *cmd_name)
+int	is_builtin(const char *cmd_name)
 {
-    return (ft_strcmp(cmd_name, "cd") == 0 ||
-            ft_strcmp(cmd_name, "echo") == 0 ||
-            ft_strcmp(cmd_name, "pwd") == 0 ||
-            ft_strcmp(cmd_name, "export") == 0 ||
-            ft_strcmp(cmd_name, "unset") == 0 ||
-            ft_strcmp(cmd_name, "env") == 0 ||
-            ft_strcmp(cmd_name, "exit") == 0);
+	return (ft_strcmp(cmd_name, "cd") == 0 || ft_strcmp(cmd_name, "echo") == 0
+		|| ft_strcmp(cmd_name, "pwd") == 0 || ft_strcmp(cmd_name, "export") == 0
+		|| ft_strcmp(cmd_name, "unset") == 0 || ft_strcmp(cmd_name, "env") == 0
+		|| ft_strcmp(cmd_name, "exit") == 0);
 }
 
 void	execute_builtin(t_command *cmd, t_shell *shell)

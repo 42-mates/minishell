@@ -5,6 +5,7 @@ INCDIR          = include/
 
 SRCS            = src/main.c \
 				  src/parser/lexer.c \
+				  src/parser/quotes.c \
 				  src/parser/tokenize.c \
 				  src/parser/parser.c \
 				  src/parser/path.c \
@@ -15,6 +16,7 @@ SRCS            = src/main.c \
 				  src/executor/builtin.c \
 				  src/executor/pipes.c \
 				  src/executor/redirect.c \
+				  src/executor/heredoc.c \
 				  src/executor/utils_exec.c \
 				  src/builtins/exit.c \
 				  src/builtins/env.c \

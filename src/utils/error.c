@@ -6,13 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 20:06:11 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 13:15:00 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:32:29 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int cmd_err(char *cmd, char *arg, char *msg, int err_num)
+int	cmd_err(char *cmd, char *arg, char *msg, int err_num)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
@@ -26,7 +26,7 @@ int cmd_err(char *cmd, char *arg, char *msg, int err_num)
 	return (err_num);
 }
 /*
-void errmsg_cmd(char *cmd, char *arg, char *error_msg)
+void	errmsg_cmd(char *cmd, char *arg, char *error_msg)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
@@ -39,7 +39,7 @@ void errmsg_cmd(char *cmd, char *arg, char *error_msg)
 	ft_putendl_fd(error_msg, 2);
 }*/
 
-void *set_status(t_shell *shell, int status)
+void	*set_status(t_shell *shell, int status)
 {
 	shell->exit_status = status;
 	return (NULL);
@@ -66,9 +66,8 @@ void	error_exit(char *msg)
 	exit(EXIT_FAILURE);
 }
 
-
 /*
-void exec_error(const char *cmd, t_shell *shell)
+void	exec_error(const char *cmd, t_shell *shell)
 {
 	if (errno == EACCES) // Permission denied
 	{
@@ -101,7 +100,7 @@ void exec_error(const char *cmd, t_shell *shell)
 	}
 }
 
-void executor(t_command *cmd, t_shell *shell)
+void	executor(t_command *cmd, t_shell *shell)
 {
 	if (execvp(cmd->name, cmd->args) == -1)
 	{

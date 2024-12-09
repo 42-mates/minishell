@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:13:08 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/06 15:52:05 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:29:09 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 static int	is_numeric(const char *str)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	if (!str || !str[0])
 		return (0);
 	if (str[0] == '-' || str[0] == '+')
@@ -29,7 +30,7 @@ static int	is_numeric(const char *str)
 	return (1);
 }
 
-static int    syntax_error(t_command *cmd)
+static int	syntax_error(t_command *cmd)
 {
 	ft_putstr_fd("minishell: exit: ", 2);
 	ft_putstr_fd(cmd->args[1], 2);
@@ -37,10 +38,10 @@ static int    syntax_error(t_command *cmd)
 	return (2);
 }
 
-static int get_exit_code(char *arg, t_command *cmd)
+static int	get_exit_code(char *arg, t_command *cmd)
 {
-	int out_of_range;
-	long exit_code;
+	int		out_of_range;
+	long	exit_code;
 
 	exit_code = ft_atol(arg, &out_of_range);
 	if (!out_of_range)
@@ -48,7 +49,7 @@ static int get_exit_code(char *arg, t_command *cmd)
 	return (syntax_error(cmd));
 }
 
-void    ft_exit(t_command *cmd, t_shell *shell)
+void	ft_exit(t_command *cmd, t_shell *shell)
 {
 	ft_putendl_fd(cmd->name, 1);
 	if (cmd->args[1])
@@ -68,7 +69,7 @@ void    ft_exit(t_command *cmd, t_shell *shell)
 			if (is_numeric(cmd->args[1]))
 				shell->exit_status = get_exit_code(cmd->args[1], cmd);
 			else
-				shell->exit_status = syntax_error(cmd); 
+				shell->exit_status = syntax_error(cmd);
 		}
 	}
 	free_commands(cmd);

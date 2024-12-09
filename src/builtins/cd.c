@@ -6,26 +6,26 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 01:12:37 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 18:42:54 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:28:57 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char *expand_oldpwd(t_shell *shell)
+static char	*expand_oldpwd(t_shell *shell)
 {
-	char *oldpwd;
+	char	*oldpwd;
 
 	oldpwd = getenv_lst("OLDPWD", shell->env_vars);
 	if (!oldpwd)
 		return (NULL);
-	return ft_strdup(oldpwd);
+	return (ft_strdup(oldpwd));
 }
 
-static void update_pwd(t_shell *shell)
+static void	update_pwd(t_shell *shell)
 {
-	char *old_pwd;
-	char *new_pwd;
+	char	*old_pwd;
+	char	*new_pwd;
 
 	old_pwd = getenv_lst("PWD", shell->env_vars);
 	if (old_pwd)
@@ -35,21 +35,21 @@ static void update_pwd(t_shell *shell)
 	{
 		setenv_lst("PWD", new_pwd, &(shell->env_vars));
 		free(shell->pwd);
-        shell->pwd = ft_strdup(new_pwd);
+		shell->pwd = ft_strdup(new_pwd);
 		free(new_pwd);
 	}
 }
 
-static void *cd_err(char *msg)
+static void	*cd_err(char *msg)
 {
 	ft_putstr_fd("minishell: cd: ", 2);
 	ft_putendl_fd(msg, 2);
 	return (NULL);
 }
 
-static char *cd_path(t_command *cmd, t_shell *shell)
+static char	*cd_path(t_command *cmd, t_shell *shell)
 {
-	char *path;
+	char	*path;
 
 	path = NULL;
 	if (!cmd->args[1])
@@ -57,7 +57,7 @@ static char *cd_path(t_command *cmd, t_shell *shell)
 		path = getenv_lst("HOME", shell->env_vars);
 		if (!path || ft_strlen(path) == 0)
 			return (cd_err("HOME not set"));
-		return ft_strdup(path);
+		return (ft_strdup(path));
 	}
 	if (ft_strcmp(cmd->args[1], "-") == 0)
 	{
@@ -66,12 +66,12 @@ static char *cd_path(t_command *cmd, t_shell *shell)
 			return (cd_err("OLDPWD not set"));
 		return (path);
 	}
-	return ft_strdup(cmd->args[1]);
+	return (ft_strdup(cmd->args[1]));
 }
 
-int ft_cd(t_command *cmd, t_shell *shell)
+int	ft_cd(t_command *cmd, t_shell *shell)
 {
-	char *path;
+	char	*path;
 
 	if (cmd->args[1] && cmd->args[2])
 		return (cmd_err("cd", NULL, "too many arguments", ERROR));

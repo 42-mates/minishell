@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:45:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/11/28 19:11:31 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:37:50 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,55 +59,40 @@ char	*expand_var(char *line, int *i, t_shell *shell, char *value)
 	return (new_value);
 }
 
-char	*extract_word(char *line, int *i, t_shell *shell)
+static char *get_unquoted(char *line, int *i)
 {
-	char	*value;
+	int start;
+	
+	start = *i;
+	while (line[*i] && !ft_isspace(line[*i]) && !is_meta(line[*i])
+		   && line[*i] != '\'' && line[*i] != '"' && line[*i] != '$')
+		(*i)++;
+	return (ft_substr(line, start, *i - start));
+}
+
+char *extract_word(char *line, int *i, t_shell *shell)
+{
+	char *value;
+	char *chunk;
+	char *tmp;
 
 	value = ft_strdup("");
-	if (!value)
-		return (NULL);
 	while (line[*i] && !ft_isspace(line[*i]) && !is_meta(line[*i]))
 	{
-		if (line[*i] == '$')
-			value = expand_var(line, i, shell, value);
+		chunk = NULL;
+		if (line[*i] == '\'' || line[*i] == '"')
+			chunk = quotes(line, i, shell);
+		else if (line[*i] == '$')
+			chunk = extract_var(line, i, shell);
 		else
-			value = add_char(line, i, value);
-		if (!value)
+			chunk = get_unquoted(line, i);
+		tmp = ft_strjoin(value, chunk);
+		free(value);
+		free(chunk);
+		if (!tmp)
 			return (NULL);
+		value = tmp;
 	}
 	return (value);
 }
 
-char	*double_quote(char *line, int *i, t_shell *shell)
-{
-	char	*value;
-
-	++(*i);
-	value = ft_strdup("");
-	while (line[*i] && line[*i] != '"')
-	{
-		if (line[*i] == '$')
-			value = expand_var(line, i, shell, value);
-		else
-			value = add_char(line, i, value);
-		if (!value)
-			return (NULL);
-	}
-	if (line[*i] == '"')
-		(*i)++;
-	return (value);
-}
-
-char	*single_quote(char *line, int *i)
-{
-	int		start;
-	char	*value;
-
-	start = ++(*i);
-	while (line[*i] && line[*i] != '\'')
-		(*i)++;
-	value = ft_substr(line, start, *i - start);
-	if (line[*i] == '\'')
-		(*i)++;
-	return (value);
-}
