@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 12:30:28 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:07:26 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		exit(EXIT_FAILURE);
 	}
 	duplicate_fds(pipeline, i);
-	set_redirection(cmd, shell);
+	if (set_redirection(cmd, shell) == -1)
+		exit(1);
 	if (is_builtin(cmd->name))
 	{
 		execute_builtin(cmd, shell);
@@ -105,19 +106,27 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 	else
 	{
 		if (!cmd->name)
-			set_redirection(cmd, shell);
-		else if (is_builtin(cmd->name))
+		{
+			if (set_redirection(cmd, shell) == -1)
+				return;
+		}
+		else if (cmd->name && is_builtin(cmd->name))
 		{
 			backup_original_fds(original_fds, shell, pipeline);
-			set_redirection(cmd, shell);
+			if (set_redirection(cmd, shell) == -1)
+				exit(1);
 			execute_builtin(cmd, shell);
 			restore_original_fds(original_fds);
 		}
 		else
+		{
 			execute_multi(cmd, shell, pipeline);
+		}
 	}
 	free(pipeline);
 }
+
+
 
 // void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 // {
