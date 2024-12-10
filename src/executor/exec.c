@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/10 18:48:35 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/10 19:09:53 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 {
 	char	**envp;
 
+	signal(SIGQUIT, child_signals);
+	signal(SIGINT, child_signals);
 	envp = list_to_array(shell->env_vars);
 	if (!envp)
 	{
