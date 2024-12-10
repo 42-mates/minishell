@@ -35,3 +35,8 @@ Minishell is a miniature shell program based on Bash. Minishell supports:
   * `ctrl-\` does nothing
 
 However, Minishell does not support `\`, `;`, `&&`, `||`, or wildcards.
+
+To run Minishell with Valgrind and suppress `readline` memory leaks, you can use a suppression file. Example command:
+
+```bash
+valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./minishell
