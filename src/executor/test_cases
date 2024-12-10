@@ -1,4 +1,0 @@
-writing to/reading from protected/restricted files with
-builtin commands result in exit from minishell
-
-echo "Hello" > protected.txt
