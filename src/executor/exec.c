@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 20:29:10 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/10 17:56:53 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	execute_extern(t_command *cmd, t_pipe *pipeline, char **envp, t_shell *shell)
 {
-	if (execve(cmd->name, cmd->args, envp) == -1)
-	{	
+	if (execve(cmd->name, cmd->args, envp) == -1) // если успешно, новая программа (например /bin/ls) сама вызывает
+	{											//   exit(code) внутри себя, и этот code получает род-ль через waitpid()	
 		free_array(envp);
 		close_pipes(pipeline);
 		free(pipeline);
@@ -33,8 +33,6 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 {
 	char	**envp;
 
-	signal(SIGQUIT, child_signals);
-	signal(SIGINT, child_signals);
 	envp = list_to_array(shell->env_vars);
 	if (!envp)
 	{
@@ -44,8 +42,14 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		exit(EXIT_FAILURE);
 	}
 	duplicate_fds(pipeline, i);
+	if (cmd->delimiter)
+		heredoc(cmd, shell);
 	if (set_redirection(cmd, shell) == -1)
-		exit(1);
+	{
+		// printf("failed to open file %s\n", cmd->append_file);
+		shell->exit_status = 1;
+		exit(shell->exit_status);
+	}
 	if (is_builtin(cmd->name))
 	{
 		execute_builtin(cmd, shell);
@@ -68,14 +72,6 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
 		waitpid(pids[i], &status, 0);
 		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-		{
-			shell->exit_status = 128 + WTERMSIG(status);
-			// if (WTERMSIG(status) == SIGQUIT)
-			// 	write(STDERR_FILENO, "Quit (core dumped)\n", 19);
-			// if (WTERMSIG(status) == SIGINT)
-			// 	write(STDERR_FILENO, "\n", 1);
-		}
 		i++;
 	}
 }
@@ -104,6 +100,8 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		current_cmd = current_cmd->next;
 		i++;
 	}
+	// if (cmd->tmp_file_path)
+		// unlink(cmd->tmp_file_path);
 	parent_process(pipeline, pids, shell);
 }
 
@@ -129,14 +127,10 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 			restore_original_fds(original_fds);
 		}
 		else
-		{
 			execute_multi(cmd, shell, pipeline);
-		}
 	}
 	free(pipeline);
 }
-
-
 
 // void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 // {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 21:10:06 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/10 17:50:46 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,13 @@ typedef struct s_token
 	struct s_token		*next;
 }						t_token;
 
+// typedef struct s_redirect
+// {
+// 	t_token_type		type;	
+// 	char				*value;
+// 	struct s_redirect	*next;
+// } t_redirect;
+
 typedef struct s_command
 {
 	char				*name;
@@ -59,6 +66,7 @@ typedef struct s_command
 	char				*input_file;
 	char				*append_file;
 	char				*delimiter;
+	char				*tmp_file_path;
 	struct s_command	*next;
 }						t_command;
 
@@ -79,7 +87,6 @@ typedef struct s_shell
 // init
 void					setup_signals(void);
 void					handle_eof(t_shell *shell);
-void					handle_signal(t_shell *shell);
 t_env					*init_env(char **envp);
 t_shell					*init_shell(int argc, char **argv, char **envp);
 
@@ -92,14 +99,13 @@ int						create_pipes(t_pipe *pipeline, t_shell *shell);
 void					duplicate_fds(t_pipe *pipeline, int i);
 void					close_pipes(t_pipe *pipeline);
 void					close_pipe_ends(int i, t_pipe *pipeline, t_command *current);
-int					set_redirection(t_command *cmd, t_shell *shell);
-int    				open_file(t_command *cmd, char *file, int flags, int newfd, t_shell *shell);
-int					redirect(int oldfd, int newfd, t_shell *shell);
+int						set_redirection(t_command *cmd, t_shell *shell);
+int						set_redirections(t_command *cmd, t_shell *shell);
+int    					open_file(t_command *cmd, char *file, int flags, int newfd, t_shell *shell);
+int						redirect(int oldfd, int newfd, t_shell *shell);
 void					backup_original_fds(int *fds, t_shell *shell, t_pipe *pipeline);
 void					restore_original_fds(int *fds);
-void    heredoc(char *delimiter);
-void					sort_env_array(t_env **array);
-void					child_signals(int sig);
+void    				heredoc(t_command *cmd, t_shell *shell);
 void					ft_exit(t_command *cmd, t_shell *shell);
 int						ft_pwd(t_command *cmd, t_shell *shell);
 int						ft_echo(t_command *cmd);

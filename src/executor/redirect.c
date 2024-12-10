@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:45:48 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/09 17:00:29 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/10 17:34:09 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	open_file(t_command *cmd, char *file, int flags, int newfd,
 
 int	set_redirection(t_command *cmd, t_shell *shell)
 {
-	if (cmd->input_file)
+	if (cmd->input_file && !cmd->delimiter)
 		if (open_file(cmd, cmd->input_file, O_RDONLY, STDIN_FILENO, shell) == -1)
 			return (-1);
 	if (cmd->output_file)
@@ -57,8 +57,6 @@ int	set_redirection(t_command *cmd, t_shell *shell)
 		if (open_file(cmd, cmd->append_file, O_WRONLY | O_CREAT | O_APPEND,
 			STDOUT_FILENO, shell) == -1)
 			return (-1);
-	if (cmd->delimiter)
-		heredoc(cmd->delimiter);
 	return(0);
 }
 
