@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/10 17:56:53 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/10 18:48:35 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,14 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
 		waitpid(pids[i], &status, 0);
 		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			shell->exit_status = 128 + WTERMSIG(status);
+			// if (WTERMSIG(status) == SIGQUIT)
+			// 	write(STDERR_FILENO, "Quit (core dumped)\n", 19);
+			// if (WTERMSIG(status) == SIGINT)
+			// 	write(STDERR_FILENO, "\n", 1);
+		}
 		i++;
 	}
 }

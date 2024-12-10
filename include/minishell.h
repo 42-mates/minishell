@@ -6,7 +6,7 @@
 /*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/10 17:50:46 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/10 18:49:48 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_shell
 // init
 void					setup_signals(void);
 void					handle_eof(t_shell *shell);
+void					handle_signal(t_shell *shell);
 t_env					*init_env(char **envp);
 t_shell					*init_shell(int argc, char **argv, char **envp);
 
@@ -106,6 +107,8 @@ int						redirect(int oldfd, int newfd, t_shell *shell);
 void					backup_original_fds(int *fds, t_shell *shell, t_pipe *pipeline);
 void					restore_original_fds(int *fds);
 void    				heredoc(t_command *cmd, t_shell *shell);
+void					sort_env_array(t_env **array);
+void					child_signals(int sig);
 void					ft_exit(t_command *cmd, t_shell *shell);
 int						ft_pwd(t_command *cmd, t_shell *shell);
 int						ft_echo(t_command *cmd);
