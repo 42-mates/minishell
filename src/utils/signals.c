@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 20:36:13 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 21:11:49 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/11 13:42:43 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	handle_signal(t_shell *shell)
 	}
 }
 
+// Ctrl-C and Ctrl-\ in exec.c
 void	child_signals(int sig)
 {
 	if (sig == SIGQUIT)

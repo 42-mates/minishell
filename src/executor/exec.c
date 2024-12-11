@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/10 18:48:35 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/11 13:28:27 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	execute_extern(t_command *cmd, t_pipe *pipeline, char **envp, t_shell *shell)
 {
-	if (execve(cmd->name, cmd->args, envp) == -1) // если успешно, новая программа (например /bin/ls) сама вызывает
-	{											//   exit(code) внутри себя, и этот code получает род-ль через waitpid()	
+	if (execve(cmd->name, cmd->args, envp) == -1)
+	{	
 		free_array(envp);
 		close_pipes(pipeline);
 		free(pipeline);
@@ -73,13 +73,7 @@ void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
 		if (WIFEXITED(status))
 			shell->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-		{
 			shell->exit_status = 128 + WTERMSIG(status);
-			// if (WTERMSIG(status) == SIGQUIT)
-			// 	write(STDERR_FILENO, "Quit (core dumped)\n", 19);
-			// if (WTERMSIG(status) == SIGINT)
-			// 	write(STDERR_FILENO, "\n", 1);
-		}
 		i++;
 	}
 }
@@ -117,6 +111,8 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 {
 	int	original_fds[2];
 
+	signal(SIGQUIT, child_signals);
+	signal(SIGINT, child_signals);
 	if (count_cmds(cmd) > 1)
 		execute_multi(cmd, shell, pipeline);
 	else

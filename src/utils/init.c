@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 12:31:52 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/08 02:01:23 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/11 13:22:55 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ t_shell	*init_shell(int argc, char **argv, char **envp)
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
 		return (NULL);
-	setup_signals();
 	shell->exit_status = 0;
 	shell->env_vars = init_env(envp);
 	shell->pwd = init_pwd(&shell->env_vars);
