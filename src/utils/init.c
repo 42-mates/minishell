@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 12:31:52 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/11 13:22:55 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:58:08 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,20 @@ static void	init_shlvl(t_env **env_vars)
 	free(new_shlvl);
 }
 
+void init_pipeline(t_pipe *pipeline)
+{
+	int i;
+
+	i = 0;	
+	pipeline->n_pipes = 0;
+	while (i < MAX_PIPES)
+	{
+		pipeline->pipefd[i][0] = -1;
+		pipeline->pipefd[i][1] = -1;
+		i++;
+	}
+}
+
 t_shell	*init_shell(int argc, char **argv, char **envp)
 {
 	t_shell	*shell;
@@ -74,6 +88,7 @@ t_shell	*init_shell(int argc, char **argv, char **envp)
 	shell->exit_status = 0;
 	shell->env_vars = init_env(envp);
 	shell->pwd = init_pwd(&shell->env_vars);
+	init_pipeline(&shell->pipeline);
 	init_shlvl(&shell->env_vars);
 	return (shell);
 }

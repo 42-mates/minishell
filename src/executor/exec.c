@@ -6,41 +6,60 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/11 13:28:27 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/11 23:41:21 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 
-void	execute_extern(t_command *cmd, t_pipe *pipeline, char **envp, t_shell *shell)
+void	execute_extern(t_command *cmd, t_shell *shell)
 {
-	if (execve(cmd->name, cmd->args, envp) == -1)
+	char	**envp;
+	char	*exec_path;
+	struct	stat st;
+	
+	envp = list_to_array(shell->env_vars);
+	if (!envp)
+	{
+		perror("minishell: failed to convert environment variables");
+		exit(EXIT_FAILURE);
+	}
+	if (!ft_strchr(cmd->name, '/'))
+	{
+		exec_path = get_path(cmd->name, shell->env_vars);
+		if (!exec_path)
+        {
+            ft_putstr_fd("minishell: ", 2);
+            ft_putstr_fd(cmd->name, 2);
+            ft_putendl_fd(": command not found", 2);
+            free_array(envp);
+            exit(127);
+        }
+        // free(cmd->name);
+        // cmd->name = exec_path;
+        free(cmd->args[0]);
+        cmd->args[0] = ft_strdup(exec_path);
+	}
+	if (stat(cmd->args[0], &st) == 0 && S_ISDIR(st.st_mode))
+    {
+        ft_putstr_fd("minishell: ", 2);
+        ft_putstr_fd(cmd->args[0], 2);
+        ft_putendl_fd(": Is a directory", 2);
+        free_array(envp);
+        exit(126);
+    }
+	if (execve(cmd->args[0], cmd->args, envp) == -1)
 	{	
 		free_array(envp);
-		close_pipes(pipeline);
-		free(pipeline);
-		perror("minishell: execve:");
-		//exit(shell->exit_status);
-		shell->exit_status = errno; // излишне, будет установлен в род.процессе
-		// exit(errno); 				//	при ошибке вызова execve выходим из ПРОЦЕССА через EXIT
-		// return ; 					а не из ФУНКЦИИ через return
-		// errno тоже нужно обработать
-		// пример: errno EACCES =-13 (126 exit status в bash)
+		exec_error(cmd->name, shell);
+		exit(shell->exit_status);
 	}
 }
 
 void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 {
-	char	**envp;
-
-	envp = list_to_array(shell->env_vars);
-	if (!envp)
-	{
-		close_pipes(pipeline);
-		free(pipeline);
-		perror("minishell: failed to convert environment variables");
-		exit(EXIT_FAILURE);
-	}
 	duplicate_fds(pipeline, i);
 	if (cmd->delimiter)
 		heredoc(cmd, shell);
@@ -53,11 +72,10 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 	if (is_builtin(cmd->name))
 	{
 		execute_builtin(cmd, shell);
-		free_array(envp);
 		exit(shell->exit_status);
 	}
 	else
-		execute_extern(cmd, pipeline, envp, shell);
+		execute_extern(cmd, shell);
 }
 
 void	parent_process(t_pipe *pipeline, pid_t pids[MAX_PIPES + 1], t_shell *shell)
@@ -124,7 +142,7 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		}
 		else if (cmd->name && is_builtin(cmd->name))
 		{
-			backup_original_fds(original_fds, shell, pipeline);
+			backup_original_fds(original_fds, shell);
 			if (set_redirection(cmd, shell) == -1)
 				exit(1);
 			execute_builtin(cmd, shell);
@@ -133,7 +151,7 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		else
 			execute_multi(cmd, shell, pipeline);
 	}
-	free(pipeline);
+	//free(pipeline);
 }
 
 // void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)

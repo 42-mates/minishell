@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/10 18:49:48 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:48:22 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,6 @@
 # define SUCCESS 0
 # define ERROR 1
 # define MAX_PIPES 20
-
-typedef struct s_pipe
-{
-	int					n_pipes;
-	int					pipefd[MAX_PIPES][2];
-}						t_pipe;
 
 typedef enum e_token_type
 {
@@ -77,11 +71,18 @@ typedef struct s_env
 	struct s_env		*next;
 }						t_env;
 
+typedef struct s_pipe
+{
+	int					n_pipes;
+	int					pipefd[MAX_PIPES][2];
+}						t_pipe;
+
 typedef struct s_shell
 {
 	int					exit_status;
-	t_env				*env_vars;
 	char				*pwd;
+	t_env				*env_vars;
+	t_pipe				pipeline;
 }						t_shell;
 
 // init
@@ -95,16 +96,16 @@ t_shell					*init_shell(int argc, char **argv, char **envp);
 int						is_builtin(const char *cmd_name);
 void					execute_builtin(t_command *cmd, t_shell *shell);
 void					executor(t_command *cmd, t_shell *shell, t_pipe *pipeline);
-t_pipe					*set_pipeline(t_shell *shell, t_command *cmd);
+void					init_pipeline(t_pipe *pipeline);
+void					cleanup_pipeline(t_pipe *pipeline);
 int						create_pipes(t_pipe *pipeline, t_shell *shell);
 void					duplicate_fds(t_pipe *pipeline, int i);
 void					close_pipes(t_pipe *pipeline);
 void					close_pipe_ends(int i, t_pipe *pipeline, t_command *current);
 int						set_redirection(t_command *cmd, t_shell *shell);
-int						set_redirections(t_command *cmd, t_shell *shell);
 int    					open_file(t_command *cmd, char *file, int flags, int newfd, t_shell *shell);
 int						redirect(int oldfd, int newfd, t_shell *shell);
-void					backup_original_fds(int *fds, t_shell *shell, t_pipe *pipeline);
+void					backup_original_fds(int *fds, t_shell *shell);
 void					restore_original_fds(int *fds);
 void    				heredoc(t_command *cmd, t_shell *shell);
 void					sort_env_array(t_env **array);
@@ -132,11 +133,10 @@ char					*expand_var(char *line, int *i, t_shell *shell, char *value);
 char					*extract_word(char *line, int *i, t_shell *shell);
 char					*add_char(char *line, int *i, char *value);
 bool					is_meta(char c);
-int						parse_redirects(t_token **tokens, t_command *cmd,
+bool					parse_redirects(t_token **tokens, t_command *cmd,
 							t_shell *shell);
 void					parse_args(t_token **tokens, t_command *cmd);
-int						parse_pipe(t_token **tokens, t_command **current,
-							t_shell *shell);
+bool					parse_pipe(t_token **tokens, t_command **cmd, t_shell *shell);
 t_command				*init_command(t_shell *shell);
 bool					is_redirect(t_token_type type);
 
@@ -154,6 +154,7 @@ long					ft_atol(char *str, int *out_of_range);
 void					*err_msg(char *cmd, char *msg, t_shell *shell,
 							int exit_status);
 int						cmd_err(char *cmd, char *arg, char *msg, int err_num);
+void					exec_error(char *cmd, t_shell *shell);
 
 // free
 void					free_array(char **ptr);

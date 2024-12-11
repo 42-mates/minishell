@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 02:07:27 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/07 15:27:17 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:32:28 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ void	parse_args(t_token **tokens, t_command *cmd)
 	(*tokens) = (*tokens)->next;
 }
 
-int	parse_redirects(t_token **tokens, t_command *cmd, t_shell *shell)
+bool	parse_redirects(t_token **tokens, t_command *cmd, t_shell *shell)
 {
 	if (!(*tokens)->next || (*tokens)->next->type != WORD)
-		return (err_msg(NULL, "syntax error near unexpected token", shell, 2),
-			-1);
+	{
+		err_msg(NULL, "syntax error near unexpected token", shell, 2);
+		return (false);
+	}
 	if ((*tokens)->type == REDIRECT_OUT)
 		cmd->output_file = ft_strdup((*tokens)->next->value);
 	else if ((*tokens)->type == APPEND)
@@ -38,18 +40,20 @@ int	parse_redirects(t_token **tokens, t_command *cmd, t_shell *shell)
 	else if ((*tokens)->type == HEREDOC)
 		cmd->delimiter = ft_strdup((*tokens)->next->value);
 	(*tokens) = (*tokens)->next->next;
-	return (0);
+	return (true);
 }
 
-int	parse_pipe(t_token **tokens, t_command **current, t_shell *shell)
+bool	parse_pipe(t_token **tokens, t_command **cmd, t_shell *shell)
 {
-	if (!(*current) || !(*tokens)->next || (*tokens)->next->type != WORD)
-		return (err_msg(NULL, "syntax error near unexpected token `|`", shell,
-				2), -1);
-	(*current)->next = init_command(shell);
-	if (!(*current)->next)
-		return (-1);
-	*current = (*current)->next;
+	if (!(*cmd) || !(*tokens)->next || (*tokens)->next->type != WORD)
+	{
+		err_msg(NULL, "syntax error near unexpected token `|`", shell, 2);
+		return (false);
+	}
+	(*cmd)->next = init_command(shell);
+	if (!(*cmd)->next)
+		return (false);
+	*cmd = (*cmd)->next;
 	*tokens = (*tokens)->next;
-	return (0);
+	return (true);
 }

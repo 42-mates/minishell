@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 20:36:13 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/11 13:42:43 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/11 23:48:44 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	handle_signal(t_shell *shell)
 }
 
 // Ctrl-C and Ctrl-\ in exec.c
+// TODO : rename exec signals (not child actually)
 void	child_signals(int sig)
 {
 	if (sig == SIGQUIT)

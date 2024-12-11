@@ -6,12 +6,16 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 20:06:11 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/07 15:32:29 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/11 23:29:06 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/** 
+ * print error messages and
+ * return exit_status in builtins
+ */
 int	cmd_err(char *cmd, char *arg, char *msg, int err_num)
 {
 	ft_putstr_fd("minishell: ", 2);
@@ -25,19 +29,6 @@ int	cmd_err(char *cmd, char *arg, char *msg, int err_num)
 	ft_putendl_fd(msg, 2);
 	return (err_num);
 }
-/*
-void	errmsg_cmd(char *cmd, char *arg, char *error_msg)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": ", 2);
-	if (arg)
-	{
-		ft_putstr_fd(arg, 2);
-		ft_putstr_fd(": ", 2);
-	}
-	ft_putendl_fd(error_msg, 2);
-}*/
 
 void	*set_status(t_shell *shell, int status)
 {
@@ -45,6 +36,10 @@ void	*set_status(t_shell *shell, int status)
 	return (NULL);
 }
 
+/** 
+ * is used to return from func. with NULL while setting exit_status
+ * and writing error message
+ */ 
 void	*err_msg(char *cmd, char *msg, t_shell *shell, int exit_status)
 {
 	ft_putstr_fd("minishell: ", 2);
@@ -57,17 +52,7 @@ void	*err_msg(char *cmd, char *msg, t_shell *shell, int exit_status)
 	return (set_status(shell, exit_status));
 }
 
-// TODO : rewrite to use
-void	error_exit(char *msg)
-{
-	ft_putstr_fd(strerror(errno), 2);
-	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(msg, 2);
-	exit(EXIT_FAILURE);
-}
-
-/*
-void	exec_error(const char *cmd, t_shell *shell)
+void	exec_error(char *cmd, t_shell *shell)
 {
 	if (errno == EACCES) // Permission denied
 	{
@@ -83,13 +68,20 @@ void	exec_error(const char *cmd, t_shell *shell)
 		ft_putendl_fd(": command not found", 2);
 		shell->exit_status = 127;
 	}
-	else if (errno == ENOTDIR)
+	else if (errno == ENOTDIR) // Not a directory
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": Not a directory", 2);
-		shell->exit_status = 127; // какой код
+		ft_putendl_fd(": Not a directory", 2); 
+		shell->exit_status = 127;
 	}
+	// else if (errno == EISDIR) // Is a directory
+	// {
+	// 	ft_putstr_fd("minishell: ", 2);
+	// 	ft_putstr_fd(cmd, 2);
+	// 	ft_putendl_fd(": Is a directory", 2);
+	// 	shell->exit_status = 126;
+	// }	
 	else
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -100,13 +92,24 @@ void	exec_error(const char *cmd, t_shell *shell)
 	}
 }
 
-void	executor(t_command *cmd, t_shell *shell)
-{
-	if (execvp(cmd->name, cmd->args) == -1)
-	{
-		handle_exec_error(cmd->name, shell);
-		exit(shell->exit_status);
-	}
-}
+// TODO : rewrite to use
+// void	error_exit(char *msg)
+// {
+// 	ft_putstr_fd(strerror(errno), 2);
+// 	ft_putstr_fd(": ", 2);
+// 	ft_putendl_fd(msg, 2);
+// 	exit(EXIT_FAILURE);
+// }
 
-*/
+// void	errmsg_cmd(char *cmd, char *arg, char *error_msg)
+// {
+// 	ft_putstr_fd("minishell: ", 2);
+// 	ft_putstr_fd(cmd, 2);
+// 	ft_putstr_fd(": ", 2);
+// 	if (arg)
+// 	{
+// 		ft_putstr_fd(arg, 2);
+// 		ft_putstr_fd(": ", 2);
+// 	}
+// 	ft_putendl_fd(error_msg, 2);
+// }

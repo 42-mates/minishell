@@ -3,14 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:46:05 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/10 18:50:42 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/11 23:55:02 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void cleanup_pipeline(t_pipe *pipeline)
+{
+	int i;
+
+	i = 0;
+	while (i < pipeline->n_pipes)
+	{
+		close(pipeline->pipefd[i][0]);
+		close(pipeline->pipefd[i][1]);
+		i++;
+	}
+	init_pipeline(pipeline);
+}
 
 int	count_cmds(t_command *cmd)
 {

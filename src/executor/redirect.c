@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:45:48 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/10 17:34:09 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:37:56 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	set_redirection(t_command *cmd, t_shell *shell)
 	return(0);
 }
 
-void	backup_original_fds(int *fds, t_shell *shell, t_pipe *pipeline)
+void	backup_original_fds(int *fds, t_shell *shell)
 {
 	fds[0] = dup(STDIN_FILENO);
 	fds[1] = dup(STDOUT_FILENO);
@@ -68,7 +68,6 @@ void	backup_original_fds(int *fds, t_shell *shell, t_pipe *pipeline)
 	{
 		perror("dup");
 		shell->exit_status = 1;
-		free(pipeline);
 		exit(EXIT_FAILURE);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/11 13:11:33 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:40:46 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,28 @@ static char	*get_input(t_shell *shell)
 	return (input);
 }
 
+static bool set_pipeline(t_command *cmd, t_shell *shell)
+{
+	shell->pipeline.n_pipes = count_cmds(cmd) - 1;
+	if (shell->pipeline.n_pipes > MAX_PIPES)
+	{
+		err_msg("pipe", "pipe limit exceeded (max 20)", shell, 1);
+		return (false);
+	}
+	return (true);
+}
+
 static void	minishell(char *line, t_shell *shell)
 {
 	t_command	*cmd;
-	t_pipe		*pipeline;
 
 	cmd = parser(line, shell);
 	if (!cmd)
 		return ;
 	// print_command(cmd);
-	pipeline = set_pipeline(shell, cmd);
-	if (pipeline)
-		executor(cmd, shell, pipeline);
+	if (set_pipeline(cmd, shell))
+		executor(cmd, shell, &shell->pipeline);
+	cleanup_pipeline(&shell->pipeline);
 	free_commands(cmd);
 }
 
