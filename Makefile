@@ -8,11 +8,11 @@ SRCS            = src/main.c \
 				  src/parser/quotes.c \
 				  src/parser/tokenize.c \
 				  src/parser/parser.c \
-				  src/parser/path.c \
 				  src/parser/extract.c \
 				  src/parser/syntax.c \
 				  src/parser/utils_parser.c \
 				  src/executor/exec.c \
+				  src/executor/path.c \
 				  src/executor/builtin.c \
 				  src/executor/pipes.c \
 				  src/executor/redirect.c \
