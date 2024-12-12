@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 00:46:41 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/11 17:24:23 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 11:57:02 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,32 @@ void	duplicate_fds(t_pipe *pipeline, int i)
 	}
 }
 
-void	close_pipes(t_pipe *pipeline)
-{
-	int	i;
+// void	close_pipes(t_pipe *pipeline)
+// {
+// 	int	i;
 
-	i = 0;
-	while (i < pipeline->n_pipes)
-	{
-		close(pipeline->pipefd[i][0]);
-		close(pipeline->pipefd[i][1]);
-		i++;
-	}
+// 	i = 0;
+// 	while (i < pipeline->n_pipes)
+// 	{
+// 		close(pipeline->pipefd[i][0]);
+// 		close(pipeline->pipefd[i][1]);
+// 		i++;
+// 	}
+// }
+
+void close_pipes(t_pipe *pipeline)
+{
+    int i;
+
+    i = 0;
+    while (i < pipeline->n_pipes - 1) // Закрыть все, кроме последнего пайпа
+    {
+        close(pipeline->pipefd[i][0]);
+        close(pipeline->pipefd[i][1]);
+        i++;
+    }
 }
+
 
 void	close_pipe_ends(int i, t_pipe *pipeline, t_command *current)
 {

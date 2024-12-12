@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 09:58:45 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 12:02:24 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ void	execute_extern(t_command *cmd, t_shell *shell)
 void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 {
 	duplicate_fds(pipeline, i);
+	for (int j = 0; j < pipeline->n_pipes; j++)
+    {
+        close(pipeline->pipefd[j][0]);
+        close(pipeline->pipefd[j][1]);
+    }
 	if (cmd->delimiter)
 		heredoc(cmd, shell);
 	if (set_redirection(cmd, shell) == -1)
@@ -121,7 +126,12 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		}
 		else if (pids[i] == 0)
 			child_process(current_cmd, shell, pipeline, i);
-		close_pipe_ends(i, pipeline, current_cmd);
+		if (i > 0)
+        {
+            close(pipeline->pipefd[i - 1][0]);
+            close(pipeline->pipefd[i - 1][1]);
+        }
+		//close_pipe_ends(i, pipeline, current_cmd);
 		current_cmd = current_cmd->next;
 		i++;
 	}
