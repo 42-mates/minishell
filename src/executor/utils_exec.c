@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:46:05 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/11 23:55:02 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 08:03:07 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,19 @@ void	sort_env_array(t_env **array)
 		}
 		i++;
 	}
+}
+
+void	free_array(char **ptr)
+{
+	int	i;
+
+	i = 0;
+	if (!ptr)
+		return ;
+	while (ptr[i])
+	{
+		free(ptr[i]);
+		i++;
+	}
+	free(ptr);
 }

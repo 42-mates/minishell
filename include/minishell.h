@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/11 20:48:22 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 07:57:15 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ typedef enum e_token_type
 {
 	WORD,
 	PIPE,
-	REDIRECT_IN,
-	REDIRECT_OUT,
-	APPEND,
-	HEREDOC
+	R_INPUT,
+	R_OUTPUT,
+	R_APPEND,
+	R_HEREDOC
 }						t_token_type;
 
 typedef struct s_token
@@ -45,20 +45,21 @@ typedef struct s_token
 	struct s_token		*next;
 }						t_token;
 
-// typedef struct s_redirect
-// {
-// 	t_token_type		type;	
-// 	char				*value;
-// 	struct s_redirect	*next;
-// } t_redirect;
+typedef struct s_redirect
+{
+	t_token_type		type;	
+	char				*filename;
+	struct s_redirect	*next;
+}						t_redirect;
 
 typedef struct s_command
 {
 	char				*name;
 	char				**args;
-	char				*output_file;
-	char				*input_file;
-	char				*append_file;
+	t_redirect			*redirects;
+	// char				*output_file;
+	// char				*input_file;
+	// char				*append_file;
 	char				*delimiter;
 	char				*tmp_file_path;
 	struct s_command	*next;
@@ -109,7 +110,7 @@ void					backup_original_fds(int *fds, t_shell *shell);
 void					restore_original_fds(int *fds);
 void    				heredoc(t_command *cmd, t_shell *shell);
 void					sort_env_array(t_env **array);
-void					child_signals(int sig);
+void					exec_signals(int sig);
 void					ft_exit(t_command *cmd, t_shell *shell);
 int						ft_pwd(t_command *cmd, t_shell *shell);
 int						ft_echo(t_command *cmd);
@@ -135,6 +136,7 @@ char					*add_char(char *line, int *i, char *value);
 bool					is_meta(char c);
 bool					parse_redirects(t_token **tokens, t_command *cmd,
 							t_shell *shell);
+bool					parse_heredoc(t_token **tokens, t_command *cmd, t_shell *shell);
 void					parse_args(t_token **tokens, t_command *cmd);
 bool					parse_pipe(t_token **tokens, t_command **cmd, t_shell *shell);
 t_command				*init_command(t_shell *shell);

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 20:36:13 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/11 23:48:44 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 06:27:47 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void	handle_signal(t_shell *shell)
 }
 
 // Ctrl-C and Ctrl-\ in exec.c
-// TODO : rename exec signals (not child actually)
-void	child_signals(int sig)
+void	exec_signals(int sig)
 {
 	if (sig == SIGQUIT)
 		write(2, "Quit (core dumped)\n", 19);

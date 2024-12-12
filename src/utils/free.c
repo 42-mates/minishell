@@ -6,26 +6,11 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 21:30:41 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 08:06:04 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_array(char **ptr)
-{
-	int	i;
-
-	i = 0;
-	if (!ptr)
-		return ;
-	while (ptr[i])
-	{
-		free(ptr[i]);
-		i++;
-	}
-	free(ptr);
-}
 
 void	free_tokens(t_token *tokens)
 {
@@ -41,6 +26,22 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
+void free_redirects(t_redirect *redirects)
+{
+	t_redirect *current;
+	t_redirect *next;
+
+	current = redirects;
+	while (current)
+	{
+		next = current->next;
+		if (current->filename)
+			free(current->filename);
+		free(current);
+		current = next;
+	}
+}
+
 void	free_command(t_command *cmd)
 {
 	if (!cmd)
@@ -49,12 +50,8 @@ void	free_command(t_command *cmd)
 		free(cmd->name);
 	if (cmd->args)
 		free_array(cmd->args);
-	if (cmd->input_file)
-		free(cmd->input_file);
-	if (cmd->output_file)
-		free(cmd->output_file);
-	if (cmd->append_file)
-		free(cmd->append_file);
+	if (cmd->redirects)
+		free_redirects(cmd->redirects);
 	if (cmd->delimiter)
 		free(cmd->delimiter);
 	free(cmd);

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/11 23:41:21 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 06:28:20 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,8 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 {
 	int	original_fds[2];
 
-	signal(SIGQUIT, child_signals);
-	signal(SIGINT, child_signals);
+	signal(SIGQUIT, exec_signals);
+	signal(SIGINT, exec_signals);
 	if (count_cmds(cmd) > 1)
 		execute_multi(cmd, shell, pipeline);
 	else

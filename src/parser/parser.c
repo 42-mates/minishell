@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/11 20:37:58 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 07:43:15 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ static t_command	*parse_command(t_token **tokens, t_shell *shell,
 	{
 		*current = init_command(shell);
 		if (!*current)
+			return (NULL);
+	}
+	if ((*tokens)->type == R_HEREDOC)
+	{
+		if (!parse_heredoc(tokens, *current, shell))
 			return (NULL);
 	}
 	if (is_redirect((*tokens)->type))

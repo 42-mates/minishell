@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 18:22:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/07 15:27:02 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 07:44:49 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,16 @@ t_command	*init_command(t_shell *shell)
 		return (set_status(shell, 1));
 	cmd->name = NULL;
 	cmd->args = NULL;
-	cmd->output_file = NULL;
-	cmd->input_file = NULL;
-	cmd->append_file = NULL;
+	cmd->redirects = NULL;
 	cmd->delimiter = NULL;
+	cmd->tmp_file_path = NULL;
 	cmd->next = NULL;
 	return (cmd);
 }
 
 bool	is_redirect(t_token_type type)
 {
-	return (type == REDIRECT_OUT || type == REDIRECT_IN || type == APPEND
-		|| type == HEREDOC);
+	return (type == R_OUTPUT || type == R_INPUT || type == R_APPEND);
 }
 
 bool	is_meta(char c)

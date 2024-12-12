@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 02:07:27 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/11 20:32:28 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 07:48:36 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,52 @@ void	parse_args(t_token **tokens, t_command *cmd)
 	(*tokens) = (*tokens)->next;
 }
 
-bool	parse_redirects(t_token **tokens, t_command *cmd, t_shell *shell)
+bool	parse_heredoc(t_token **tokens, t_command *cmd, t_shell *shell)
 {
 	if (!(*tokens)->next || (*tokens)->next->type != WORD)
 	{
 		err_msg(NULL, "syntax error near unexpected token", shell, 2);
 		return (false);
 	}
-	if ((*tokens)->type == REDIRECT_OUT)
-		cmd->output_file = ft_strdup((*tokens)->next->value);
-	else if ((*tokens)->type == APPEND)
-		cmd->append_file = ft_strdup((*tokens)->next->value);
-	else if ((*tokens)->type == REDIRECT_IN)
-		cmd->input_file = ft_strdup((*tokens)->next->value);
-	else if ((*tokens)->type == HEREDOC)
-		cmd->delimiter = ft_strdup((*tokens)->next->value);
+	cmd->delimiter = ft_strdup((*tokens)->next->value);
+	if (!cmd->delimiter)
+		return (false);
+	(*tokens) = (*tokens)->next->next;
+	return (true);
+}
+
+bool	parse_redirects(t_token **tokens, t_command *cmd, t_shell *shell)
+{
+	t_redirect *new_redir;
+	t_redirect *last;
+	
+	if (!(*tokens)->next || (*tokens)->next->type != WORD)
+	{
+		err_msg(NULL, "syntax error near unexpected token", shell, 2);
+		return (false);
+	}
+	new_redir = malloc(sizeof(t_redirect));
+	if (!new_redir)
+		return (false);
+	new_redir->filename = ft_strdup((*tokens)->next->value);
+	if (!new_redir->filename)
+		return (free(new_redir), false);
+	if ((*tokens)->type == R_OUTPUT)
+		new_redir->type = R_OUTPUT;
+	else if ((*tokens)->type == R_APPEND)
+		new_redir->type = R_APPEND;
+	else if ((*tokens)->type == R_INPUT)
+		new_redir->type = R_INPUT;
+	new_redir->next = NULL;
+	if (!cmd->redirects)
+		cmd->redirects = new_redir;
+	else
+	{
+		last = cmd->redirects;
+		while (last->next)
+			last = last->next;
+		last->next = new_redir;
+	}
 	(*tokens) = (*tokens)->next->next;
 	return (true);
 }

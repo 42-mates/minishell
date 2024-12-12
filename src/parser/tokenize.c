@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 21:39:15 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 10:14:11 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/12 07:16:12 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,18 @@ t_token	*meta_token(t_token *tokens, char *line, int *i)
 		tokens = add_token(tokens, ft_strdup("|"), PIPE);
 	else if (line[*i] == '>' && line[*i + 1] == '>')
 	{
-		tokens = add_token(tokens, ft_strdup(">>"), APPEND);
+		tokens = add_token(tokens, ft_strdup(">>"), R_APPEND);
 		(*i)++;
 	}
 	else if (line[*i] == '>')
-		tokens = add_token(tokens, ft_strdup(">"), REDIRECT_OUT);
+		tokens = add_token(tokens, ft_strdup(">"), R_OUTPUT);
 	else if (line[*i] == '<' && line[*i + 1] == '<')
 	{
-		tokens = add_token(tokens, ft_strdup("<<"), HEREDOC);
+		tokens = add_token(tokens, ft_strdup("<<"), R_HEREDOC);
 		(*i)++;
 	}
 	else if (line[*i] == '<')
-		tokens = add_token(tokens, ft_strdup("<"), REDIRECT_IN);
+		tokens = add_token(tokens, ft_strdup("<"), R_INPUT);
 	(*i)++;
 	return (tokens);
 }

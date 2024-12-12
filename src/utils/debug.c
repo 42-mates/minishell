@@ -1,7 +1,18 @@
 #include "minishell.h"
 
 // TODO : delete before pushing to intra
-// TODO : also delete all // comments && unnecessary comments 
+// TODO : also delete all // comments && unnecessary comments
+const char *redirect_type_to_string(t_token_type type)
+{
+    switch (type)
+    {
+        case R_INPUT: return "Input (<)";
+        case R_OUTPUT: return "Output (>)";
+        case R_APPEND: return "Append (>>)";
+        default: return "Unknown";
+    }
+}
+
 void print_command(t_command *cmd)
 {
     int i;
@@ -23,10 +34,16 @@ void print_command(t_command *cmd)
     {
         printf("  (No arguments)\n");
     }
-    printf("Input file: %s\n", cmd->input_file ? cmd->input_file : "(NULL)");
-    printf("Output file: %s\n", cmd->output_file ? cmd->output_file : "(NULL)");
-    printf("Append file: %s\n", cmd->append_file ? cmd->append_file : "(NULL)");
+    printf("Redirects:\n");
+    t_redirect *redirect = cmd->redirects;
+    while (redirect)
+    {
+        printf("  Type: %s, Filename: %s\n", redirect_type_to_string(redirect->type),
+            redirect->filename ? redirect->filename : "(NULL)");
+        redirect = redirect->next;
+    }
     printf("Delimiter: %s\n", cmd->delimiter ? cmd->delimiter : "(NULL)");
+    printf("Temporary file path: %s\n", cmd->tmp_file_path ? cmd->tmp_file_path : "(NULL)");
     if (cmd->next)
     {
         printf("\n--- Next command ---\n");
@@ -46,14 +63,14 @@ const char *token_type_to_string(t_token_type type)
             return "WORD";
         case PIPE:
             return "PIPE";
-        case REDIRECT_IN:
-            return "REDIRECT_IN";
-        case REDIRECT_OUT:
-            return "REDIRECT_OUT";
-        case APPEND:
-            return "APPEND";
-        case HEREDOC:
-            return "HEREDOC";
+        case R_INPUT:
+            return "R_INPUT";
+        case R_OUTPUT:
+            return "R_OUTPUT";
+        case R_APPEND:
+            return "R_APPEND";
+        case R_HEREDOC:
+            return "R_HEREDOC";
         default:
             return "UNKNOWN";
     }
