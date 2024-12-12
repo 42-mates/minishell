@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 20:06:11 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 09:44:44 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 11:06:58 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,13 @@ void	exec_error(char *cmd, t_shell *shell)
 		ft_putendl_fd(": Not a directory", 2); 
 		shell->exit_status = 127;
 	}
-	// else if (errno == EISDIR) // Is a directory
-	// {
-	// 	ft_putstr_fd("minishell: ", 2);
-	// 	ft_putstr_fd(cmd, 2);
-	// 	ft_putendl_fd(": Is a directory", 2);
-	// 	shell->exit_status = 126;
-	// }	
+	else if (errno == EPIPE)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(": Broken pipe", 2);
+		shell->exit_status = 141;
+	}	
 	else
 	{
 		ft_putstr_fd("minishell: ", 2);
