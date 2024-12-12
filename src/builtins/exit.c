@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:13:08 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/07 15:29:09 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 09:51:03 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	ft_exit(t_command *cmd, t_shell *shell)
 		{
 			if (is_numeric(cmd->args[1]))
 			{
-				ft_putendl_fd("minishell: exit: too many arguments", 1);
+				ft_putendl_fd("minishell: exit: too many arguments", 2);
 				shell->exit_status = 1;
 				return ;
 			}

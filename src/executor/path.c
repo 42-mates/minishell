@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:35:00 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/06 21:30:21 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 09:38:47 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,14 @@ char	*get_path(char *cmd_name, t_env *env_list)
 	char	**split_paths;
 	char	*full_path;
 
-	if (access(cmd_name, X_OK) == 0)
-		return (ft_strdup(cmd_name));
+	if (ft_strchr(cmd_name, '/'))
+	{
+		if (access(cmd_name, X_OK) == 0)
+			return (ft_strdup(cmd_name));
+		return NULL;
+	}
+	// if (access(cmd_name, X_OK) == 0)
+	// 	return (ft_strdup(cmd_name));
 	path = getenv_lst("PATH", env_list);
 	if (!path)
 		return (NULL);

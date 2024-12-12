@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 20:06:11 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/11 23:29:06 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 09:44:44 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ void	exec_error(char *cmd, t_shell *shell)
 		ft_putendl_fd(": Permission denied", 2);
 		shell->exit_status = 126;
 	}
-	else if (errno == ENOENT) // File not found
+	else if (errno == ENOENT) // No such file or directory
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": command not found", 2);
+		ft_putendl_fd(": No such file or directory", 2);
 		shell->exit_status = 127;
 	}
 	else if (errno == ENOTDIR) // Not a directory

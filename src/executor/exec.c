@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 06:28:20 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 09:58:45 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ void	execute_extern(t_command *cmd, t_shell *shell)
 	{
 		perror("minishell: failed to convert environment variables");
 		exit(EXIT_FAILURE);
+	}
+	if (!cmd->name || cmd->name[0] == '\0')
+	{
+		free_array(envp);
+		exit(0);
 	}
 	if (!ft_strchr(cmd->name, '/'))
 	{

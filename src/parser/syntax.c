@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 02:07:27 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 07:48:36 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 10:08:10 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 void	parse_args(t_token **tokens, t_command *cmd)
 {
+	if ((*tokens)->value && (*tokens)->value[0] == '\0')
+	{
+		(*tokens) = (*tokens)->next;
+		return ;
+	}
 	if (!cmd->name)
 	{
 		cmd->name = ft_strdup((*tokens)->value);
