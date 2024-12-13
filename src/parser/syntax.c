@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 02:07:27 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 10:08:10 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 14:35:34 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,29 +43,42 @@ bool	parse_heredoc(t_token **tokens, t_command *cmd, t_shell *shell)
 	return (true);
 }
 
+static t_redirect	*init_redirect(t_token *token)
+{
+	t_redirect	*new_redir;
+
+	new_redir = malloc(sizeof(t_redirect));
+	if (!new_redir)
+		return (NULL);
+	new_redir->filename = ft_strdup(token->next->value);
+	if (!new_redir->filename)
+	{
+		free(new_redir);
+		return (NULL);
+	}
+	if (token->type == R_OUTPUT)
+		new_redir->type = R_OUTPUT;
+	else if (token->type == R_APPEND)
+		new_redir->type = R_APPEND;
+	else if (token->type == R_INPUT)
+		new_redir->type = R_INPUT;
+	new_redir->next = NULL;
+	return (new_redir);
+}
+
 bool	parse_redirects(t_token **tokens, t_command *cmd, t_shell *shell)
 {
-	t_redirect *new_redir;
-	t_redirect *last;
-	
+	t_redirect	*new_redir;
+	t_redirect	*last;
+
 	if (!(*tokens)->next || (*tokens)->next->type != WORD)
 	{
 		err_msg(NULL, "syntax error near unexpected token", shell, 2);
 		return (false);
 	}
-	new_redir = malloc(sizeof(t_redirect));
+	new_redir = init_redirect(*tokens);
 	if (!new_redir)
 		return (false);
-	new_redir->filename = ft_strdup((*tokens)->next->value);
-	if (!new_redir->filename)
-		return (free(new_redir), false);
-	if ((*tokens)->type == R_OUTPUT)
-		new_redir->type = R_OUTPUT;
-	else if ((*tokens)->type == R_APPEND)
-		new_redir->type = R_APPEND;
-	else if ((*tokens)->type == R_INPUT)
-		new_redir->type = R_INPUT;
-	new_redir->next = NULL;
 	if (!cmd->redirects)
 		cmd->redirects = new_redir;
 	else

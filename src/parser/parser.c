@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 07:43:15 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:35:04 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static t_command	*parse_command(t_token **tokens, t_shell *shell,
 	if (is_redirect((*tokens)->type))
 	{
 		if (!parse_redirects(tokens, *current, shell))
-			return NULL;
+			return (NULL);
 	}
 	else
 		parse_args(tokens, *current);
