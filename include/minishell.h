@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 07:57:15 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 01:36:56 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <signal.h>
 # include <stdlib.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 # include <unistd.h>
 
 # define SUCCESS 0
@@ -57,9 +59,6 @@ typedef struct s_command
 	char				*name;
 	char				**args;
 	t_redirect			*redirects;
-	// char				*output_file;
-	// char				*input_file;
-	// char				*append_file;
 	char				*delimiter;
 	char				*tmp_file_path;
 	struct s_command	*next;
@@ -156,7 +155,7 @@ long					ft_atol(char *str, int *out_of_range);
 void					*err_msg(char *cmd, char *msg, t_shell *shell,
 							int exit_status);
 int						cmd_err(char *cmd, char *arg, char *msg, int err_num);
-void					exec_error(char *cmd, t_shell *shell);
+int						exec_error(char *cmd);
 
 // free
 void					free_array(char **ptr);

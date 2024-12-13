@@ -6,14 +6,19 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 12:02:24 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 01:49:56 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <sys/stat.h>
-#include <sys/types.h>
 
+/** 
+ * 1. convert env variables list to an array of strings (for execve)
+ * 2. if command name doesn't contain a '/', search for it in the PATH
+ * 3. check if the resolved path is a directory using stat
+ * 4. execute the command using execve
+ * 5. exit with the appropriate error code if execve fails
+ */
 void	execute_extern(t_command *cmd, t_shell *shell)
 {
 	char	**envp;
@@ -22,55 +27,29 @@ void	execute_extern(t_command *cmd, t_shell *shell)
 	
 	envp = list_to_array(shell->env_vars);
 	if (!envp)
-	{
-		perror("minishell: failed to convert environment variables");
-		exit(EXIT_FAILURE);
-	}
-	if (!cmd->name || cmd->name[0] == '\0')
-	{
-		free_array(envp);
-		exit(0);
-	}
+		exit(cmd_err("malloc", NULL, "env conversion failed", 1));
 	if (!ft_strchr(cmd->name, '/'))
 	{
 		exec_path = get_path(cmd->name, shell->env_vars);
 		if (!exec_path)
-        {
-            ft_putstr_fd("minishell: ", 2);
-            ft_putstr_fd(cmd->name, 2);
-            ft_putendl_fd(": command not found", 2);
-            free_array(envp);
-            exit(127);
-        }
-        // free(cmd->name);
-        // cmd->name = exec_path;
-        free(cmd->args[0]);
-        cmd->args[0] = ft_strdup(exec_path);
+			exit(cmd_err(cmd->name, NULL, "command not found", 127));
+		free(cmd->args[0]);
+		cmd->args[0] = exec_path;
 	}
 	if (stat(cmd->args[0], &st) == 0 && S_ISDIR(st.st_mode))
-    {
-        ft_putstr_fd("minishell: ", 2);
-        ft_putstr_fd(cmd->args[0], 2);
-        ft_putendl_fd(": Is a directory", 2);
-        free_array(envp);
-        exit(126);
-    }
-	if (execve(cmd->args[0], cmd->args, envp) == -1)
-	{	
-		free_array(envp);
-		exec_error(cmd->name, shell);
-		exit(shell->exit_status);
-	}
+		exit(cmd_err(cmd->args[0], NULL, "Is a directory", 126));
+	execve(cmd->args[0], cmd->args, envp);
+	exit(exec_error(cmd->name));
 }
 
 void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 {
 	duplicate_fds(pipeline, i);
 	for (int j = 0; j < pipeline->n_pipes; j++)
-    {
-        close(pipeline->pipefd[j][0]);
-        close(pipeline->pipefd[j][1]);
-    }
+	{
+		close(pipeline->pipefd[j][0]);
+		close(pipeline->pipefd[j][1]);
+	}
 	if (cmd->delimiter)
 		heredoc(cmd, shell);
 	if (set_redirection(cmd, shell) == -1)
@@ -127,10 +106,10 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		else if (pids[i] == 0)
 			child_process(current_cmd, shell, pipeline, i);
 		if (i > 0)
-        {
-            close(pipeline->pipefd[i - 1][0]);
-            close(pipeline->pipefd[i - 1][1]);
-        }
+		{
+			close(pipeline->pipefd[i - 1][0]);
+			close(pipeline->pipefd[i - 1][1]);
+		}
 		//close_pipe_ends(i, pipeline, current_cmd);
 		current_cmd = current_cmd->next;
 		i++;
@@ -166,7 +145,6 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		else
 			execute_multi(cmd, shell, pipeline);
 	}
-	//free(pipeline);
 }
 
 // void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)

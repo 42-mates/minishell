@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 20:06:11 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 11:06:58 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/12 22:58:42 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /** 
  * print error messages and
- * return exit_status in builtins
+ * return exit_status
  */
 int	cmd_err(char *cmd, char *arg, char *msg, int err_num)
 {
@@ -52,64 +52,14 @@ void	*err_msg(char *cmd, char *msg, t_shell *shell, int exit_status)
 	return (set_status(shell, exit_status));
 }
 
-void	exec_error(char *cmd, t_shell *shell)
+int	exec_error(char *cmd)
 {
-	if (errno == EACCES) // Permission denied
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": Permission denied", 2);
-		shell->exit_status = 126;
-	}
-	else if (errno == ENOENT) // No such file or directory
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": No such file or directory", 2);
-		shell->exit_status = 127;
-	}
-	else if (errno == ENOTDIR) // Not a directory
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": Not a directory", 2); 
-		shell->exit_status = 127;
-	}
-	else if (errno == EPIPE)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": Broken pipe", 2);
-		shell->exit_status = 141;
-	}	
+	if (errno == EACCES)
+		return (cmd_err(cmd, NULL, "Permission denied", 126));
+	else if (errno == ENOENT)
+		return (cmd_err(cmd, NULL, "No such file or directory", 127));
+	else if (errno == ENOTDIR)
+		return (cmd_err(cmd, NULL, "Not a directory", 127));	
 	else
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(errno), 2);
-		shell->exit_status = 1; // General failure
-	}
+		return (cmd_err(cmd, NULL, strerror(errno), 1));
 }
-
-// TODO : rewrite to use
-// void	error_exit(char *msg)
-// {
-// 	ft_putstr_fd(strerror(errno), 2);
-// 	ft_putstr_fd(": ", 2);
-// 	ft_putendl_fd(msg, 2);
-// 	exit(EXIT_FAILURE);
-// }
-
-// void	errmsg_cmd(char *cmd, char *arg, char *error_msg)
-// {
-// 	ft_putstr_fd("minishell: ", 2);
-// 	ft_putstr_fd(cmd, 2);
-// 	ft_putstr_fd(": ", 2);
-// 	if (arg)
-// 	{
-// 		ft_putstr_fd(arg, 2);
-// 		ft_putstr_fd(": ", 2);
-// 	}
-// 	ft_putendl_fd(error_msg, 2);
-// }

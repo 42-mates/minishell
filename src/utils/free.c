@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 08:06:04 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 01:28:50 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	free_shell(t_shell *shell)
 	if (shell->pwd)
 		free(shell->pwd);
 	free_env(shell->env_vars);
+	cleanup_pipeline(&shell->pipeline);
 	rl_clear_history();
 	free(shell);
 	return (exit_status);
