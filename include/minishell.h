@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 01:36:56 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 19:31:19 by mglikenf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define SUCCESS 0
 # define ERROR 1
 # define MAX_PIPES 20
+# define RANDOM_BYTES 8
 
 typedef enum e_token_type
 {
@@ -107,7 +108,7 @@ int    					open_file(t_command *cmd, char *file, int flags, int newfd, t_shell 
 int						redirect(int oldfd, int newfd, t_shell *shell);
 void					backup_original_fds(int *fds, t_shell *shell);
 void					restore_original_fds(int *fds);
-void    				heredoc(t_command *cmd, t_shell *shell);
+int	    				heredoc(t_command *cmd, t_shell *shell);
 void					sort_env_array(t_env **array);
 void					exec_signals(int sig);
 void					ft_exit(t_command *cmd, t_shell *shell);
