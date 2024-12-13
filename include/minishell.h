@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 01:36:56 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:37:49 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ void					duplicate_fds(t_pipe *pipeline, int i);
 void					close_pipes(t_pipe *pipeline);
 void					close_pipe_ends(int i, t_pipe *pipeline, t_command *current);
 int						set_redirection(t_command *cmd, t_shell *shell);
-int    					open_file(t_command *cmd, char *file, int flags, int newfd, t_shell *shell);
-int						redirect(int oldfd, int newfd, t_shell *shell);
 void					backup_original_fds(int *fds, t_shell *shell);
 void					restore_original_fds(int *fds);
 void    				heredoc(t_command *cmd, t_shell *shell);

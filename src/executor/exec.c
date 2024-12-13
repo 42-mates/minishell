@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 14:42:41 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:08:31 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,25 +123,33 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 	signal(SIGQUIT, exec_signals);
 	signal(SIGINT, exec_signals);
 	if (count_cmds(cmd) > 1)
-		execute_multi(cmd, shell, pipeline);
-	else
 	{
-		if (!cmd->name)
-		{
-			if (set_redirection(cmd, shell) == -1)
-				return;
-		}
-		else if (cmd->name && is_builtin(cmd->name))
-		{
-			backup_original_fds(original_fds, shell);
-			if (set_redirection(cmd, shell) == -1)
-				exit(1);
-			execute_builtin(cmd, shell);
-			restore_original_fds(original_fds);
-		}
-		else
-			execute_multi(cmd, shell, pipeline);
+		execute_multi(cmd, shell, pipeline);
+		return ;
 	}
+	if (!cmd->name)
+	{
+		if (set_redirection(cmd, shell) == -1)
+		{
+			shell->exit_status = 1;
+			return;
+		}
+		return ;
+	}
+	if (is_builtin(cmd->name))
+	{
+		backup_original_fds(original_fds, shell);
+		if (set_redirection(cmd, shell) == -1)
+		{
+			restore_original_fds(original_fds);
+			shell->exit_status = 1;
+			return ;
+		}
+		execute_builtin(cmd, shell);
+		restore_original_fds(original_fds);
+		return ;
+	}
+	execute_multi(cmd, shell, pipeline);
 }
 
 // void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
