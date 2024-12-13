@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 01:49:56 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 14:42:41 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		heredoc(cmd, shell);
 	if (set_redirection(cmd, shell) == -1)
 	{
-		// printf("failed to open file %s\n", cmd->append_file);
 		shell->exit_status = 1;
 		exit(shell->exit_status);
 	}
@@ -114,8 +113,6 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		current_cmd = current_cmd->next;
 		i++;
 	}
-	// if (cmd->tmp_file_path)
-		// unlink(cmd->tmp_file_path);
 	parent_process(pipeline, pids, shell);
 }
 
