@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:45:48 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/13 17:40:37 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:02:17 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static int	get_flags(t_token_type type)
 		return (O_WRONLY | O_CREAT | O_APPEND);
 }
 
+
 int	set_redirection(t_command *cmd, t_shell *shell)
 {
 	t_redirect	*r;
@@ -50,9 +51,11 @@ int	set_redirection(t_command *cmd, t_shell *shell)
 	int			oldfd;
 	int			newfd;
 
-	// Сначала heredoc, если есть delimiter
-	// if (cmd->delimiter && heredoc(cmd, shell) == -1)
-	//     return (-1);
+	// if (cmd->redirects->type == R_HEREDOC)
+	// {
+	// 	if (heredoc(cmd, shell) == -1)
+	// 		return (-1);
+	// }	    
 	r = cmd->redirects;
 	while (r)
 	{

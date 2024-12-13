@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 17:08:31 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 20:45:10 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		close(pipeline->pipefd[j][0]);
 		close(pipeline->pipefd[j][1]);
 	}
-	if (cmd->delimiter)
-		heredoc(cmd, shell);
+	// if (cmd->redirects->type == R_HEREDOC)
+	// 	heredoc(cmd, shell);
 	if (set_redirection(cmd, shell) == -1)
 	{
 		shell->exit_status = 1;

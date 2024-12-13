@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:42:50 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 13:35:04 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 20:10:02 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ static t_command	*parse_command(t_token **tokens, t_shell *shell,
 		if (!*current)
 			return (NULL);
 	}
-	if ((*tokens)->type == R_HEREDOC)
-	{
-		if (!parse_heredoc(tokens, *current, shell))
-			return (NULL);
-	}
+	// if ((*tokens)->type == R_HEREDOC)
+	// {
+	// 	if (!parse_heredoc(tokens, *current, shell))
+	// 		return (NULL);
+	// }
 	if (is_redirect((*tokens)->type))
 	{
 		if (!parse_redirects(tokens, *current, shell))
@@ -70,7 +70,7 @@ t_command	*parser(char *line, t_shell *shell)
 	tokens = lexer(line, shell);
 	if (!tokens)
 		return (NULL);
-	//print_tokens(tokens);
+	// print_tokens(tokens);
 	head = build_command(tokens, shell);
 	free_tokens(tokens);
 	return (head);

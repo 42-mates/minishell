@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 01:28:50 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:07:05 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	free_command(t_command *cmd)
 		free_array(cmd->args);
 	if (cmd->redirects)
 		free_redirects(cmd->redirects);
-	if (cmd->delimiter)
-		free(cmd->delimiter);
+	// if (cmd->delimiter)
+		// free(cmd->delimiter);
 	free(cmd);
 }
 

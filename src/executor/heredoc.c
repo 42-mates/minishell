@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mglikenf <mglikenf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 11:12:32 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/13 12:47:52 by mglikenf         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:00:08 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,17 +103,13 @@ char    *read_random_bytes()
 
 char    *create_random_file()
 {
-    char            *random_hex;
-    char            *file_name;
+    char    *random_hex;
+    char    *file_name;
+    char    *prefix;
 
+    prefix = "/tmp/minishell_heredoc";
     random_hex = read_random_bytes();
-    file_name = malloc(256);
-    if (!file_name)
-    {
-        perror("malloc file name");
-        return (NULL);
-    }
-    snprintf(file_name, 256, "/tmp/minishell_heredoc_%s", random_hex);
+    file_name = ft_strjoin(prefix, random_hex);
     printf("file_name = %s\n", file_name);
     return (file_name);
 }
@@ -131,31 +127,61 @@ int create_tmp_file(char *file, t_shell *shell)
     return (fd);
 }
 
-void    heredoc(t_command *cmd, t_shell *shell)
+int    heredoc(t_command *cmd, t_shell *shell)
 {
     int temp_fd;
+    char *temp;
 
-    // cmd->tmp_file_path = NULL;
-    cmd->tmp_file_path = create_random_file();
+    temp = create_random_file();
     // if (!cmd->tmp_file_path)
     //     return (-1);
-    temp_fd = create_tmp_file(cmd->tmp_file_path, shell);
-    write_input_to_file(temp_fd, cmd->delimiter);
+    temp_fd = create_tmp_file(temp, shell);
+    write_input_to_file(temp_fd, cmd->redirects->filename);
     close(temp_fd);
-    temp_fd = open(cmd->tmp_file_path, O_RDONLY, 0644);
+    temp_fd = open(temp, O_RDONLY, 0644);
     if (temp_fd == -1)
     {
         perror("heredoc: open temporary file for read");
-        return ;
+        return -1;
     }
     if (dup2(temp_fd, STDIN_FILENO) == -1)
     {
         perror("dup2");
         shell->exit_status = 1;
         close(temp_fd);
-        return;
+        return -1;
     }
     close(temp_fd);
-    if (cmd->tmp_file_path)
-		unlink(cmd->tmp_file_path);
+    if (temp)
+		unlink(temp);
+    return 0;
 }
+
+// int handle_heredoc(const char *delimiter)
+// {
+//     char *line;
+//     int pipe_fd[2];
+
+//     if (pipe(pipe_fd) == -1)
+//     {
+//         perror("pipe");
+//         return -1;
+//     }
+
+//     while (1)
+//     {
+//         ft_putstr_fd("> ", 1); // Вывод приглашения
+//         line = readline(NULL); // Считываем строку
+//         if (!line || ft_strcmp(line, delimiter) == 0)
+//         {
+//             free(line);
+//             break; // Завершаем, если достигли делимитера
+//         }
+//         ft_putstr_fd(line, pipe_fd[1]); // Пишем в пайп
+//         ft_putstr_fd("\n", pipe_fd[1]);
+//         free(line);
+//     }
+//     close(pipe_fd[1]); // Закрываем запись
+//     return pipe_fd[0]; // Возвращаем дескриптор для чтения
+// }
+

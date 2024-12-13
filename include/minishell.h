@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 17:37:49 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:03:39 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ typedef struct s_command
 	char				*name;
 	char				**args;
 	t_redirect			*redirects;
-	char				*delimiter;
-	char				*tmp_file_path;
+	// char				*delimiter;
+	// char				*tmp_file_path;
 	struct s_command	*next;
 }						t_command;
 
@@ -105,7 +105,7 @@ void					close_pipe_ends(int i, t_pipe *pipeline, t_command *current);
 int						set_redirection(t_command *cmd, t_shell *shell);
 void					backup_original_fds(int *fds, t_shell *shell);
 void					restore_original_fds(int *fds);
-void    				heredoc(t_command *cmd, t_shell *shell);
+int    					heredoc(t_command *cmd, t_shell *shell);
 void					sort_env_array(t_env **array);
 void					exec_signals(int sig);
 void					ft_exit(t_command *cmd, t_shell *shell);

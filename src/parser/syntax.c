@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 02:07:27 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 14:35:34 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/13 19:45:25 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,19 @@ void	parse_args(t_token **tokens, t_command *cmd)
 	(*tokens) = (*tokens)->next;
 }
 
-bool	parse_heredoc(t_token **tokens, t_command *cmd, t_shell *shell)
-{
-	if (!(*tokens)->next || (*tokens)->next->type != WORD)
-	{
-		err_msg(NULL, "syntax error near unexpected token", shell, 2);
-		return (false);
-	}
-	cmd->delimiter = ft_strdup((*tokens)->next->value);
-	if (!cmd->delimiter)
-		return (false);
-	(*tokens) = (*tokens)->next->next;
-	return (true);
-}
+// bool	parse_heredoc(t_token **tokens, t_command *cmd, t_shell *shell)
+// {
+// 	if (!(*tokens)->next || (*tokens)->next->type != WORD)
+// 	{
+// 		err_msg(NULL, "syntax error near unexpected token", shell, 2);
+// 		return (false);
+// 	}
+// 	cmd->delimiter = ft_strdup((*tokens)->next->value);
+// 	if (!cmd->delimiter)
+// 		return (false);
+// 	(*tokens) = (*tokens)->next->next;
+// 	return (true);
+// }
 
 static t_redirect	*init_redirect(t_token *token)
 {
@@ -62,6 +62,8 @@ static t_redirect	*init_redirect(t_token *token)
 		new_redir->type = R_APPEND;
 	else if (token->type == R_INPUT)
 		new_redir->type = R_INPUT;
+	else if (token->type == R_HEREDOC)
+		new_redir->type = R_HEREDOC;
 	new_redir->next = NULL;
 	return (new_redir);
 }
