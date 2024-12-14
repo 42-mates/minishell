@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 21:03:39 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/14 19:05:32 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ t_shell					*init_shell(int argc, char **argv, char **envp);
 
 // executor & builtins
 int						is_builtin(const char *cmd_name);
+void					case_builtin(t_command *cmd, t_shell *shell);
 void					execute_builtin(t_command *cmd, t_shell *shell);
 void					executor(t_command *cmd, t_shell *shell, t_pipe *pipeline);
 void					init_pipeline(t_pipe *pipeline);
@@ -103,8 +104,6 @@ void					duplicate_fds(t_pipe *pipeline, int i);
 void					close_pipes(t_pipe *pipeline);
 void					close_pipe_ends(int i, t_pipe *pipeline, t_command *current);
 int						set_redirection(t_command *cmd, t_shell *shell);
-void					backup_original_fds(int *fds, t_shell *shell);
-void					restore_original_fds(int *fds);
 int    					heredoc(t_command *cmd, t_shell *shell);
 void					sort_env_array(t_env **array);
 void					exec_signals(int sig);

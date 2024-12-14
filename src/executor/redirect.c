@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:45:48 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/13 21:02:17 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/14 19:06:01 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,26 +76,6 @@ int	set_redirection(t_command *cmd, t_shell *shell)
 		r = r->next;
 	}
 	return (0);
-}
-
-void	backup_original_fds(int *fds, t_shell *shell)
-{
-	fds[0] = dup(STDIN_FILENO);
-	fds[1] = dup(STDOUT_FILENO);
-	if (fds[0] == -1 || fds[1] == -1)
-	{
-		perror("dup");
-		shell->exit_status = 1;
-		exit(EXIT_FAILURE);
-	}
-}
-
-void	restore_original_fds(int *fds)
-{
-	dup2(fds[0], STDIN_FILENO);
-	dup2(fds[1], STDOUT_FILENO);
-	close(fds[0]);
-	close(fds[1]);
 }
 
 // int	open_file(t_command *cmd, char *file, int flags, int newfd, 	t_shell *shell)

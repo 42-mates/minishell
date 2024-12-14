@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 20:45:10 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/14 19:21:31 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,63 +118,48 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 
 void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 {
-	int	original_fds[2];
-
 	signal(SIGQUIT, exec_signals);
 	signal(SIGINT, exec_signals);
 	if (count_cmds(cmd) > 1)
-	{
 		execute_multi(cmd, shell, pipeline);
-		return ;
-	}
-	if (!cmd->name)
+	else
 	{
-		if (set_redirection(cmd, shell) == -1)
+		if (!cmd->name)
 		{
-			shell->exit_status = 1;
-			return;
+			if (set_redirection(cmd, shell) == -1)
+				return ;
 		}
-		return ;
+		else
+			execute_multi(cmd, shell, pipeline);
 	}
-	if (is_builtin(cmd->name))
-	{
-		backup_original_fds(original_fds, shell);
-		if (set_redirection(cmd, shell) == -1)
-		{
-			restore_original_fds(original_fds);
-			shell->exit_status = 1;
-			return ;
-		}
-		execute_builtin(cmd, shell);
-		restore_original_fds(original_fds);
-		return ;
-	}
-	execute_multi(cmd, shell, pipeline);
 }
 
 // void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 // {
-// 	int	original_in;
-// 	int	original_out;
+// 	int	original_fds[2];
 
-// 	if (is_builtin(cmd->name) && count_cmds(cmd) == 1)
-// 	{
-// 		original_in = dup(STDIN_FILENO);
-// 		original_out = dup(STDOUT_FILENO);
-// 		if (original_in == -1 || original_out == -1)
-// 		{
-// 			perror("dup");
-// 			shell->exit_status = 1;
-// 		}
-// 		if (cmd->input_file || cmd->output_file || cmd->append_file)
-// 			set_redirection(cmd, shell);
-// 		execute_builtin(cmd, shell);
-// 		dup2(original_in, STDIN_FILENO);
-// 		dup2(original_out, STDOUT_FILENO);
-// 	}
-// 	else
+// 	signal(SIGQUIT, exec_signals);
+// 	signal(SIGINT, exec_signals);
+// 	if (count_cmds(cmd) > 1)
 // 		execute_multi(cmd, shell, pipeline);
-// 	free(pipeline);
+// 	else
+// 	{
+// 		if (!cmd->name)
+// 		{
+// 			if (set_redirection(cmd, shell) == -1)
+// 				return;
+// 		}
+// 		else if (cmd->name && is_builtin(cmd->name))
+// 		{
+// 			backup_original_fds(original_fds, shell);
+// 			if (set_redirection(cmd, shell) == -1)
+// 				exit(1);
+// 			execute_builtin(cmd, shell);
+// 			restore_original_fds(original_fds);
+// 		}
+// 		else
+// 			execute_multi(cmd, shell, pipeline);
+// 	}
 // }
 
 // void	execute_command(t_command *cmd, t_shell *shell)

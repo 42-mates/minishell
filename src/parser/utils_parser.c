@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 18:22:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 21:05:59 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/14 16:55:56 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,15 @@ t_command	*init_command(t_shell *shell)
 	return (cmd);
 }
 
-bool	is_redirect(t_token_type type)
-{
-	return (type == R_OUTPUT || type == R_INPUT || type == R_APPEND);
-}
-
 // bool	is_redirect(t_token_type type)
 // {
-// 	return (type == R_OUTPUT || type == R_INPUT || type == R_APPEND || type == R_HEREDOC);
+// 	return (type == R_OUTPUT || type == R_INPUT || type == R_APPEND);
 // }
+
+bool	is_redirect(t_token_type type)
+{
+	return (type == R_OUTPUT || type == R_INPUT || type == R_APPEND || type == R_HEREDOC);
+}
 
 bool	is_meta(char c)
 {
