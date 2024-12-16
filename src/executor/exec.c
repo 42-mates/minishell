@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/14 19:21:31 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/16 22:02:46 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,10 @@ void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
 		close(pipeline->pipefd[j][0]);
 		close(pipeline->pipefd[j][1]);
 	}
-	// if (cmd->redirects->type == R_HEREDOC)
-	// 	heredoc(cmd, shell);
-	if (set_redirection(cmd, shell) == -1)
-	{
-		shell->exit_status = 1;
-		exit(shell->exit_status);
-	}
+	if (handle_heredocs(cmd) == -1)
+		exit(EXIT_FAILURE);
+	if (set_redirection(cmd) == -1)
+		exit(EXIT_FAILURE);
 	if (is_builtin(cmd->name))
 	{
 		execute_builtin(cmd, shell);
@@ -104,11 +101,11 @@ void	execute_multi(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		}
 		else if (pids[i] == 0)
 			child_process(current_cmd, shell, pipeline, i);
-		if (i > 0)
-		{
-			close(pipeline->pipefd[i - 1][0]);
-			close(pipeline->pipefd[i - 1][1]);
-		}
+		// if (i > 0)
+		// {
+		// 	close(pipeline->pipefd[i - 1][0]);
+		// 	close(pipeline->pipefd[i - 1][1]);
+		// }
 		//close_pipe_ends(i, pipeline, current_cmd);
 		current_cmd = current_cmd->next;
 		i++;
@@ -120,47 +117,8 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 {
 	signal(SIGQUIT, exec_signals);
 	signal(SIGINT, exec_signals);
-	if (count_cmds(cmd) > 1)
-		execute_multi(cmd, shell, pipeline);
-	else
-	{
-		if (!cmd->name)
-		{
-			if (set_redirection(cmd, shell) == -1)
-				return ;
-		}
-		else
-			execute_multi(cmd, shell, pipeline);
-	}
+	execute_multi(cmd, shell, pipeline);
 }
-
-// void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
-// {
-// 	int	original_fds[2];
-
-// 	signal(SIGQUIT, exec_signals);
-// 	signal(SIGINT, exec_signals);
-// 	if (count_cmds(cmd) > 1)
-// 		execute_multi(cmd, shell, pipeline);
-// 	else
-// 	{
-// 		if (!cmd->name)
-// 		{
-// 			if (set_redirection(cmd, shell) == -1)
-// 				return;
-// 		}
-// 		else if (cmd->name && is_builtin(cmd->name))
-// 		{
-// 			backup_original_fds(original_fds, shell);
-// 			if (set_redirection(cmd, shell) == -1)
-// 				exit(1);
-// 			execute_builtin(cmd, shell);
-// 			restore_original_fds(original_fds);
-// 		}
-// 		else
-// 			execute_multi(cmd, shell, pipeline);
-// 	}
-// }
 
 // void	execute_command(t_command *cmd, t_shell *shell)
 // {

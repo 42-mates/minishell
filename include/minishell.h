@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/14 19:05:32 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/16 23:02:19 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 
 # define SUCCESS 0
 # define ERROR 1
+# define BYTES 8
+# define TMP_DIR "/tmp/heredoc"
 # define MAX_PIPES 20
 
 typedef enum e_token_type
@@ -103,8 +105,11 @@ int						create_pipes(t_pipe *pipeline, t_shell *shell);
 void					duplicate_fds(t_pipe *pipeline, int i);
 void					close_pipes(t_pipe *pipeline);
 void					close_pipe_ends(int i, t_pipe *pipeline, t_command *current);
-int						set_redirection(t_command *cmd, t_shell *shell);
-int    					heredoc(t_command *cmd, t_shell *shell);
+void					case_redirects(t_command *cmd, t_shell *shell);
+int						handle_heredocs(t_command *cmd);
+int						set_redirection(t_command *cmd);
+int						heredoc(char *delimiter);
+int handle_heredoc(char *delimiter);
 void					sort_env_array(t_env **array);
 void					exec_signals(int sig);
 void					ft_exit(t_command *cmd, t_shell *shell);
