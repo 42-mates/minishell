@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/16 23:02:19 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:35:57 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,7 @@ void					close_pipe_ends(int i, t_pipe *pipeline, t_command *current);
 void					case_redirects(t_command *cmd, t_shell *shell);
 int						handle_heredocs(t_command *cmd);
 int						set_redirection(t_command *cmd);
-int						heredoc(char *delimiter);
-int handle_heredoc(char *delimiter);
+bool					create_file(char **temp, int *temp_fd);
 void					sort_env_array(t_env **array);
 void					exec_signals(int sig);
 void					ft_exit(t_command *cmd, t_shell *shell);
