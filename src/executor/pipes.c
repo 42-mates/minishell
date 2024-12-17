@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 00:46:41 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/16 21:57:09 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/17 23:41:16 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,28 +51,6 @@ void	close_pipes(t_pipe *pipeline)
 	}
 }
 
-// void close_pipes(t_pipe *pipeline)
-// {
-//     int i;
-
-//     i = 0;
-//     while (i < pipeline->n_pipes - 1) // Закрыть все, кроме последнего пайпа
-//     {
-//         close(pipeline->pipefd[i][0]);
-//         close(pipeline->pipefd[i][1]);
-//         i++;
-//     }
-// }
-
-
-void	close_pipe_ends(int i, t_pipe *pipeline, t_command *current)
-{
-	if (current->next)
-		close(pipeline->pipefd[i][1]);
-	if (i > 0)
-		close(pipeline->pipefd[i - 1][0]);
-}
-
 int	create_pipes(t_pipe *pipeline, t_shell *shell)
 {
 	int	i;
@@ -94,4 +72,16 @@ int	create_pipes(t_pipe *pipeline, t_shell *shell)
 		i++;
 	}
 	return (0);
+}
+
+bool set_pipeline(t_command *cmd, t_shell *shell)
+{
+	shell->pipeline.n_pipes = count_cmds(cmd) - 1;
+	if (shell->pipeline.n_pipes > MAX_PIPES)
+	{
+		err_msg("pipe", "pipe limit exceeded", shell, 1);
+		shell->exit_status = 1;
+		return (false);
+	}
+	return (true);
 }

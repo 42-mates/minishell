@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/17 14:35:57 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/17 23:39:40 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ typedef struct s_command
 	char				*name;
 	char				**args;
 	t_redirect			*redirects;
-	// char				*delimiter;
-	// char				*tmp_file_path;
 	struct s_command	*next;
 }						t_command;
 
@@ -100,11 +98,11 @@ void					case_builtin(t_command *cmd, t_shell *shell);
 void					execute_builtin(t_command *cmd, t_shell *shell);
 void					executor(t_command *cmd, t_shell *shell, t_pipe *pipeline);
 void					init_pipeline(t_pipe *pipeline);
+bool					set_pipeline(t_command *cmd, t_shell *shell);
 void					cleanup_pipeline(t_pipe *pipeline);
 int						create_pipes(t_pipe *pipeline, t_shell *shell);
 void					duplicate_fds(t_pipe *pipeline, int i);
 void					close_pipes(t_pipe *pipeline);
-void					close_pipe_ends(int i, t_pipe *pipeline, t_command *current);
 void					case_redirects(t_command *cmd, t_shell *shell);
 int						handle_heredocs(t_command *cmd);
 int						set_redirection(t_command *cmd);
