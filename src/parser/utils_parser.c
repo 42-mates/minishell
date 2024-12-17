@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 18:22:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/17 14:45:58 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/17 21:53:10 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ t_command	*init_command(t_shell *shell)
 	cmd->name = NULL;
 	cmd->args = NULL;
 	cmd->redirects = NULL;
+	cmd->pipe_in = -1;
+	cmd->pipe_out = -1;
 	cmd->next = NULL;
 	return (cmd);
 }
