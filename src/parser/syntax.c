@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 02:07:27 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/13 19:45:25 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:41:07 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,6 @@ void	parse_args(t_token **tokens, t_command *cmd)
 		cmd->args = append_to_array(cmd->args, (*tokens)->value);
 	(*tokens) = (*tokens)->next;
 }
-
-// bool	parse_heredoc(t_token **tokens, t_command *cmd, t_shell *shell)
-// {
-// 	if (!(*tokens)->next || (*tokens)->next->type != WORD)
-// 	{
-// 		err_msg(NULL, "syntax error near unexpected token", shell, 2);
-// 		return (false);
-// 	}
-// 	cmd->delimiter = ft_strdup((*tokens)->next->value);
-// 	if (!cmd->delimiter)
-// 		return (false);
-// 	(*tokens) = (*tokens)->next->next;
-// 	return (true);
-// }
 
 static t_redirect	*init_redirect(t_token *token)
 {
@@ -96,7 +82,7 @@ bool	parse_redirects(t_token **tokens, t_command *cmd, t_shell *shell)
 
 bool	parse_pipe(t_token **tokens, t_command **cmd, t_shell *shell)
 {
-	if (!(*cmd) || !(*tokens)->next || (*tokens)->next->type != WORD)
+	if (!(*cmd) || !(*tokens)->next)
 	{
 		err_msg(NULL, "syntax error near unexpected token `|`", shell, 2);
 		return (false);
@@ -106,5 +92,12 @@ bool	parse_pipe(t_token **tokens, t_command **cmd, t_shell *shell)
 		return (false);
 	*cmd = (*cmd)->next;
 	*tokens = (*tokens)->next;
+	if (is_redirect((*tokens)->type))
+	{
+		if (!parse_redirects(tokens, *cmd, shell))
+			return (false);
+	}
+	else if ((*tokens)->type == WORD)
+		parse_args(tokens, *cmd);
 	return (true);
 }

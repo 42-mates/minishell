@@ -43,8 +43,6 @@ void print_command(t_command *cmd)
             redirect->filename ? redirect->filename : "(NULL)");
         redirect = redirect->next;
     }
-    // printf("Delimiter: %s\n", cmd->delimiter ? cmd->delimiter : "(NULL)");
-    // printf("Temporary file path: %s\n", cmd->tmp_file_path ? cmd->tmp_file_path : "(NULL)");
     if (cmd->next)
     {
         printf("\n--- Next command ---\n");
