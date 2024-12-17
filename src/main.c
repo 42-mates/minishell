@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/16 23:01:42 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:59:48 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void	minishell(char *line, t_shell *shell)
 	if (!cmd)
 		return ;
 	// print_command(cmd);	
-	if (!cmd->next && cmd->name && is_builtin(cmd->name))
+	if (!cmd->next && is_builtin(cmd->name))
 		case_builtin(cmd, shell);
 	else if (!cmd->next && !cmd->name && cmd->redirects)
 		case_redirects(cmd, shell);

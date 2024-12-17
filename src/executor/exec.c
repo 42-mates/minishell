@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/16 22:02:46 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:04:51 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	execute_extern(t_command *cmd, t_shell *shell)
 	envp = list_to_array(shell->env_vars);
 	if (!envp)
 		exit(cmd_err("malloc", NULL, "env conversion failed", 1));
+	if (!cmd->name || cmd->name[0] == '\0')
+		exit(SUCCESS);
 	if (!ft_strchr(cmd->name, '/'))
 	{
 		exec_path = get_path(cmd->name, shell->env_vars);

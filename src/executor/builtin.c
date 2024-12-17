@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 10:00:57 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/16 22:43:07 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:52:00 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static void	restore_original_fds(int *fds)
 
 int	is_builtin(const char *cmd_name)
 {
+	if (!cmd_name)
+		return (0);
 	return (ft_strcmp(cmd_name, "cd") == 0 || ft_strcmp(cmd_name, "echo") == 0
 		|| ft_strcmp(cmd_name, "pwd") == 0 || ft_strcmp(cmd_name, "export") == 0
 		|| ft_strcmp(cmd_name, "unset") == 0 || ft_strcmp(cmd_name, "env") == 0
