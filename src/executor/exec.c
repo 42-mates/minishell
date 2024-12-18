@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/17 23:52:16 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/18 00:51:10 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ void	execute_extern(t_command *cmd, t_shell *shell)
 	exit(exec_error(cmd->name));
 }
 
-void	child_process(t_command *cmd, t_shell *shell, t_pipe *pipeline, int i)
+void	child_process(t_command *cmd, t_shell *shell, int i)
 {
-	duplicate_fds(pipeline, i);
-	close_pipes(pipeline);
-	if (handle_heredocs(cmd) == -1)
-		exit(EXIT_FAILURE);
+	duplicate_fds(&shell->pipeline, i);
+	close_pipes(&shell->pipeline);
+	// if (handle_heredocs(cmd) == -1)
+	// 	exit(EXIT_FAILURE);
 	if (set_redirection(cmd) == -1)
 		exit(EXIT_FAILURE);
 	if (is_builtin(cmd->name))
@@ -79,19 +79,40 @@ void	parent_process(t_pipe *pipeline, pid_t *pids, t_shell *shell)
 	}
 }
 
+int all_heredocs(t_command *cmds, t_shell *shell)
+{
+	t_command *cur;
+
+	cur = cmds;
+	while (cur)
+	{
+		if (handle_heredocs(cur) == -1)
+		{
+			shell->exit_status = 1;
+			return -1;
+		}
+		cur = cur->next;
+	}
+	return 0;
+}
+
 void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 {
-	t_command	*current_cmd;
+	t_command	*cur;
 	pid_t		pids[MAX_PIPES + 1];
 	int			i;
+
+	int original_stdin = dup(STDIN_FILENO);
+	if (all_heredocs(cmd, shell) == -1)
+		return;
 	
 	i = 0;
-	current_cmd = cmd;
+	cur = cmd;
 	signal(SIGQUIT, exec_signals);
 	signal(SIGINT, exec_signals);
 	if (create_pipes(pipeline, shell) == -1)
 		return ;
-	while (current_cmd)
+	while (cur)
 	{
 		pids[i] = fork();
 		if (pids[i] < 0)
@@ -100,9 +121,12 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 			return ;
 		}
 		else if (pids[i] == 0)
-			child_process(current_cmd, shell, pipeline, i);
-		current_cmd = current_cmd->next;
+			child_process(cur, shell, i);
+		cur = cur->next;
 		i++;
 	}
 	parent_process(pipeline, pids, shell);
+	
+	dup2(original_stdin, STDIN_FILENO);
+	close(original_stdin);
 }
