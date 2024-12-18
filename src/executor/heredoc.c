@@ -6,13 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 11:12:32 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/17 14:37:30 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/18 14:00:08 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void heredoc_warning(char *delimiter)
+static void	heredoc_warning(char *delimiter)
 {
 	ft_putstr_fd("minishell: warning: here-document ", 2);
 	ft_putstr_fd("delimited by end-of-file (wanted `", 2);
@@ -20,9 +20,9 @@ static void heredoc_warning(char *delimiter)
 	ft_putendl_fd("')", 2);
 }
 
-static void write_input_to_fd(int fd, char *delimiter)
+static void	write_input_to_fd(int fd, char *delimiter)
 {
-	char    *line;
+	char	*line;
 
 	while (1)
 	{
@@ -30,12 +30,12 @@ static void write_input_to_fd(int fd, char *delimiter)
 		if (!line)
 		{
 			heredoc_warning(delimiter);
-			break;
+			break ;
 		}
 		if (ft_strcmp(delimiter, line) == 0)
 		{
 			free(line);
-			break;
+			break ;
 		}
 		ft_putendl_fd(line, fd);
 		free(line);
@@ -54,7 +54,6 @@ static int	heredoc(char *delimiter)
 	// 	perror("dup: failed to save STDIN_FILENO");
 	// 	return (-1);
 	// }
-
 	if (!create_file(&temp, &temp_fd))
 		return (-1);
 	write_input_to_fd(temp_fd, delimiter);
@@ -63,11 +62,11 @@ static int	heredoc(char *delimiter)
 	if (temp_fd == -1)
 	{
 		perror("heredoc: open temporary file for read");
-		return -1;
+		free(temp);
+		return (-1);
 	}
 	unlink(temp);
 	free(temp);
-
 	// if (dup2(original_stdin, STDIN_FILENO) == -1)
 	// {
 	// 	perror("dup2: failed to restore STDIN_FILENO");
@@ -75,7 +74,6 @@ static int	heredoc(char *delimiter)
 	// 	return (-1);
 	// }
 	// close(original_stdin);
-	
 	return (temp_fd);
 }
 
@@ -87,14 +85,14 @@ static int	heredoc(char *delimiter)
 // 	if (pipe(pipe_fd) == -1)
 // 	{
 // 		perror("pipe");
-// 		return -1;
+// 		return (-1);
 // 	}
 // 	write_input_to_fd(pipe_fd[1], delimiter);
 // 	close(pipe_fd[1]); // close write end
-// 	return pipe_fd[0]; // return read end
+// 	return (pipe_fd[0]); // return read end
 // }
 
-static int redirect_heredoc(int heredoc_fd)
+static int	redirect_heredoc(int heredoc_fd)
 {
 	if (dup2(heredoc_fd, STDIN_FILENO) == -1)
 	{
@@ -106,11 +104,10 @@ static int redirect_heredoc(int heredoc_fd)
 	return (0);
 }
 
-// TODO : command w/pipes & heredoc NOT working
 int	handle_heredocs(t_command *cmd)
 {
 	t_redirect	*r;
-	int heredoc_fd;
+	int			heredoc_fd;
 
 	heredoc_fd = -1;
 	r = cmd->redirects;

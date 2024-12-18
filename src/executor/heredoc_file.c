@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 14:12:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/17 14:20:26 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:30:36 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ static char	*hexify_bytes(unsigned char *random_bytes)
  * not a third—party library or program. Its usage
  * complies with the Norm and subject rules.
  */
-static char    *get_random_hex()
+static char	*get_random_hex(void)
 {
-	unsigned char   random_bytes[BYTES];
-	int             urandom_fd;
-	char            *random_hex;
+	unsigned char	random_bytes[BYTES];
+	int				urandom_fd;
+	char			*random_hex;
 
 	urandom_fd = open("/dev/urandom", O_RDONLY);
 	if (urandom_fd == -1)
@@ -63,10 +63,10 @@ static char    *get_random_hex()
 	return (random_hex);
 }
 
-static char    *generate_filename()
+static char	*generate_filename(void)
 {
-	char    *random_hex;
-	char    *filename;
+	char	*random_hex;
+	char	*filename;
 
 	random_hex = get_random_hex();
 	if (!random_hex)
@@ -84,10 +84,10 @@ static char    *generate_filename()
 	return (filename);
 }
 
-static int open_read_fd(char *file)
+static int	open_read_fd(char *file)
 {
 	int	fd;
-	
+
 	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1)
 	{

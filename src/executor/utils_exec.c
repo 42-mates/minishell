@@ -6,15 +6,15 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:46:05 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/12 08:03:07 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:30:25 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void cleanup_pipeline(t_pipe *pipeline)
+void	cleanup_pipeline(t_pipe *pipeline)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < pipeline->n_pipes)

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 12:31:52 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/11 18:58:08 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:28:38 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ static void	init_shlvl(t_env **env_vars)
 	free(new_shlvl);
 }
 
-void init_pipeline(t_pipe *pipeline)
+void	init_pipeline(t_pipe *pipeline)
 {
-	int i;
+	int	i;
 
-	i = 0;	
+	i = 0;
 	pipeline->n_pipes = 0;
 	while (i < MAX_PIPES)
 	{

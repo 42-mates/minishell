@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 00:46:41 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/17 23:41:16 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:29:27 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	create_pipes(t_pipe *pipeline, t_shell *shell)
 	return (0);
 }
 
-bool set_pipeline(t_command *cmd, t_shell *shell)
+bool	set_pipeline(t_command *cmd, t_shell *shell)
 {
 	shell->pipeline.n_pipes = count_cmds(cmd) - 1;
 	if (shell->pipeline.n_pipes > MAX_PIPES)

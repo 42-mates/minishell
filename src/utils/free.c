@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:31:08 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/17 14:46:31 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:29:16 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
-void free_redirects(t_redirect *redirects)
+void	free_redirects(t_redirect *redirects)
 {
-	t_redirect *current;
-	t_redirect *next;
+	t_redirect	*current;
+	t_redirect	*next;
 
 	current = redirects;
 	while (current)

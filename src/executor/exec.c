@@ -6,13 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/18 00:51:10 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/18 18:06:35 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/** 
+/**
  * 1. convert env variables list to an array of strings (for execve)
  * 2. if command name doesn't contain a '/', search for it in the PATH
  * 3. check if the resolved path is a directory using stat
@@ -21,10 +21,10 @@
  */
 void	execute_extern(t_command *cmd, t_shell *shell)
 {
-	char	**envp;
-	char	*exec_path;
-	struct	stat st;
-	
+	char		**envp;
+	char		*exec_path;
+	struct stat	st;
+
 	envp = list_to_array(shell->env_vars);
 	if (!envp)
 		exit(cmd_err("malloc", NULL, "env conversion failed", 1));
@@ -48,8 +48,6 @@ void	child_process(t_command *cmd, t_shell *shell, int i)
 {
 	duplicate_fds(&shell->pipeline, i);
 	close_pipes(&shell->pipeline);
-	// if (handle_heredocs(cmd) == -1)
-	// 	exit(EXIT_FAILURE);
 	if (set_redirection(cmd) == -1)
 		exit(EXIT_FAILURE);
 	if (is_builtin(cmd->name))
@@ -79,9 +77,9 @@ void	parent_process(t_pipe *pipeline, pid_t *pids, t_shell *shell)
 	}
 }
 
-int all_heredocs(t_command *cmds, t_shell *shell)
+int	all_heredocs(t_command *cmds, t_shell *shell)
 {
-	t_command *cur;
+	t_command	*cur;
 
 	cur = cmds;
 	while (cur)
@@ -89,23 +87,24 @@ int all_heredocs(t_command *cmds, t_shell *shell)
 		if (handle_heredocs(cur) == -1)
 		{
 			shell->exit_status = 1;
-			return -1;
+			return (-1);
 		}
 		cur = cur->next;
 	}
-	return 0;
+	return (0);
 }
 
+// TODO : refactor
 void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 {
 	t_command	*cur;
 	pid_t		pids[MAX_PIPES + 1];
 	int			i;
+	int			original_stdin;
 
-	int original_stdin = dup(STDIN_FILENO);
+	original_stdin = dup(STDIN_FILENO);
 	if (all_heredocs(cmd, shell) == -1)
-		return;
-	
+		return ;
 	i = 0;
 	cur = cmd;
 	signal(SIGQUIT, exec_signals);
@@ -126,7 +125,6 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		i++;
 	}
 	parent_process(pipeline, pids, shell);
-	
 	dup2(original_stdin, STDIN_FILENO);
 	close(original_stdin);
 }

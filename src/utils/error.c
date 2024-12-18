@@ -6,13 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 20:06:11 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 22:58:42 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:29:07 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/** 
+/**
  * print error messages and
  * return exit_status
  */
@@ -36,10 +36,10 @@ void	*set_status(t_shell *shell, int status)
 	return (NULL);
 }
 
-/** 
+/**
  * is used to return from func. with NULL while setting exit_status
  * and writing error message
- */ 
+ */
 void	*err_msg(char *cmd, char *msg, t_shell *shell, int exit_status)
 {
 	ft_putstr_fd("minishell: ", 2);
@@ -59,7 +59,7 @@ int	exec_error(char *cmd)
 	else if (errno == ENOENT)
 		return (cmd_err(cmd, NULL, "No such file or directory", 127));
 	else if (errno == ENOTDIR)
-		return (cmd_err(cmd, NULL, "Not a directory", 127));	
+		return (cmd_err(cmd, NULL, "Not a directory", 127));
 	else
 		return (cmd_err(cmd, NULL, strerror(errno), 1));
 }

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/17 23:39:40 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:32:11 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdlib.h>
-# include <sys/wait.h>
 # include <sys/stat.h>
 # include <sys/types.h>
+# include <sys/wait.h>
 # include <unistd.h>
 
 # define SUCCESS 0
 # define ERROR 1
 # define BYTES 8
 # define TMP_DIR "/tmp/heredoc"
-# define MAX_PIPES 20
+# define MAX_PIPES 1024
 
 typedef enum e_token_type
 {
@@ -51,7 +51,7 @@ typedef struct s_token
 
 typedef struct s_redirect
 {
-	t_token_type		type;	
+	t_token_type		type;
 	char				*filename;
 	struct s_redirect	*next;
 }						t_redirect;
@@ -96,7 +96,8 @@ t_shell					*init_shell(int argc, char **argv, char **envp);
 int						is_builtin(const char *cmd_name);
 void					case_builtin(t_command *cmd, t_shell *shell);
 void					execute_builtin(t_command *cmd, t_shell *shell);
-void					executor(t_command *cmd, t_shell *shell, t_pipe *pipeline);
+void					executor(t_command *cmd, t_shell *shell,
+							t_pipe *pipeline);
 void					init_pipeline(t_pipe *pipeline);
 bool					set_pipeline(t_command *cmd, t_shell *shell);
 void					cleanup_pipeline(t_pipe *pipeline);
@@ -128,15 +129,18 @@ char					*quotes(char *line, int *i, void *shell);
 char					*double_quote(char *line, int *i, t_shell *shell);
 char					*single_quote(char *line, int *i);
 char					*extract_var(char *line, int *i, t_shell *shell);
-char					*expand_var(char *line, int *i, t_shell *shell, char *value);
+char					*expand_var(char *line, int *i, t_shell *shell,
+							char *value);
 char					*extract_word(char *line, int *i, t_shell *shell);
 char					*add_char(char *line, int *i, char *value);
 bool					is_meta(char c);
 bool					parse_redirects(t_token **tokens, t_command *cmd,
 							t_shell *shell);
-bool					parse_heredoc(t_token **tokens, t_command *cmd, t_shell *shell);
+bool					parse_heredoc(t_token **tokens, t_command *cmd,
+							t_shell *shell);
 void					parse_args(t_token **tokens, t_command *cmd);
-bool					parse_pipe(t_token **tokens, t_command **cmd, t_shell *shell);
+bool					parse_pipe(t_token **tokens, t_command **cmd,
+							t_shell *shell);
 t_command				*init_command(t_shell *shell);
 bool					is_redirect(t_token_type type);
 

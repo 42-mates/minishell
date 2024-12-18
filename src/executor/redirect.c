@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:45:48 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/16 23:01:50 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:29:50 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	get_newfd(t_token_type type)
 {
-    if (type == R_OUTPUT || type == R_APPEND)
+	if (type == R_OUTPUT || type == R_APPEND)
 		return (STDOUT_FILENO);
 	else
 		return (STDIN_FILENO);
@@ -37,7 +37,7 @@ int	open_file(t_command *cmd, t_redirect *r, int flags)
 
 	oldfd = open(r->filename, flags, 0644);
 	if (oldfd == -1)
-		return(cmd_err(r->filename, NULL, strerror(errno), -1));
+		return (cmd_err(r->filename, NULL, strerror(errno), -1));
 	if (cmd->name)
 	{
 		newfd = get_newfd(r->type);
@@ -56,7 +56,7 @@ int	set_redirection(t_command *cmd)
 {
 	t_redirect	*r;
 	int			flags;
-	    
+
 	r = cmd->redirects;
 	while (r)
 	{
@@ -71,7 +71,7 @@ int	set_redirection(t_command *cmd)
 	return (0);
 }
 
-void case_redirects(t_command *cmd, t_shell *shell)
+void	case_redirects(t_command *cmd, t_shell *shell)
 {
 	if (handle_heredocs(cmd) == -1)
 	{
@@ -81,7 +81,7 @@ void case_redirects(t_command *cmd, t_shell *shell)
 	if (set_redirection(cmd) == -1)
 	{
 		shell->exit_status = 1;
-		return;
+		return ;
 	}
 	shell->exit_status = 0;
 }
