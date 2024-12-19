@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:13:08 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/12 09:51:03 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:40:13 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ static int	get_exit_code(char *arg, t_command *cmd)
 
 void	ft_exit(t_command *cmd, t_shell *shell)
 {
-	ft_putendl_fd(cmd->name, 1);
+	if (shell->pipeline.n_pipes == 0)
+		ft_putendl_fd(cmd->name, 1);
 	if (cmd->args[1])
 	{
 		if (cmd->args[2])

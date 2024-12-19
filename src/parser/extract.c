@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:45:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 21:21:22 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:25:27 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,7 @@ char	*expand_var(char *line, int *i, t_shell *shell, char *value)
 	free(var_value);
 	free(value);
 	if (!new_value)
-	{
-		free(value);
 		return (NULL);
-	}
 	return (new_value);
 }
 
