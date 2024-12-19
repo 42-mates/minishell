@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:45:48 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/18 13:29:50 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:28:12 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	set_redirection(t_command *cmd)
 
 void	case_redirects(t_command *cmd, t_shell *shell)
 {
-	if (handle_heredocs(cmd) == -1)
+	if (cmd_heredocs(cmd) == -1)
 	{
 		shell->exit_status = 1;
 		return ;

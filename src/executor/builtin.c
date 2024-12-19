@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 10:00:57 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/17 14:52:00 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:28:03 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	case_builtin(t_command *cmd, t_shell *shell)
 	if (cmd->redirects)
 	{
 		backup_original_fds(original_fds, shell);
-		if (handle_heredocs(cmd) == -1)
+		if (cmd_heredocs(cmd) == -1)
 		{
 			shell->exit_status = 1;
 			return ;

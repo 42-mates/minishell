@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 12:31:52 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/18 13:28:38 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:28:23 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ static void	check_args(int argc, char **argv, char **envp)
 {
 	(void)argv;
 	if (argc != 1)
-		ft_putendl_fd("minishell: warning: arguments ignored", 1);
+		ft_putendl_fd("minishell: warning: arguments ignored", 2);
 	if (!envp || !*envp)
 	{
-		ft_putstr_fd("minishell: warning: ", 1);
-		ft_putendl_fd("no environment variables set", 1);
+		ft_putstr_fd("minishell: warning: ", 2);
+		ft_putendl_fd("no environment variables set", 2);
 	}
 }
 

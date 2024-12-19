@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/17 23:37:52 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:28:26 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	minishell(char *line, t_shell *shell)
 		case_redirects(cmd, shell);
 	else
 	{
-		if (set_pipeline(cmd, shell))
+		if (prepare_execution(cmd, shell))
 			executor(cmd, shell, &shell->pipeline);
 		cleanup_pipeline(&shell->pipeline);
 	}

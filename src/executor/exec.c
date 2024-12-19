@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/18 18:06:35 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:45:26 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,12 @@ void	child_process(t_command *cmd, t_shell *shell, int i)
 {
 	duplicate_fds(&shell->pipeline, i);
 	close_pipes(&shell->pipeline);
+	if (cmd->heredoc_fd != -1)
+	{
+		if (dup2(cmd->heredoc_fd, STDIN_FILENO) == -1)
+			exit(EXIT_FAILURE);
+		close(cmd->heredoc_fd);
+	}	
 	if (set_redirection(cmd) == -1)
 		exit(EXIT_FAILURE);
 	if (is_builtin(cmd->name))
@@ -77,40 +83,16 @@ void	parent_process(t_pipe *pipeline, pid_t *pids, t_shell *shell)
 	}
 }
 
-int	all_heredocs(t_command *cmds, t_shell *shell)
-{
-	t_command	*cur;
-
-	cur = cmds;
-	while (cur)
-	{
-		if (handle_heredocs(cur) == -1)
-		{
-			shell->exit_status = 1;
-			return (-1);
-		}
-		cur = cur->next;
-	}
-	return (0);
-}
-
-// TODO : refactor
 void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 {
 	t_command	*cur;
 	pid_t		pids[MAX_PIPES + 1];
 	int			i;
-	int			original_stdin;
 
-	original_stdin = dup(STDIN_FILENO);
-	if (all_heredocs(cmd, shell) == -1)
-		return ;
 	i = 0;
 	cur = cmd;
 	signal(SIGQUIT, exec_signals);
 	signal(SIGINT, exec_signals);
-	if (create_pipes(pipeline, shell) == -1)
-		return ;
 	while (cur)
 	{
 		pids[i] = fork();
@@ -125,6 +107,15 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 		i++;
 	}
 	parent_process(pipeline, pids, shell);
-	dup2(original_stdin, STDIN_FILENO);
-	close(original_stdin);
+}
+
+bool	prepare_execution(t_command *cmd, t_shell *shell)
+{
+	if (set_pipeline(cmd, shell) == -1)
+		return (false);
+	if (create_pipes(&shell->pipeline, shell) == -1)
+		return (false);
+	if (pipeline_heredocs(cmd, shell) == -1)
+		return (false);
+	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/18 15:32:11 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:46:50 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,12 @@
 
 # define SUCCESS 0
 # define ERROR 1
+
 # define BYTES 8
 # define TMP_DIR "/tmp/heredoc"
 # define MAX_PIPES 1024
+
+extern volatile sig_atomic_t g_signal;
 
 typedef enum e_token_type
 {
@@ -61,6 +64,7 @@ typedef struct s_command
 	char				*name;
 	char				**args;
 	t_redirect			*redirects;
+	int					heredoc_fd;
 	struct s_command	*next;
 }						t_command;
 
@@ -96,16 +100,18 @@ t_shell					*init_shell(int argc, char **argv, char **envp);
 int						is_builtin(const char *cmd_name);
 void					case_builtin(t_command *cmd, t_shell *shell);
 void					execute_builtin(t_command *cmd, t_shell *shell);
+bool					prepare_execution(t_command *cmd, t_shell *shell);
 void					executor(t_command *cmd, t_shell *shell,
 							t_pipe *pipeline);
 void					init_pipeline(t_pipe *pipeline);
-bool					set_pipeline(t_command *cmd, t_shell *shell);
+int						set_pipeline(t_command *cmd, t_shell *shell);
 void					cleanup_pipeline(t_pipe *pipeline);
 int						create_pipes(t_pipe *pipeline, t_shell *shell);
 void					duplicate_fds(t_pipe *pipeline, int i);
 void					close_pipes(t_pipe *pipeline);
 void					case_redirects(t_command *cmd, t_shell *shell);
-int						handle_heredocs(t_command *cmd);
+int						pipeline_heredocs(t_command *cmds, t_shell *shell);
+int						cmd_heredocs(t_command *cmd);
 int						set_redirection(t_command *cmd);
 bool					create_file(char **temp, int *temp_fd);
 void					sort_env_array(t_env **array);

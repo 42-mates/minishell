@@ -6,25 +6,11 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:46:05 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/18 13:30:25 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:28:14 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	cleanup_pipeline(t_pipe *pipeline)
-{
-	int	i;
-
-	i = 0;
-	while (i < pipeline->n_pipes)
-	{
-		close(pipeline->pipefd[i][0]);
-		close(pipeline->pipefd[i][1]);
-		i++;
-	}
-	init_pipeline(pipeline);
-}
 
 int	count_cmds(t_command *cmd)
 {
