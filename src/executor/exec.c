@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/19 17:45:26 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:03:17 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	executor(t_command *cmd, t_shell *shell, t_pipe *pipeline)
 
 	i = 0;
 	cur = cmd;
+	init_pids(pids, MAX_PIPES + 1);
 	signal(SIGQUIT, exec_signals);
 	signal(SIGINT, exec_signals);
 	while (cur)

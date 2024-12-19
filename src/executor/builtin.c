@@ -6,30 +6,39 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 10:00:57 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/19 16:28:03 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 19:39:56 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	backup_original_fds(int *fds, t_shell *shell)
+static int	backup_fds(int *fds, t_shell *shell)
 {
 	fds[0] = dup(STDIN_FILENO);
 	fds[1] = dup(STDOUT_FILENO);
-	if (fds[0] == -1 || fds[1] == -1)
+	if (fds[0] < 0 || fds[1] < 0)
 	{
 		perror("dup");
 		shell->exit_status = 1;
-		exit(EXIT_FAILURE);
+		return (-1);
 	}
+	return (0);
 }
 
-static void	restore_original_fds(int *fds)
+static void	restore_fds(int *fds)
 {
-	dup2(fds[0], STDIN_FILENO);
-	dup2(fds[1], STDOUT_FILENO);
-	close(fds[0]);
-	close(fds[1]);
+	if (!fds)
+		return;
+	if (fds[0] >= 0)
+	{
+		dup2(fds[0], STDIN_FILENO);
+		close(fds[0]);
+	}
+	if (fds[1] >= 0)
+	{
+		dup2(fds[1], STDOUT_FILENO);
+		close(fds[1]);
+	}
 }
 
 int	is_builtin(const char *cmd_name)
@@ -64,9 +73,12 @@ void	case_builtin(t_command *cmd, t_shell *shell)
 {
 	int	original_fds[2];
 
+	original_fds[0] = -1;
+	original_fds[1] = -1;
 	if (cmd->redirects)
 	{
-		backup_original_fds(original_fds, shell);
+		if (backup_fds(original_fds, shell) == -1)
+			return ;
 		if (cmd_heredocs(cmd) == -1)
 		{
 			shell->exit_status = 1;
@@ -74,12 +86,12 @@ void	case_builtin(t_command *cmd, t_shell *shell)
 		}
 		if (set_redirection(cmd) == -1)
 		{
-			restore_original_fds(original_fds);
+			restore_fds(original_fds);
 			shell->exit_status = 1;
 			return ;
 		}
 	}
 	execute_builtin(cmd, shell);
 	if (cmd->redirects)
-		restore_original_fds(original_fds);
+		restore_fds(original_fds);
 }

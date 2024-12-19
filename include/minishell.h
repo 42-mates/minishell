@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/19 17:46:50 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:02:55 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ void					*err_msg(char *cmd, char *msg, t_shell *shell,
 							int exit_status);
 int						cmd_err(char *cmd, char *arg, char *msg, int err_num);
 int						exec_error(char *cmd);
+void					init_pids(pid_t *pids, int size);
 
 // free
 void					free_array(char **ptr);

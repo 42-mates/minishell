@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:46:05 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/19 16:28:14 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:08:52 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,16 @@ void	free_array(char **ptr)
 		i++;
 	}
 	free(ptr);
+}
+
+void init_pids(pid_t *pids, int size)
+{
+	int i;
+
+	i = 0;
+	while (i < size)
+	{
+		pids[i] = -1;
+		i++;
+	}
 }
