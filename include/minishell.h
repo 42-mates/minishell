@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/19 20:02:55 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/20 09:39:44 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@
 # define BYTES 8
 # define TMP_DIR "/tmp/heredoc"
 # define MAX_PIPES 1024
-
-extern volatile sig_atomic_t g_signal;
 
 typedef enum e_token_type
 {

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 10:00:57 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/19 19:39:56 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/20 09:36:58 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	backup_fds(int *fds, t_shell *shell)
 static void	restore_fds(int *fds)
 {
 	if (!fds)
-		return;
+		return ;
 	if (fds[0] >= 0)
 	{
 		dup2(fds[0], STDIN_FILENO);
