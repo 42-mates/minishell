@@ -1,14 +1,14 @@
 # minishell
 ```
-FINAL GRADE: -/100
+FINAL GRADE: 101/100
 ```
-Made by [@prosviriakova](https://github.com/prosviriakova) and @.
+Made by [@prosviriakova](https://github.com/prosviriakova) and [@mglikenf](https://github.com/mglikenf).
 
 ## Description
-Minishell is a 42 School team project to create a basic shell program in C. It implements redirections and pipes, as well as environment variable expansions and the `cd`, `echo`, `env`, `exit`, `export`, `pwd` and `unset` builtin commands.
+Minishell is a 42 School team project aimed at creating a basic shell program in C, designed to enhance understanding of system-level programming and teamwork. It implements redirections and pipes, as well as environment variable expansions and the `cd`, `echo`, `env`, `exit`, `export`, `pwd` and `unset` builtin commands.
 
 ## Features
-Minishell is a miniature shell program based on Bash. Minishell supports:
+Minishell is a miniature shell program inspired by Bash, designed to replicate its key functionalities:
 * Prompt display
 * Command history (up and down arrows)
 * System executables available from the environment (`ls`, `cat`, `grep`, etc.)
@@ -34,9 +34,16 @@ Minishell is a miniature shell program based on Bash. Minishell supports:
   * `ctrl-d` exits minishell
   * `ctrl-\` does nothing
 
-However, Minishell does not support `\`, `;`, `&&`, `||`, or wildcards.
+However, Minishell does not support `\`, `;`, `&&`, `||`, or wildcards, as these features would require significantly more complex parsing logic and are outside the scope of this project.
 
-To run Minishell with Valgrind and suppress `readline` memory leaks, you can use a suppression file. Example command:
+## Suppression File
+Using a suppression file helps Valgrind focus on actual memory leaks in your code by ignoring known issues in external libraries like `readline`. To run Minishell with Valgrind and suppress readline memory leaks, you can use a suppression file. Example command:
 
 ```bash
 valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./minishell
+```
+
+## Testing
+We thoroughly tested the project using the **[minishell_tester](https://github.com/LucasKuhn/minishell_tester)**. Minishell successfully passes all tests.
+
+*Subject version: 7.1.*

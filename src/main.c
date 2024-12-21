@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:40:34 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/19 16:28:26 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/21 12:05:22 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static char	*generate_prompt(t_env *env_list)
 	return (prompt);
 }
 
-// isatty added, run additioinal tests
 static char	*get_input(t_shell *shell)
 {
 	char	*prompt;
@@ -53,11 +52,6 @@ static char	*get_input(t_shell *shell)
 	free(prompt);
 	if (!input)
 		handle_eof(shell);
-	// {
-	// 	if (isatty(STDIN_FILENO))
-	// 		handle_eof(shell);
-	// 	return (NULL);
-	// }
 	return (input);
 }
 

@@ -6,18 +6,18 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:54:56 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 22:23:33 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/21 12:01:21 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
-* return codes (shell->exit_status):
-* 2 : more than one argument passed
-* 1 : environment variables are empty
-* 0 : success
-*/
+ *  @return Return codes for shell->exit_status:
+ * - 2: More than one argument passed.
+ * - 1: Environment variables are empty.
+ * - 0: Success (all environment variables printed).
+ */
 int	ft_env(t_command *cmd, t_shell *shell)
 {
 	t_env	*current;

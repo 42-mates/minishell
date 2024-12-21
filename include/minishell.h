@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:30:58 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/20 09:39:44 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/21 12:07:00 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,90 +87,79 @@ typedef struct s_shell
 	t_pipe				pipeline;
 }						t_shell;
 
-// init
 void					setup_signals(void);
 void					handle_eof(t_shell *shell);
 void					handle_signal(t_shell *shell);
 t_env					*init_env(char **envp);
 t_shell					*init_shell(int argc, char **argv, char **envp);
 
-// executor & builtins
 int						is_builtin(const char *cmd_name);
-void					case_builtin(t_command *cmd, t_shell *shell);
-void					execute_builtin(t_command *cmd, t_shell *shell);
-bool					prepare_execution(t_command *cmd, t_shell *shell);
-void					executor(t_command *cmd, t_shell *shell,
-							t_pipe *pipeline);
-void					init_pipeline(t_pipe *pipeline);
 int						set_pipeline(t_command *cmd, t_shell *shell);
-void					cleanup_pipeline(t_pipe *pipeline);
 int						create_pipes(t_pipe *pipeline, t_shell *shell);
-void					duplicate_fds(t_pipe *pipeline, int i);
-void					close_pipes(t_pipe *pipeline);
-void					case_redirects(t_command *cmd, t_shell *shell);
 int						pipeline_heredocs(t_command *cmds, t_shell *shell);
 int						cmd_heredocs(t_command *cmd);
 int						set_redirection(t_command *cmd);
-bool					create_file(char **temp, int *temp_fd);
+void					case_builtin(t_command *cmd, t_shell *shell);
+void					execute_builtin(t_command *cmd, t_shell *shell);
+void					executor(t_command *cmd, t_shell *shell,
+							t_pipe *pipeline);
+void					init_pipeline(t_pipe *pipeline);
+void					cleanup_pipeline(t_pipe *pipeline);
+void					duplicate_fds(t_pipe *pipeline, int i);
+void					close_pipes(t_pipe *pipeline);
+void					case_redirects(t_command *cmd, t_shell *shell);
 void					sort_env_array(t_env **array);
 void					exec_signals(int sig);
-void					ft_exit(t_command *cmd, t_shell *shell);
+bool					prepare_execution(t_command *cmd, t_shell *shell);
+bool					create_file(char **temp, int *temp_fd);
+
 int						ft_pwd(t_command *cmd, t_shell *shell);
 int						ft_echo(t_command *cmd);
 int						ft_env(t_command *cmd, t_shell *shell);
 int						ft_unset(t_command *cmd, t_shell *shell);
 int						ft_export(t_command *cmd, t_shell *shell);
 int						ft_cd(t_command *cmd, t_shell *shell);
+void					ft_exit(t_command *cmd, t_shell *shell);
 
-// lexer & parser
 t_token					*lexer(char *line, t_shell *shell);
 t_token					*meta_token(t_token *tokens, char *line, int *i);
 t_token					*word_token(char *line, int *i, t_shell *shell,
 							t_token *tokens);
 t_command				*parser(char *line, t_shell *shell);
+t_command				*init_command(t_shell *shell);
 char					*get_path(char *cmd_name, t_env *env_list);
 char					*quotes(char *line, int *i, void *shell);
-char					*double_quote(char *line, int *i, t_shell *shell);
-char					*single_quote(char *line, int *i);
-char					*extract_var(char *line, int *i, t_shell *shell);
 char					*expand_var(char *line, int *i, t_shell *shell,
 							char *value);
 char					*extract_word(char *line, int *i, t_shell *shell);
 char					*add_char(char *line, int *i, char *value);
+char					**list_to_array(t_env *env_list);
+char					*getenv_lst(const char *name, t_env *env_list);
+char					**append_to_array(char **array, const char *new_elem);
+long					ft_atol(char *str, int *out_of_range);
 bool					is_meta(char c);
 bool					parse_redirects(t_token **tokens, t_command *cmd,
 							t_shell *shell);
-bool					parse_heredoc(t_token **tokens, t_command *cmd,
-							t_shell *shell);
-void					parse_args(t_token **tokens, t_command *cmd);
 bool					parse_pipe(t_token **tokens, t_command **cmd,
 							t_shell *shell);
-t_command				*init_command(t_shell *shell);
 bool					is_redirect(t_token_type type);
-
-// utils
 bool					is_empty_line(const char *line);
-char					**list_to_array(t_env *env_list);
-char					*getenv_lst(const char *name, t_env *env_list);
+int						count_cmds(t_command *cmd);
+int						cmd_err(char *cmd, char *arg, char *msg, int err_num);
+int						exec_error(char *cmd);
+int						free_shell(t_shell *shell);
+void					parse_args(t_token **tokens, t_command *cmd);
 void					setenv_lst(const char *name, const char *value,
 							t_env **env_vars);
 void					remove_var(t_env **env_list, const char *name);
 void					*set_status(t_shell *shell, int status);
-char					**append_to_array(char **array, const char *new_elem);
-int						count_cmds(t_command *cmd);
-long					ft_atol(char *str, int *out_of_range);
 void					*err_msg(char *cmd, char *msg, t_shell *shell,
 							int exit_status);
-int						cmd_err(char *cmd, char *arg, char *msg, int err_num);
-int						exec_error(char *cmd);
 void					init_pids(pid_t *pids, int size);
-
-// free
 void					free_array(char **ptr);
 void					free_env(t_env *lst);
 void					free_tokens(t_token *tokens);
 void					free_commands(t_command *cmd);
-int						free_shell(t_shell *shell);
 
 // debug
 void					print_command(t_command *cmd);

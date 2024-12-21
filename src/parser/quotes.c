@@ -6,13 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 03:35:23 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/09 01:37:35 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:21:59 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*double_quote(char *line, int *i, t_shell *shell)
+static char	*double_quote(char *line, int *i, t_shell *shell)
 {
 	char	*value;
 
@@ -32,7 +32,7 @@ char	*double_quote(char *line, int *i, t_shell *shell)
 	return (value);
 }
 
-char	*single_quote(char *line, int *i)
+static char	*single_quote(char *line, int *i)
 {
 	int		start;
 	char	*value;

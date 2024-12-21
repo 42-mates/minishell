@@ -6,17 +6,17 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 14:12:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/18 13:30:36 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/21 11:52:42 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * Converts an array of bytes into a hexadecimal string.
- * Each byte (8 bits) is split into two nibbles (4 bits each),
- * and converted into two characters.
- * The resulting string is null-terminated.
+ * @brief Converts an array of bytes into a hexadecimal string.
+ *
+ * Each byte (8 bits) is split into two nibbles (4 bits each) and
+ * converted into two characters. The resulting string is null-terminated.
  */
 static char	*hexify_bytes(unsigned char *random_bytes)
 {
@@ -40,9 +40,10 @@ static char	*hexify_bytes(unsigned char *random_bytes)
 }
 
 /**
- * /dev/urandom is a built-in feature of the Linux OS,
- * not a third—party library or program. Its usage
- * complies with the Norm and subject rules.
+ * @note /dev/urandom is a special file that serves as a
+ * source of random data. It is non-blocking and provides
+ * high-quality random bytes. Its usage complies with 
+ * the Norm and subject rules.
  */
 static char	*get_random_hex(void)
 {

@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:45:48 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/19 16:28:12 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:28:02 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	get_flags(t_token_type type)
 		return (O_WRONLY | O_CREAT | O_APPEND);
 }
 
-int	open_file(t_command *cmd, t_redirect *r, int flags)
+static int	open_file(t_command *cmd, t_redirect *r, int flags)
 {
 	int	oldfd;
 	int	newfd;

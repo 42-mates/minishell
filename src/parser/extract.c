@@ -6,13 +6,13 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:45:36 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/19 18:25:27 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/20 10:22:18 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*extract_var(char *line, int *i, t_shell *shell)
+static char	*extract_var(char *line, int *i, t_shell *shell)
 {
 	char	*var_name;
 	char	*var_value;

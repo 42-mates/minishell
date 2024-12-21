@@ -6,12 +6,17 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 20:36:13 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/12 06:27:47 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/21 12:18:14 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Global variable to store the signal number
+ * volatile - the value of the variable can change at any time
+ * sig_atomic_t - the type of the variable that can be accessed atomically
+ */
 volatile sig_atomic_t	g_signal = 0;
 
 void	handle_signal(t_shell *shell)
@@ -23,7 +28,9 @@ void	handle_signal(t_shell *shell)
 	}
 }
 
-// Ctrl-C and Ctrl-\ in exec.c
+/**
+ * @brief Handle signals for executor
+ */
 void	exec_signals(int sig)
 {
 	if (sig == SIGQUIT)
@@ -32,7 +39,6 @@ void	exec_signals(int sig)
 		write(2, "\n", 1);
 }
 
-// SIGINT (ctrl-C)
 static void	handle_sigint(int sig)
 {
 	g_signal = sig;
@@ -42,13 +48,18 @@ static void	handle_sigint(int sig)
 	rl_redisplay();
 }
 
-// EOF (ctrl-D)
+/**
+ * @brief Handle EOF (ctrl-D)
+ */
 void	handle_eof(t_shell *shell)
 {
 	ft_putendl_fd("exit", 1);
 	exit(free_shell(shell));
 }
 
+/**
+ * @brief Handle signals for shell
+ */
 void	setup_signals(void)
 {
 	signal(SIGINT, handle_sigint);

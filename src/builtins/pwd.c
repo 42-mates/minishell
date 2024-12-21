@@ -6,17 +6,17 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:12:56 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/09 14:21:33 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/21 11:58:54 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * return codes (shell->exit_status):
- * 2 : invalid option passed (e.g., "pwd -z")
- * 1 : error retrieving the current working directory (e.g., `getcwd` fails)
- * 0 : success (current working directory printed)
+ * @return Return codes for shell->exit_status:
+ * - 2: Invalid option passed (e.g., "pwd -z").
+ * - 1: Error retrieving the current working directory (e.g., `getcwd` fails).
+ * - 0: Success (current working directory printed).
  */
 int	ft_pwd(t_command *cmd, t_shell *shell)
 {

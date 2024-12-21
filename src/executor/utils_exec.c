@@ -6,7 +6,7 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:46:05 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/20 09:36:41 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/21 11:37:55 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,6 @@ int	count_cmds(t_command *cmd)
 	return (n_cmds);
 }
 
-/**
- * Sorts an array of environment variables
- * in ascending order based on the variable names
- * using bubble sort
- */
 void	sort_env_array(t_env **array)
 {
 	int		size;

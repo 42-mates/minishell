@@ -1,9 +1,9 @@
-NAME            = minishell
+NAME			= minishell
 
-OBJDIR          = obj/
-INCDIR          = include/
+OBJDIR			= obj/
+INCDIR			= include/
 
-SRCS            = src/main.c \
+SRCS			= src/main.c \
 				  src/parser/lexer.c \
 				  src/parser/quotes.c \
 				  src/parser/tokenize.c \
@@ -37,14 +37,14 @@ SRCS            = src/main.c \
 
 OBJS			= $(SRCS:src/%.c=$(OBJDIR)%.o)
 
-LIBFT_DIR       = ./libft
-LIBFT           = $(LIBFT_DIR)/libft.a
+LIBFT_DIR		= ./libft
+LIBFT			= $(LIBFT_DIR)/libft.a
 
-CC              = cc
+CC				= cc
 INCLUDES		= -I $(INCDIR) -I $(LIBFT_DIR)/include
-CFLAGS          = -Wall -Wextra -Werror
-LDFLAGS         = -lreadline
-RM              = rm -f
+CFLAGS			= -Wall -Wextra -Werror
+LDFLAGS			= -lreadline
+RM				= rm -f
 
 all:			$(NAME)
 
@@ -59,13 +59,13 @@ $(LIBFT):
 				@$(MAKE) -C $(LIBFT_DIR)
 
 clean:
-				$(RM) $(OBJS)
+				rm -rf $(OBJDIR)
 				@$(MAKE) -C $(LIBFT_DIR) clean
 
-fclean: 		clean
+fclean:
 				$(RM) $(NAME)
-				@$(MAKE) -C $(LIBFT_DIR) fclean
 				rm -rf $(OBJDIR)
+				@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: 			fclean all
 

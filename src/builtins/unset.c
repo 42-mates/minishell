@@ -6,17 +6,23 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:41:18 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/04 19:03:52 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/21 11:56:43 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
-* return codes (shell->exit_status):
-* 2 : one of arguments is option
-* 0 : success / no args
-*/
+ * @brief Unsets (removes) environment variables.
+ *
+ * This function removes variables from the shell's environment if they
+ * are specified as arguments. If an argument starts with a dash ('-'),
+ * it is treated as an invalid option.
+ *
+ * @return Return codes for shell->exit_status:
+ * - 2: One of the arguments is an invalid option.
+ * - 0: Success (no arguments or successful execution).
+ */
 int	ft_unset(t_command *cmd, t_shell *shell)
 {
 	int	i;

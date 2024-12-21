@@ -6,20 +6,23 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:44:54 by oprosvir          #+#    #+#             */
-/*   Updated: 2024/12/19 20:03:17 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/21 12:10:56 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * 1. convert env variables list to an array of strings (for execve)
- * 2. if command name doesn't contain a '/', search for it in the PATH
- * 3. check if the resolved path is a directory using stat
- * 4. execute the command using execve
- * 5. exit with the appropriate error code if execve fails
+ * @brief Executes an external command in child process.
+ *
+ * This function prepares and executes external commands by:
+ * 1. Converting the environment variables list into an array of strings (for execve).
+ * 2. Searching for the command in the PATH if it doesn't contain a '/'.
+ * 3. Checking if the resolved path is a directory using `stat`.
+ * 4. Executing the command using `execve`.
+ * 5. Exiting with the appropriate error code if `execve` fails.
  */
-void	execute_extern(t_command *cmd, t_shell *shell)
+static void	execute_extern(t_command *cmd, t_shell *shell)
 {
 	char		**envp;
 	char		*exec_path;
@@ -44,7 +47,7 @@ void	execute_extern(t_command *cmd, t_shell *shell)
 	exit(exec_error(cmd->name));
 }
 
-void	child_process(t_command *cmd, t_shell *shell, int i)
+static void	child_process(t_command *cmd, t_shell *shell, int i)
 {
 	duplicate_fds(&shell->pipeline, i);
 	close_pipes(&shell->pipeline);
@@ -65,7 +68,7 @@ void	child_process(t_command *cmd, t_shell *shell, int i)
 		execute_extern(cmd, shell);
 }
 
-void	parent_process(t_pipe *pipeline, pid_t *pids, t_shell *shell)
+static void	parent_process(t_pipe *pipeline, pid_t *pids, t_shell *shell)
 {
 	int	i;
 	int	status;

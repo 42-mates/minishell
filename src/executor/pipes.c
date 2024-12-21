@@ -6,18 +6,17 @@
 /*   By: oprosvir <oprosvir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 00:46:41 by mglikenf          #+#    #+#             */
-/*   Updated: 2024/12/19 18:06:16 by oprosvir         ###   ########.fr       */
+/*   Updated: 2024/12/21 12:15:57 by oprosvir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * if not first comm in pipeline, its input (STDIN) redirected from
- * the output end of the previous pipe (pipefd[i - 1][0])
- * 
- * if not last comm in pipeline its output (STDOUT) redirected to
- * input end of the current pipe (pipefd[i][1])
+ * @note If not first comm in pipeline, its input (STDIN) redirected from
+ * the output end of the previous pipe (pipefd[i - 1][0]).
+ * If not last comm in pipeline its output (STDOUT) redirected to
+ * input end of the current pipe (pipefd[i][1]).
  */
 void	duplicate_fds(t_pipe *pipeline, int i)
 {
